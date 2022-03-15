@@ -27,7 +27,7 @@ public class CustomerService {
             Customer newCustomer = new Customer(firstName, lastName, email);
             if (customers.containsKey(email)) {
                 // TODO: display error and retry
-                System.out.println("Customer with this email is already registered.");
+                throw new IllegalArgumentException("Customer with this email is already registered.");
             } else {
                 customers.put(email, newCustomer);
             }
