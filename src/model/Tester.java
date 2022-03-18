@@ -10,7 +10,6 @@ public class Tester {
         System.out.println("--- Start model tests ---");
         System.out.println();
 
-        // Test Customer class
         System.out.println("--- Testing Customer ---");
         Customer vanya = new Customer("Vanya", "Zykov",
                 "vanya@bk.ru");
@@ -23,19 +22,16 @@ public class Tester {
         }
         System.out.println();
 
-        // Test Room class
         System.out.println("--- Testing Room ---");
         Room room101 = new Room("101", 150.0, RoomType.SINGLE);
         System.out.println(room101);
         System.out.println();
 
-        // Test FreeRoom
         System.out.println("--- Testing FreeRoom ---");
         FreeRoom freeRoom = new FreeRoom("102", RoomType.SINGLE);
         System.out.println(freeRoom);
         System.out.println();
 
-        // Test Reservation class
         System.out.println("--- Testing Reservation ---");
         Calendar cal = Calendar.getInstance();
         cal.set(2022, 03, 16);
