@@ -23,28 +23,22 @@ public class CustomerService {
     }
 
     public void addCustomer(String email, String firstName, String lastName) {
-        try {
-            Customer newCustomer = new Customer(firstName, lastName, email);
-            if (customers.containsKey(email)) {
-                // TODO: display error and retry
-                throw new IllegalArgumentException("Customer with this email is already registered.");
-            } else {
-                customers.put(email, newCustomer);
-            }
-        } catch (IllegalArgumentException ex) {
-            // TODO: display error and let user reenter email
-            System.out.println(ex.getLocalizedMessage());
+        Customer newCustomer = new Customer(firstName, lastName, email);
+        if (customers.containsKey(email)) {
+            throw new IllegalArgumentException("Customer with this email is " +
+                    "already registered.");
+        } else {
+            customers.put(email, newCustomer);
         }
     }
 
     public Customer getCustomer(String customerEmail) {
         if (this.customers.containsKey(customerEmail)) {
             return this.customers.get(customerEmail);
-        } else {
-            // TODO: finish it
-            System.out.println("Not found customer with this email. Please register.");
-            return null;
         }
+
+        throw new IllegalArgumentException("Not found customer with this email. " +
+                "Please register.");
     }
 
     public Collection<Customer> getAllCustomers() {

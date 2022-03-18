@@ -31,15 +31,27 @@ public class CustomerServiceTest {
         System.out.println();
 
         // Adding existing email
-        serv1.addCustomer(emailVanya, "Jack", "Zet");
+        try {
+            serv1.addCustomer(emailVanya, "Jack", "Zet");
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex.getLocalizedMessage());
+        }
         System.out.println();
 
         // Handling adding customer with invalid email
-        serv1.addCustomer("invalidEmail", "Jack", "Zet");
+        try {
+            serv1.addCustomer("invalidEmail", "Jack", "Zet");
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex.getLocalizedMessage());
+        }
         System.out.println();
 
         // Handling getting unregistered customer
-        serv1.getCustomer("notReg");
+        try {
+            serv1.getCustomer("notReg");
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex.getLocalizedMessage());
+        }
         System.out.println();
 
         System.out.println("--- End CustomerService test");
