@@ -26,6 +26,10 @@ public class ReservationService {
         return INSTANCE;
     }
 
+    public Map<String, IRoom> getRooms() {
+        return rooms;
+    }
+
     public void addRoom(IRoom room) {
         if (rooms.containsKey(room.getRoomNumber())) {
             throw new IllegalArgumentException("Room number " + room.getRoomNumber() +
