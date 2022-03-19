@@ -13,8 +13,8 @@ public final class HotelResource {
 
     private static HotelResource INSTANCE;
 
-    private CustomerService customerService;
-    private ReservationService reservationService;
+    private final CustomerService customerService;
+    private final ReservationService reservationService;
 
     private HotelResource(CustomerService customerService,
                           ReservationService reservationService) {
@@ -27,7 +27,7 @@ public final class HotelResource {
                                             ReservationService reservationService) {
 
         if (INSTANCE == null) {
-            return new HotelResource(customerService, reservationService);
+            INSTANCE = new HotelResource(customerService, reservationService);
         }
 
         return INSTANCE;
