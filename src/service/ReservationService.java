@@ -6,12 +6,12 @@ import model.Reservation;
 
 import java.util.*;
 
-public class ReservationService {
+public final class ReservationService {
 
     private static ReservationService INSTANCE;
 
-    private List<Reservation> reservations;
-    private Map<String, IRoom> rooms;
+    private final List<Reservation> reservations;
+    private final Map<String, IRoom> rooms;
 
     private ReservationService() {
         reservations = new ArrayList<>();
@@ -55,7 +55,7 @@ public class ReservationService {
 
         // Check chosen room is available for booking
         for (IRoom anAvailableRoom: availableRooms) {
-            if (anAvailableRoom.getRoomNumber() == room.getRoomNumber()) {
+            if (anAvailableRoom.getRoomNumber().equals(room.getRoomNumber())) {
                 // Reserve the room
                 Reservation newReservation = new Reservation(customer, room,
                         checkInDate, checkoutDate);

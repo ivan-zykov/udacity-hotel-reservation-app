@@ -4,11 +4,11 @@ import model.Customer;
 
 import java.util.*;
 
-public class CustomerService {
+public final class CustomerService {
 
     private static CustomerService INSTANCE;
 
-    private Map<String, Customer> customers;
+    private final Map<String, Customer> customers;
 
     private CustomerService() {
         this.customers = new HashMap<>();
