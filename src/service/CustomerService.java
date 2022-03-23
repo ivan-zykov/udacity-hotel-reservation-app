@@ -37,8 +37,7 @@ public final class CustomerService {
             return this.customers.get(customerEmail);
         }
 
-        throw new IllegalArgumentException("Not found customer with this email. " +
-                "Please register.");
+        return null;
     }
 
     public Collection<Customer> getAllCustomers() {

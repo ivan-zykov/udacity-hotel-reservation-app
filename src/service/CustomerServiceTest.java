@@ -46,12 +46,10 @@ public class CustomerServiceTest {
         }
         System.out.println();
 
-        // Handling getting unregistered customer
-        try {
-            serv1.getCustomer("notReg");
-        } catch (IllegalArgumentException ex) {
-            System.out.println(ex.getLocalizedMessage());
-        }
+        System.out.println("Getting non-existing customer");
+        if (serv1.getCustomer("notReg") == null) {
+            System.out.println("Customer not found");
+        };
         System.out.println();
 
         System.out.println("--- End CustomerService test");
