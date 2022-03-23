@@ -5,6 +5,8 @@ import service.ReservationService;
 import ui.AdminMenu;
 import ui.MainMenu;
 
+import java.util.Scanner;
+
 public final class HotelReservationApp {
 
     public static void main(String[] args) {
@@ -17,7 +19,8 @@ public final class HotelReservationApp {
         AdminMenu adminMenu = new AdminMenu(adminResource);
         HotelResource hotelResource = HotelResource.getInstance(customerService,
                 reservationService);
-        MainMenu mainMenu = new MainMenu(adminMenu, hotelResource);
+        Scanner scanner = new Scanner(System.in);
+        MainMenu mainMenu = new MainMenu(adminMenu, hotelResource, scanner);
 
         // Run the app
         mainMenu.open();

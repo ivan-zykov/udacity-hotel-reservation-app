@@ -22,6 +22,7 @@ public final class AdminMenu {
 
         boolean keepRunning = true;
 
+        // TODO: inject scanner instead
         Scanner scanner = new Scanner(System.in);
 
         while (keepRunning) {
@@ -29,6 +30,11 @@ public final class AdminMenu {
                 printMenu();
 
                 int input = Integer.parseInt(scanner.next());
+
+                // Clean scanner
+                if (scanner.hasNextLine()) {
+                    scanner.nextLine();
+                }
 
                 switch (input) {
                     case 1:
@@ -51,7 +57,12 @@ public final class AdminMenu {
                         System.out.println("Please enter a number representing" +
                                 "a menu option from above");
                 }
+            } catch (NumberFormatException ex) {
+                System.out.println("Please enter a number");
+            } catch (IllegalArgumentException ex) {
+                System.out.println(ex.getLocalizedMessage());
             } catch (Exception ex) {
+                System.out.println("Unknown error occurred.");
                 System.out.println(ex.getLocalizedMessage());
             }
         }
@@ -160,7 +171,7 @@ public final class AdminMenu {
             }
         }
 
-        this.adminResource.addRoom(newRooms);
+        adminResource.addRoom(newRooms);
         System.out.println("Rooms were successfully added");
     }
 
@@ -175,7 +186,7 @@ public final class AdminMenu {
     }
 
     private void seeAllRooms() {
-        Collection<IRoom> allRooms = this.adminResource.getAllRooms();
+        Collection<IRoom> allRooms = adminResource.getAllRooms();
 
         if (allRooms.isEmpty()) {
             System.out.println("There are no rooms yet. Please add some");
