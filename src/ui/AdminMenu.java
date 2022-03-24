@@ -1,6 +1,7 @@
 package ui;
 
 import api.AdminResource;
+import model.Customer;
 import model.IRoom;
 import model.Room;
 import model.RoomType;
@@ -37,7 +38,7 @@ public final class AdminMenu {
 
                 switch (input) {
                     case 1:
-                        System.out.println("Selected 1");
+                        seeAllCustomers();
                         break;
                     case 2:
                         seeAllRooms();
@@ -80,6 +81,20 @@ public final class AdminMenu {
         System.out.println("----------------------------------------");
         System.out.println();
         System.out.println("Select a menu option");
+    }
+
+    private void seeAllCustomers() {
+        Collection<Customer> allCustomers = adminResource.getAllCustomers();
+
+       if (allCustomers.isEmpty()) {
+           System.out.println("There are no registered customers yet. You can add " +
+                   "one in main menu");
+           return;
+       }
+
+       for (Customer aCustomer: allCustomers) {
+           System.out.println(aCustomer);
+       }
     }
 
     private void addARoom() {
