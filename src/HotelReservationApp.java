@@ -16,10 +16,10 @@ public final class HotelReservationApp {
         ReservationService reservationService = ReservationService.getInstance();
         AdminResource adminResource = AdminResource.getInstance(customerService,
                 reservationService);
-        AdminMenu adminMenu = new AdminMenu(adminResource);
+        Scanner scanner = new Scanner(System.in);
+        AdminMenu adminMenu = new AdminMenu(adminResource, scanner);
         HotelResource hotelResource = HotelResource.getInstance(customerService,
                 reservationService);
-        Scanner scanner = new Scanner(System.in);
         MainMenu mainMenu = new MainMenu(adminMenu, hotelResource, scanner);
 
         // Run the app

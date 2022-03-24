@@ -13,17 +13,16 @@ import java.util.Scanner;
 public final class AdminMenu {
 
     private final AdminResource adminResource;
+    private final Scanner scanner;
 
-    public AdminMenu(AdminResource adminResource) {
+    public AdminMenu(AdminResource adminResource, Scanner scanner) {
         this.adminResource = adminResource;
+        this.scanner = scanner;
     }
 
     public void open() {
 
         boolean keepRunning = true;
-
-        // TODO: inject scanner instead
-        Scanner scanner = new Scanner(System.in);
 
         while (keepRunning) {
             try {
@@ -88,7 +87,6 @@ public final class AdminMenu {
         // TODO: add option to add a room using FreeRoom class
 
         boolean keepAddingRooms = true;
-        Scanner scanner = new Scanner(System.in);
         List<IRoom> newRooms = new ArrayList<>();
 
         while (keepAddingRooms) {
