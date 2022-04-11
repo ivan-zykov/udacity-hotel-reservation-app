@@ -11,14 +11,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
-public final class AdminMenu {
+public final class AdminMenu extends Menu {
 
     private final AdminResource adminResource;
-    private final Scanner scanner;
 
     public AdminMenu(AdminResource adminResource, Scanner scanner) {
+        super(scanner);
         this.adminResource = adminResource;
-        this.scanner = scanner;
     }
 
     public void open() {
@@ -71,7 +70,6 @@ public final class AdminMenu {
     private void printMenu() {
         System.out.println();
         System.out.println("Admin menu of Vanya's Hotel Reservation App");
-        System.out.println();
         System.out.println("----------------------------------------");
         System.out.println("1. See all Customers");
         System.out.println("2. See all Rooms");
@@ -79,7 +77,6 @@ public final class AdminMenu {
         System.out.println("4. Add a room");
         System.out.println("5. Back to Main Menu");
         System.out.println("----------------------------------------");
-        System.out.println();
         System.out.println("Select a menu option");
     }
 
@@ -165,7 +162,7 @@ public final class AdminMenu {
                 input = scanner.next();
                 switch (input.toLowerCase()) {
                     case "y":
-                        // Restart outer while loop
+                        // Restart inner while loop
                         isBadInput = false;
                         // Clean scanner
                         if (scanner.hasNextLine()) {
@@ -209,18 +206,5 @@ public final class AdminMenu {
         for (IRoom aRoom: allRooms) {
             System.out.println(aRoom);
         }
-    }
-
-    private boolean isNumber(String strInt) {
-        if (strInt == null) {
-            return false;
-        }
-        try {
-            Double.parseDouble(strInt);
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-
-        return true;
     }
 }

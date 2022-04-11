@@ -102,6 +102,7 @@ public final class ReservationService {
         if (availableRooms.isEmpty()) {
             System.out.println("No free rooms in the next 7 days found. Try " +
                     "different dates");
+            return null;
         }
 
         return new ArrayList<>(availableRooms.values());

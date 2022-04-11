@@ -5,6 +5,8 @@ import service.ReservationService;
 import ui.AdminMenu;
 import ui.MainMenu;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public final class HotelReservationApp {
@@ -17,10 +19,12 @@ public final class HotelReservationApp {
         AdminResource adminResource = AdminResource.getInstance(customerService,
                 reservationService);
         Scanner scanner = new Scanner(System.in);
+        DateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         AdminMenu adminMenu = new AdminMenu(adminResource, scanner);
         HotelResource hotelResource = HotelResource.getInstance(customerService,
                 reservationService);
-        MainMenu mainMenu = new MainMenu(adminMenu, hotelResource, scanner);
+        MainMenu mainMenu = new MainMenu(adminMenu, hotelResource, scanner,
+                simpleDateFormat);
 
         // Run the app
         mainMenu.open();
