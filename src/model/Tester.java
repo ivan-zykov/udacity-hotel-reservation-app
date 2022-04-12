@@ -27,6 +27,10 @@ public class Tester {
         System.out.println(room101);
         System.out.println();
 
+        System.out.println("--- Testing Room::isFree() on room 101 ---");
+        System.out.println(room101.isFree());
+        System.out.println();
+
         System.out.println("--- Testing FreeRoom ---");
         FreeRoom freeRoom = new FreeRoom("102", RoomType.SINGLE);
         System.out.println(freeRoom);

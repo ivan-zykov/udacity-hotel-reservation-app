@@ -2,9 +2,9 @@ package model;
 
 public class Room implements IRoom {
 
-    private String roomNumber;
-    private Double roomPrice;
-    private RoomType roomType;
+    final private String roomNumber;
+    final private Double roomPrice;
+    final private RoomType roomType;
 
     public Room(String roomNumber, Double roomPrice, RoomType roomType) {
         this.roomNumber = roomNumber;
@@ -26,13 +26,16 @@ public class Room implements IRoom {
         return roomType;
     }
 
-//    TODO: finish implementation
+    // TODO: Method is never used. Why is it required in the project?
     @Override
     public boolean isFree() {
-        return true;
+        if (roomPrice == 0.0) {
+            return true;
+        }
+
+        return false;
     }
 
-//    TODO: edit after isFree() done
     @Override
     public String toString() {
         return "Room number: " + roomNumber + ", price: " + roomPrice +
