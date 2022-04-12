@@ -145,8 +145,12 @@ public final class ReservationService {
     }
 
     public void printAllReservations() {
-        for (Reservation aRes: this.reservations) {
-            System.out.println(aRes);
+        if (this.reservations.isEmpty()) {
+            System.out.println("There are still no reservations");
+        } else {
+            for (Reservation aRes: this.reservations) {
+                System.out.println(aRes);
+            }
         }
     }
 }

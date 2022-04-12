@@ -43,7 +43,7 @@ public final class AdminMenu extends Menu {
                         seeAllRooms();
                         break;
                     case 3:
-                        System.out.println("Selected 3");
+                        seeAllReservations();
                         break;
                     case 4:
                         addARoom();
@@ -92,6 +92,10 @@ public final class AdminMenu extends Menu {
        for (Customer aCustomer: allCustomers) {
            System.out.println(aCustomer);
        }
+    }
+
+    private void seeAllReservations() {
+        adminResource.displayAllReservations();
     }
 
     private void addARoom() {
