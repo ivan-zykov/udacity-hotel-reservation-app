@@ -1,6 +1,7 @@
 package ui;
 
 import api.HotelResource;
+import model.Customer;
 import model.IRoom;
 import model.Reservation;
 
@@ -265,7 +266,30 @@ public final class MainMenu extends Menu {
     }
 
     private void seeCustomersReservations() {
-        System.out.println("Showing customer's reservations");
+
+        // Read customer's email
+        System.out.println("Please enter your email");
+        String email = readEmail();
+
+        // Check that customer is registered
+        if (! customerAlreadyExists(email)) {
+            System.out.println("You are still no registered with this email. " +
+                    "Please create an account");
+        }
+
+        // Get customer's reservations
+        Collection<Reservation> customerReservations =
+                hotelResource.getCustomersReservations(email);
+
+        // Display customer's reservations
+        if (customerReservations.isEmpty()) {
+            System.out.println("You still have no reservations with us");
+        } else {
+            System.out.println("Your reservations:");
+            for (Reservation aReservation: customerReservations) {
+                System.out.println(aReservation);
+            }
+        }
     }
 
     private void createNewAccount() {
