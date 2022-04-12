@@ -13,6 +13,9 @@ abstract class Menu {
         this.scanner = scanner;
     }
 
+    /**
+     * Implementation inspired by example on www.baeldung.com
+     */
     protected boolean isNumber(String strInt) {
         if (strInt == null) {
             return false;

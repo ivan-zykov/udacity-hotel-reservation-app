@@ -253,6 +253,9 @@ public final class MainMenu extends Menu {
         return date;
     }
 
+    /**
+     * Implementation inspired by example on www.baeldung.com
+     */
     private boolean isValidDate(String input) {
         simpleDateFormat.setLenient(false);
         try {
