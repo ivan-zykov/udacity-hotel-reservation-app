@@ -9,7 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
-public final class HotelReservationApp {
+public final class HotelApplication {
 
     public static void main(String[] args) {
 
