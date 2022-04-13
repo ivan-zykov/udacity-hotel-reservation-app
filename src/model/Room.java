@@ -41,4 +41,32 @@ public class Room implements IRoom {
         return "Room number: " + roomNumber + ", price: " + roomPrice +
                 ", type: " + roomType + ".";
     }
+
+    /**
+     * Inspired by an article on www.baeldung.com
+     */
+    @Override
+    public final boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Room)) {
+            return false;
+        }
+        Room other = (Room)o;
+        return (roomNumber == null && other.getRoomNumber() == null) ||
+                (roomNumber != null && roomNumber.equals(other.getRoomNumber()));
+    }
+
+    /**
+     * Inspired by an article on www.baeldung.com
+     */
+    @Override
+    public final int hashCode() {
+        int result = 17;
+        if (roomNumber != null) {
+            result = 31 * result + roomNumber.hashCode();
+        }
+        return result;
+    }
 }

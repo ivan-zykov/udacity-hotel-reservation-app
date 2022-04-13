@@ -123,7 +123,7 @@ public final class MainMenu extends Menu {
                     checkOut);
 
             // Stop finding a room
-            if (availableRooms == null) {
+            if (availableRooms.isEmpty()) {
                 keepFindingAndReservingARoom = false;
                 continue;
                 // The resource will print info messages to console

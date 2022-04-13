@@ -40,4 +40,47 @@ public class Reservation {
                 room + "\r\n" +
                 "Dates: " + checkInDate + " - " + checkOutDate + ".";
     }
+
+    /**
+     * Inspired by an article on www.baeldung.com
+     */
+    @Override
+    public final boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Reservation)) {
+            return false;
+        }
+        Reservation other = (Reservation)o;
+        // Compare rooms
+        boolean roomsEquals = (room == null && other.getRoom() == null) ||
+                (room != null && room.equals(other.getRoom()));
+        // Compare check-in
+        boolean checkInEquals = (checkInDate == null && other.getCheckInDate() == null)
+                || (checkInDate != null && checkInDate.equals(other.getCheckInDate()));
+        // Compare check-out
+        boolean checkOutEquals = (checkOutDate == null && other.getCheckOutDate() == null)
+                || (checkOutDate != null && checkOutDate.equals(other.getCheckOutDate()));
+
+        return roomsEquals && checkInEquals && checkOutEquals;
+    }
+
+    /**
+     * Inspired by an article on www.baeldung.com
+     */
+    @Override
+    public final int hashCode() {
+        int result = 17;
+        if (room != null) {
+            result = 31 * result + room.hashCode();
+        }
+        if (checkInDate != null) {
+            result = 31 * result + checkInDate.hashCode();
+        }
+        if (checkOutDate != null) {
+            result = 31 * result + checkOutDate.hashCode();
+        }
+        return result;
+    }
 }

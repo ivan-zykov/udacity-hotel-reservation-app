@@ -35,24 +35,27 @@ public class ReservationServiceTest {
         Customer vanya = new Customer("Vanya", "Zykov",
                 "vanya@bk.ru");
         Calendar cal = Calendar.getInstance();
-        Reservation res = reserveARoomInMay(serv, vanya, room102, cal,10,
+        Reservation res1 = reserveARoomInMay(serv, vanya, room102, cal, 10,
                 17);
 
         System.out.println("New reservation: ");
-        System.out.println(res);
+        System.out.println(res1);
         System.out.println();
 
+        System.out.println("--- Try reserving the same room again ---");
+        // Make the other room also unavailable
+        reserveARoomInMay(serv, vanya, room103, cal, 10, 17);
         // Test attempting to reserve a booked room
+        IRoom room102Copy = new Room(roomId, 170.0, RoomType.DOUBLE);
+        Reservation res2 = null;
         try {
-            reserveARoomInMay(serv, vanya, room102, cal, 10,
+            res2 = reserveARoomInMay(serv, vanya, room102Copy, cal, 10,
                     17);
+            throw new Error ("Failed to prevent booking the same room");
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getLocalizedMessage());
         }
-        System.out.println();
-
-        System.out.println("--- Testing printAllReservations() ---");
-        System.out.println("All reservations:");
+        System.out.println("All reservations below. Expect two.");
         serv.printAllReservations();
         System.out.println();
 

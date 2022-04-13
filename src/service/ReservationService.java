@@ -10,11 +10,11 @@ public final class ReservationService {
 
     private static ReservationService INSTANCE;
 
-    private final List<Reservation> reservations;
+    private final Set<Reservation> reservations;
     private final Map<String, IRoom> rooms;
 
     private ReservationService() {
-        reservations = new ArrayList<>();
+        reservations = new HashSet<>();
         rooms = new HashMap<>();
     }
 
@@ -57,6 +57,7 @@ public final class ReservationService {
         for (IRoom anAvailableRoom: availableRooms) {
             if (anAvailableRoom.getRoomNumber().equals(room.getRoomNumber())) {
                 // Reserve the room
+                // FIXME: reserve with updated dates
                 Reservation newReservation = new Reservation(customer, room,
                         checkInDate, checkoutDate);
                 reservations.add(newReservation);
@@ -102,7 +103,6 @@ public final class ReservationService {
         if (availableRooms.isEmpty()) {
             System.out.println("No free rooms in the next 7 days found. Try " +
                     "different dates");
-            return null;
         }
 
         return new ArrayList<>(availableRooms.values());
