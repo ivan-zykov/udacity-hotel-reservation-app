@@ -48,15 +48,30 @@ public class HotelResourceTest {
         System.out.println();
 
         Calendar cal = Calendar.getInstance();
-        cal.set(2022, 05, 10);
+        cal.set(2022, Calendar.MAY, 10);
         Date checkInDate = cal.getTime();
-        cal.set(2022, 05, 17);
+        cal.set(2022, Calendar.MAY, 17);
         Date checkOutDate = cal.getTime();
         System.out.println(hotelResource.bookARoom(vanyasEmail, newRoom,
                 checkInDate, checkOutDate));
         System.out.println();
 
+        System.out.println("--- Testing duplicate booking ---");
+        System.out.println();
+        try {
+            hotelResource.bookARoom(vanyasEmail, newRoom, checkInDate, checkOutDate);
+            throw new Error("Failed to prevent duplicate booking");
+        } catch (Exception ex) {
+            System.out.println(ex.getLocalizedMessage());
+        }
+        System.out.println();
+
         System.out.println("--- Testing getCustomersReservations() ---");
+        Collection<Reservation> allReservations =
+                hotelResource.getCustomersReservations(vanyasEmail);
+        for (Reservation aRes: allReservations) {
+            System.out.println(aRes);
+        }
         System.out.println();
 
         Collection<Reservation> vanyasReservations =
@@ -68,15 +83,34 @@ public class HotelResourceTest {
 
         System.out.println("--- Testing findARoom() ---");
         System.out.println();
-
+        System.out.println("Expect no free rooms");
         Collection<IRoom> availableRooms = hotelResource.findARoom(checkInDate,
                 checkOutDate);
-        for (IRoom freeRoom: availableRooms) {
-            System.out.println(freeRoom);
+        if (! availableRooms.isEmpty()) {
+            throw new Error("Failed to detect no free rooms");
+        }
+        System.out.println("No free rooms for " + checkInDate + " - " + checkOutDate);
+        System.out.println();
+
+        System.out.println("Expect a free room");
+        checkInDate = shiftDate(checkInDate);
+        checkOutDate = shiftDate(checkOutDate);
+        availableRooms = hotelResource.findARoom(checkInDate, checkOutDate);
+        if (availableRooms.isEmpty()) {
+            throw new Error("Failed to detect a free room");
+        }
+        for (IRoom aRoom: availableRooms) {
+            System.out.println(aRoom);
         }
         System.out.println();
 
         System.out.println("--- End HotelResourceTest test ---");
     }
 
+    private static Date shiftDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, 7);
+        return cal.getTime();
+    }
 }

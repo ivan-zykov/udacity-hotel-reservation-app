@@ -1,12 +1,12 @@
 package ui;
 
 import api.HotelResource;
-import model.Customer;
 import model.IRoom;
 import model.Reservation;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Scanner;
@@ -118,18 +118,39 @@ public final class MainMenu extends Menu {
                 continue;
             }
 
-            // Find available rooms
+            // Find available rooms for initial dates
             Collection<IRoom> availableRooms = hotelResource.findARoom(checkIn,
                     checkOut);
 
-            // Stop finding a room
             if (availableRooms.isEmpty()) {
+                System.out.println("No rooms found for selected dates. Trying to find" +
+                        " a room in the next 7 days");
+
+                // Shift dates
+                checkIn = shiftDate(checkIn);
+                checkOut = shiftDate(checkOut);
+
+                // Find rooms available for shifted dates
+                availableRooms = hotelResource.findARoom(checkIn, checkOut);
+
+                if (availableRooms.isEmpty()) {
+                    System.out.println("No free rooms in the next 7 days found. Try " +
+                            "different dates");
+                } else {
+                    // Print shifted dates and available rooms
+                    System.out.println("You can book following rooms from " + checkIn +
+                            " till " + checkOut + ":");
+                    for (IRoom aRoom: availableRooms) {
+                        System.out.println(aRoom);
+                    }
+                }
+
+                // Redirect back to main menu
                 keepFindingAndReservingARoom = false;
                 continue;
-                // The resource will print info messages to console
             }
 
-            // Show available rooms
+            // Print available rooms for initial dates
             System.out.println("Following rooms are available for booking:");
             for (IRoom aRoom: availableRooms) {
                 System.out.println(aRoom);
@@ -220,13 +241,13 @@ public final class MainMenu extends Menu {
 
             // Book a room
             IRoom roomObjectToBook = hotelResource.getRoom(roomNumberToBook);
-            Reservation newReservation = hotelResource.bookARoom(email,
-                    roomObjectToBook, checkIn, checkOut);
+            Reservation newReservation = hotelResource.bookARoom(email, roomObjectToBook,
+                    checkIn, checkOut);
 
             // Print reservation
             System.out.println(newReservation);
 
-            // Stop outer loop
+            // Redirect back to main menu
             keepFindingAndReservingARoom = false;
         }
     }
@@ -266,6 +287,13 @@ public final class MainMenu extends Menu {
         }
 
         return true;
+    }
+
+    private Date shiftDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, 7);
+        return cal.getTime();
     }
 
     private void seeCustomersReservations() {
@@ -351,11 +379,7 @@ public final class MainMenu extends Menu {
     }
 
     private boolean customerAlreadyExists(String email) {
-        if (hotelResource.getCustomer(email) == null) {
-            return false;
-        }
-
-        return true;
+        return hotelResource.getCustomer(email) != null;
     }
 
     private String readName(boolean isFirstName) {
@@ -382,11 +406,7 @@ public final class MainMenu extends Menu {
     }
 
     private boolean hasCharacters(String input) {
-        if (input.matches(".*[a-zA-Z]+.*")) {
-            return true;
-        }
-
-        return false;
+        return input.matches(".*[a-zA-Z]+.*");
     }
 
     private void goToAdminMenu() {

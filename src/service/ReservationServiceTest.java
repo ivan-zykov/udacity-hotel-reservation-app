@@ -51,7 +51,6 @@ public class ReservationServiceTest {
         try {
             res2 = reserveARoomInMay(serv, vanya, room102Copy, cal, 10,
                     17);
-            throw new Error ("Failed to prevent booking the same room");
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getLocalizedMessage());
         }
@@ -61,28 +60,20 @@ public class ReservationServiceTest {
 
         System.out.println("--- Testing findRooms() ---");
 
-        // Check for 9 - 10 May. Expect free rooms: 102, 103
+        // Check for 9 - 10 May
+        System.out.println("Expect free rooms: 102, 103");
         testFindRooms(serv, cal, 9, 10);
 
-        // Check for 10 - 11 May. Expect nothing free, but recommendation
-        // Make no rooms available for 10 - 11 May
-        // Book room 103, 10 - 11 May
-        reserveARoomInMay(serv, vanya, room103, cal, 10, 11);
+        // Check for 10 - 11 May
+        System.out.println("Expect nothing free");
         testFindRooms(serv, cal, 10, 11);
 
-        // Check for 16 - 17 May. Expect free rooms: 103
+        // Check for 16 - 17 May
+        System.out.println("Expect nothing free");
         testFindRooms(serv, cal, 16, 17);
 
-        // Check for 17 - 18 May. Expect nothing free and no recommendation
-        // Make no rooms available for 17 - 18 May and the next 7 days
-        // Book room 102, 17 - 18 May
-        reserveARoomInMay(serv, vanya, room102, cal, 17, 18);
-        // Book room 103, 17 - 18 May
-        reserveARoomInMay(serv, vanya, room103, cal, 17, 18);
-        // Book room 102, 24 - 25 May
-        reserveARoomInMay(serv, vanya, room102, cal, 24, 25);
-        // Book room 103, 24 - 25 May
-        reserveARoomInMay(serv, vanya, room103, cal, 24, 25);
+        // Check for 17 - 18 May.
+        System.out.println("Expect free rooms: 102, 103");
         testFindRooms(serv, cal, 17, 18);
 
         System.out.println("--- Testing getCustomersReservation() ---");
@@ -120,6 +111,8 @@ public class ReservationServiceTest {
             for (IRoom aRoom: availableRooms) {
                 System.out.println(aRoom);
             }
+        } else {
+            System.out.println("Nothing free");
         }
         System.out.println();
     }

@@ -49,71 +49,22 @@ public final class ReservationService {
     }
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate,
-                                    Date checkoutDate) {
-        // Get rooms available for booking for the time interval
-        Collection<IRoom> availableRooms = findRooms(checkInDate, checkoutDate);
-
-        // Check chosen room is available for booking
-        for (IRoom anAvailableRoom: availableRooms) {
-            if (anAvailableRoom.getRoomNumber().equals(room.getRoomNumber())) {
-                // Reserve the room
-                // FIXME: reserve with updated dates
-                Reservation newReservation = new Reservation(customer, room,
-                        checkInDate, checkoutDate);
-                reservations.add(newReservation);
-
-                return newReservation;
-            }
+                                    Date checkOutDate) {
+        Reservation newReservation = new Reservation(customer, room, checkInDate,
+                checkOutDate);
+        if (reservations.contains(newReservation)) {
+            throw new IllegalArgumentException("This room is already reserved for these " +
+                    "days");
         }
-
-        throw new IllegalArgumentException("Chosen room is not available for the " +
-                "date interval");
+        reservations.add(newReservation);
+        return newReservation;
     }
 
-    /**
-     * Find rooms which are available for the date interval
-     */
     public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
-
         // Copy all rooms
         Map<String, IRoom> availableRooms = new HashMap<>(this.rooms);
 
-        // Remove booked rooms
-        filterAvailableRooms(availableRooms, checkInDate, checkOutDate);
-
-        // Search for recommended rooms (available for next 7 days)
-        if (availableRooms.isEmpty()) {
-            System.out.println("No rooms found for selected dates. Trying to find" +
-                    " a room in the next 7 days");
-
-            availableRooms = new HashMap<>(this.rooms);
-
-            // Shift dates by 7 days
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(checkInDate);
-            cal.add(Calendar.DATE, 7);
-            checkInDate = cal.getTime();
-            cal.setTime(checkOutDate);
-            cal.add(Calendar.DATE, 7);
-            checkOutDate = cal.getTime();
-
-            filterAvailableRooms(availableRooms, checkInDate, checkOutDate);
-        }
-
-        if (availableRooms.isEmpty()) {
-            System.out.println("No free rooms in the next 7 days found. Try " +
-                    "different dates");
-        }
-
-        return new ArrayList<>(availableRooms.values());
-    }
-
-    /**
-     * Filters out rooms which are booked for selected dates
-     */
-    private void filterAvailableRooms(Map<String, IRoom> availableRooms,
-                                      Date checkInDate, Date checkOutDate) {
-
+        // Compare with dates of existing reservations
         for (Reservation aReservation: this.reservations) {
             boolean isCheckInOK = false;
             if (checkInDate.before(aReservation.getCheckInDate()) ||
@@ -130,6 +81,8 @@ public final class ReservationService {
                 availableRooms.remove(aReservation.getRoom().getRoomNumber());
             }
         }
+
+        return new ArrayList<>(availableRooms.values());
     }
 
     public Collection<Reservation> getCustomersReservation(Customer customer) {
