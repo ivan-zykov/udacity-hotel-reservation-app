@@ -66,16 +66,10 @@ public final class ReservationService {
 
         // Compare with dates of existing reservations
         for (Reservation aReservation: this.reservations) {
-            boolean isCheckInOK = false;
-            if (checkInDate.before(aReservation.getCheckInDate()) ||
-                    checkInDate.compareTo(aReservation.getCheckOutDate()) >= 0) {
-                isCheckInOK = true;
-            }
-            boolean isCheckOutOK = false;
-            if (checkOutDate.compareTo(aReservation.getCheckInDate()) <= 0 ||
-                    checkOutDate.after(aReservation.getCheckOutDate())) {
-                isCheckOutOK = true;
-            }
+            DatesCheckResult checkResult = checkDates(aReservation, checkInDate,
+                    checkOutDate);
+            boolean isCheckInOK = checkResult.getIsCheckInOK();
+            boolean isCheckOutOK = checkResult.getIsCheckOutOK();
             if (! isCheckInOK || ! isCheckOutOK) {
                 // Remove the room from the list of available rooms
                 availableRooms.remove(aReservation.getRoom().getRoomNumber());
@@ -83,6 +77,22 @@ public final class ReservationService {
         }
 
         return new ArrayList<>(availableRooms.values());
+    }
+
+    DatesCheckResult checkDates(Reservation reservation, Date checkIn, Date checkOut) {
+        boolean isCheckInOK = false;
+        if (checkIn.before(reservation.getCheckInDate()) ||
+                checkIn.compareTo(reservation.getCheckOutDate()) >= 0) {
+            isCheckInOK = true;
+        }
+        boolean isCheckOutOK = false;
+        if (checkOut.compareTo(reservation.getCheckInDate()) <= 0 ||
+                checkOut.after(reservation.getCheckOutDate())) {
+            isCheckOutOK = true;
+        }
+        DatesCheckResult result = new DatesCheckResult(isCheckInOK, isCheckOutOK);
+
+        return result;
     }
 
     public Collection<Reservation> getCustomersReservation(Customer customer) {
@@ -105,5 +115,26 @@ public final class ReservationService {
                 System.out.println(aRes);
             }
         }
+    }
+}
+
+/**
+ * Helper class for ReservationService::checkDates()
+ */
+final class DatesCheckResult {
+
+    private final boolean isCheckInOK, isCheckOutOK;
+
+    public DatesCheckResult(boolean isCheckInOK, boolean isCheckOutOK) {
+        this.isCheckInOK = isCheckInOK;
+        this.isCheckOutOK = isCheckOutOK;
+    }
+
+    public boolean getIsCheckInOK() {
+        return isCheckInOK;
+    }
+
+    public boolean getIsCheckOutOK() {
+        return isCheckOutOK;
     }
 }
