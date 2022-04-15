@@ -4,11 +4,11 @@ import java.util.regex.Pattern;
 
 public class Customer implements Comparable<Customer> {
 
-    private String firstName, lastName, email;
+    final private String firstName, lastName, email;
 
     public Customer(String firstName, String lastName, String email) {
         // Validate email
-        String emailRegex = "^(.+)@(.+).(.+)$";
+        final String emailRegex = "^(.+)@(.+).(.+)$";
         Pattern emailPattern = Pattern.compile(emailRegex);
         if (emailPattern.matcher(email).matches()) {
             this.email = email;
