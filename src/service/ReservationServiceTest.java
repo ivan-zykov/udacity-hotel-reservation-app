@@ -47,9 +47,8 @@ public class ReservationServiceTest {
         reserveARoomInMay(serv, vanya, room103, cal, 10, 17);
         // Test attempting to reserve a booked room
         IRoom room102Copy = new Room(roomId, 170.0, RoomType.DOUBLE);
-        Reservation res2 = null;
         try {
-            res2 = reserveARoomInMay(serv, vanya, room102Copy, cal, 10,
+            reserveARoomInMay(serv, vanya, room102Copy, cal, 10,
                     17);
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getLocalizedMessage());
@@ -89,9 +88,9 @@ public class ReservationServiceTest {
     private static Reservation reserveARoomInMay(ReservationService serv,
     Customer customer, IRoom room, Calendar cal, int checkInDay, int checkOutDay) {
 
-        cal.set(2022, 04, checkInDay);
+        cal.set(2022, Calendar.MAY, checkInDay);
         Date checkInDate = cal.getTime();
-        cal.set(2022, 04, checkOutDay);
+        cal.set(2022, Calendar.MAY, checkOutDay);
         Date checkOutDate = cal.getTime();
         return serv.reserveARoom(customer, room, checkInDate, checkOutDate);
     }
@@ -99,9 +98,9 @@ public class ReservationServiceTest {
     private static void testFindRooms(ReservationService serv, Calendar cal,
                                       int checkInDay, int checkOutDay) {
 
-        cal.set(2022, 04, checkInDay);
+        cal.set(2022, Calendar.MAY, checkInDay);
         Date checkInDate = cal.getTime();
-        cal.set(2022, 04, checkOutDay);
+        cal.set(2022, Calendar.MAY, checkOutDay);
         Date checkOutDate = cal.getTime();
         System.out.println("Available rooms for " + checkInDay + " - " +
                 checkOutDay + " May");
