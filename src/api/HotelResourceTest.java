@@ -74,13 +74,6 @@ public class HotelResourceTest {
         }
         System.out.println();
 
-        Collection<Reservation> vanyasReservations =
-                hotelResource.getCustomersReservations(vanyasEmail);
-        for (Reservation aReservation: vanyasReservations) {
-            System.out.println(aReservation);
-        }
-        System.out.println();
-
         System.out.println("--- Testing findARoom() ---");
         System.out.println();
         System.out.println("Expect no free rooms");
