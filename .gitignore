@@ -1,2 +1,4 @@
 /out
 *.zip
+/src/*.class
+/src/*/*.class

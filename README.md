@@ -2,8 +2,30 @@
 
 This is my implementation of the first (out of three) project in Udacity's Java Programing Nanodegree.
 
+## How to clone the repo in terminal
+```bash
+git clone https://github.com/IvanZet/udacity-hotel-reservation-app.git ivans-hotel-app
+```
+
+## How to run it in IDEA
+Open `src/HotelApplication.java` file and run the `main()` function
+
+## How to run it in terminal
+Navigate to `src/` dir of the project
+```bash
+cd ivans-hotel-app/src
+```
+Compile the project
+```bash
+javac -cp "." HotelApplication.java
+```
+Run the app
+```bash
+java -cp "." HotelApplication.java
+```
+
 ## TODO
-- [ ] Add how run it
+- [x] Add how run it
 - [ ] Add description (with screenshots maybe)
 - [ ] Add JavaDock for methods, especially public ones
 - [ ] Add unit tests
