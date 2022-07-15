@@ -1,6 +1,19 @@
 # Udacity hotel reservation app
 
+## Description
 This is my implementation of the first (out of three) project in Udacity's Java Programing Nanodegree.
+
+I wrote this console app from scratch based on architecture suggested in the course. The project demonstrates designing
+classes using OOP, organizing and processing data with collections, and using common Java types.
+
+This app allows customers to find and book a hotel room based on room availability. The following screenshots
+demonstrate the functionality implemented.
+
+Main menu:\
+![main menu](main.png)
+
+Admin menu:\
+![admin menu](admin.png)
 
 ## How to clone the repo in terminal
 ```bash
@@ -8,7 +21,7 @@ git clone https://github.com/IvanZet/udacity-hotel-reservation-app.git ivans-hot
 ```
 
 ## How to run it in IDEA
-Open `src/HotelApplication.java` file and run the `main()` function
+Open `src/HotelApplication.java` file and run the `main()` function.
 
 ## How to run it in terminal
 Navigate to `src/` dir of the project
@@ -26,7 +39,7 @@ java -cp "." HotelApplication.java
 
 ## TODO
 - [x] Add how run it
-- [ ] Add description (with screenshots maybe)
+- [x] Add description
 - [ ] Add JavaDock for methods, especially public ones
 - [ ] Add unit tests
 - [ ] Clean FIXME and TODO tags
