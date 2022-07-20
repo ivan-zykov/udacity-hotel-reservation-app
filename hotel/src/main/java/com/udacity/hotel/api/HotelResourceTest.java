@@ -1,11 +1,11 @@
-package api;
+package com.udacity.hotel.api;
 
-import model.IRoom;
-import model.Reservation;
-import model.Room;
-import model.RoomType;
-import service.CustomerService;
-import service.ReservationService;
+import com.udacity.hotel.model.IRoom;
+import com.udacity.hotel.model.Reservation;
+import com.udacity.hotel.model.Room;
+import com.udacity.hotel.model.RoomType;
+import com.udacity.hotel.service.CustomerService;
+import com.udacity.hotel.service.ReservationService;
 
 import java.util.Calendar;
 import java.util.Collection;

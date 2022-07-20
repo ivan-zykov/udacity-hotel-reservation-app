@@ -1,4 +1,4 @@
-package model;
+package com.udacity.hotel.model;
 
 /**
  * A room that is free of charge to book and holds basic information about it.

@@ -1,8 +1,8 @@
-package api;
+package com.udacity.hotel.api;
 
-import model.*;
-import service.CustomerService;
-import service.ReservationService;
+import com.udacity.hotel.model.*;
+import com.udacity.hotel.service.CustomerService;
+import com.udacity.hotel.service.ReservationService;
 
 import java.util.*;
 

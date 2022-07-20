@@ -26,21 +26,21 @@ Open `src/HotelApplication.java` file and run the `main()` function.
 ## How to run it in terminal
 Navigate to `src/` dir of the project
 ```bash
-cd ivans-hotel-app/src
+cd ivans-hotel-app/hotel/src/main/java
 ```
 Compile the project
 ```bash
-javac -cp "." HotelApplication.java
+javac com/udacity/hotel/HotelApplication.java
 ```
 Run the app
 ```bash
-java -cp "." HotelApplication.java
+java com.udacity.hotel.HotelApplication
 ```
 
 ## TODO
 - [x] Add how run it
 - [x] Add description
-- [ ] Add JavaDock for methods, especially public ones
+- [x] Add JavaDock for methods, especially public ones
 - [ ] Add unit tests
 - [ ] Clean FIXME and TODO tags
 - [ ] Fix IDEA’s standard linter errors

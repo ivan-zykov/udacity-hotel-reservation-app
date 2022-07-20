@@ -1,9 +1,9 @@
-package model;
+package com.udacity.hotel.model;
 
 import java.util.regex.Pattern;
 
 /**
- * A customer who uses the app to search for a free {@link model.IRoom} and book one.
+ * A customer who uses the app to search for a free {@link IRoom} and book one.
  * Holds basic information about a customer.
  */
 public class Customer implements Comparable<Customer> {

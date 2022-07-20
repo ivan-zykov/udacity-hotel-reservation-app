@@ -1,8 +1,9 @@
-package ui;
+package com.udacity.hotel.ui;
 
-import api.HotelResource;
-import model.IRoom;
-import model.Reservation;
+import com.udacity.hotel.api.HotelResource;
+import com.udacity.hotel.model.IRoom;
+import com.udacity.hotel.model.Customer;
+import com.udacity.hotel.model.Reservation;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -42,8 +43,8 @@ public final class MainMenu extends Menu {
      * action utilising APIs to services.
      * <p>Performed actions include:</p>
      * <ul>
-     *     <li>finding free {@link model.IRoom}s for the supplied dates and booking a selected room for the
-     *     corresponding {@link model.Customer}</li>
+     *     <li>finding free {@link IRoom}s for the supplied dates and booking a selected room for the
+     *     corresponding {@link Customer}</li>
      *     <li>printing all reservations of a specified customer</li>
      *     <li>creating a new account that is recording a new customer with data from user's input</li>
      *     <li>navigating to administrator's menu</li>

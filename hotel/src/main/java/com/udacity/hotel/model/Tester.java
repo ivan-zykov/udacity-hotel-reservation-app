@@ -1,4 +1,4 @@
-package model;
+package com.udacity.hotel.model;
 
 import java.util.*;
 

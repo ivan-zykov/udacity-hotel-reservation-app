@@ -1,11 +1,11 @@
-package service;
+package com.udacity.hotel.service;
 
-import model.Customer;
+import com.udacity.hotel.model.Customer;
 
 import java.util.*;
 
 /**
- * A singleton service to keep track of {@link model.Customer}s, record new and retrieve existing ones.
+ * A singleton service to keep track of {@link Customer}s, record new and retrieve existing ones.
  */
 public final class CustomerService {
 
@@ -31,7 +31,7 @@ public final class CustomerService {
     }
 
     /**
-     * Creates a new {@link model.Customer} and records it if no customer already recorded with the provided email.
+     * Creates a new {@link Customer} and records it if no customer already recorded with the provided email.
      *
      * @param email                     string, email of the customer
      * @param firstName                 string, first name of the customer

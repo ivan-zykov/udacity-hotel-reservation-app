@@ -1,5 +1,5 @@
 /out
 *.zip
-/src/*.class
-/src/*/*.class
+/hotel/src/main/java/com/udacity/hotel/*.class
+/hotel/src/main/java/com/udacity/hotel/*/*.class
 /doc

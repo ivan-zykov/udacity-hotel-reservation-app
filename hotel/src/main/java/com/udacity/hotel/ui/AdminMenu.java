@@ -1,10 +1,11 @@
-package ui;
+package com.udacity.hotel.ui;
 
-import api.AdminResource;
-import model.Customer;
-import model.IRoom;
-import model.Room;
-import model.RoomType;
+import com.udacity.hotel.api.AdminResource;
+import com.udacity.hotel.model.Customer;
+import com.udacity.hotel.model.IRoom;
+import com.udacity.hotel.model.Reservation;
+import com.udacity.hotel.model.Room;
+import com.udacity.hotel.model.RoomType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,9 +35,9 @@ public final class AdminMenu extends Menu {
      * corresponding action utilising APIs to services.
      * <p>Performed actions include:</p>
      * <ul>
-     *     <li>printing all {@link model.Customer}s recorded so far</li>
-     *     <li>printing all {@link model.IRoom}s</li>
-     *     <li>printing all {@link model.Reservation}s</li>
+     *     <li>printing all {@link Customer}s recorded so far</li>
+     *     <li>printing all {@link IRoom}s</li>
+     *     <li>printing all {@link Reservation}s</li>
      *     <li>recording one or multiple new rooms with data provided by the console input</li>
      *     <li>navigating to the main menu</li>
      * </ul>

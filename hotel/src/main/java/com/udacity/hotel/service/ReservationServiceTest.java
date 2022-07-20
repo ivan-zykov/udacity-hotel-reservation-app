@@ -1,6 +1,6 @@
-package service;
+package com.udacity.hotel.service;
 
-import model.*;
+import com.udacity.hotel.model.*;
 
 import java.util.*;
 

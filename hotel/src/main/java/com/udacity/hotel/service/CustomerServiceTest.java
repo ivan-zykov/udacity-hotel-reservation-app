@@ -1,6 +1,6 @@
-package service;
+package com.udacity.hotel.service;
 
-import model.Customer;
+import com.udacity.hotel.model.Customer;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,16 +1,31 @@
-import api.AdminResource;
-import api.HotelResource;
-import service.CustomerService;
-import service.ReservationService;
-import ui.AdminMenu;
-import ui.MainMenu;
+package com.udacity.hotel;
+
+import com.udacity.hotel.api.AdminResource;
+import com.udacity.hotel.api.HotelResource;
+import com.udacity.hotel.service.CustomerService;
+import com.udacity.hotel.service.ReservationService;
+import com.udacity.hotel.ui.AdminMenu;
+import com.udacity.hotel.ui.MainMenu;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
+// FIXME: add @author and @see as below to all classes
+/**
+ * Main class of this application which instantiates all required classes and prints the main menu in the console.
+ *
+ * @author Ivan Zykov
+ * @see <span>A part of the first project of Java Programing nanodegree by
+ * <a href="https://www.udacity.com/">Udacity</a></span>
+ */
 public final class HotelApplication {
 
+    /**
+     * Main method starting this app.
+     *
+     * @param args  string with arguments, but this app doesn't support any
+     */
     public static void main(String[] args) {
 
         // Instantiate classes

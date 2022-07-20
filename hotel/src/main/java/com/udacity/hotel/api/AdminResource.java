@@ -1,9 +1,10 @@
-package api;
+package com.udacity.hotel.api;
 
-import model.Customer;
-import model.IRoom;
-import service.CustomerService;
-import service.ReservationService;
+import com.udacity.hotel.model.Customer;
+import com.udacity.hotel.model.IRoom;
+import com.udacity.hotel.model.Reservation;
+import com.udacity.hotel.service.CustomerService;
+import com.udacity.hotel.service.ReservationService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,9 +30,9 @@ public final class AdminResource {
     /**
      * Provides unique instance of this singleton service.
      *
-     * @param customerService       customerService object that handles {@link model.Customer}s
-     * @param reservationService    reservationService object that handles {@link model.IRoom}s and
-     *                              {@link model.Reservation}s
+     * @param customerService       customerService object that handles {@link Customer}s
+     * @param reservationService    reservationService object that handles {@link IRoom}s and
+     *                              {@link Reservation}s
      * @return                      adminResource object of this service
      */
     public static AdminResource getInstance(CustomerService customerService,

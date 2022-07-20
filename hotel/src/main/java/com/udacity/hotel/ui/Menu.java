@@ -1,4 +1,4 @@
-package ui;
+package com.udacity.hotel.ui;
 
 import java.util.Scanner;
 

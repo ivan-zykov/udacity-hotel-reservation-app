@@ -1,13 +1,13 @@
-package service;
+package com.udacity.hotel.service;
 
-import model.Customer;
-import model.IRoom;
-import model.Reservation;
+import com.udacity.hotel.model.Customer;
+import com.udacity.hotel.model.IRoom;
+import com.udacity.hotel.model.Reservation;
 
 import java.util.*;
 
 /**
- * A singleton service to keep track, record and retrieve {@link model.IRoom}s and {@link model.Reservation}s.
+ * A singleton service to keep track, record and retrieve {@link IRoom}s and {@link Reservation}s.
  * Also, prints all reservations available.
  */
 public final class ReservationService {
@@ -166,7 +166,7 @@ public final class ReservationService {
     }
 
     /**
-     * Prints to the console all {@link model.Reservation}s for all {@link model.Customer}s or, if no reservations
+     * Prints to the console all {@link Reservation}s for all {@link Customer}s or, if no reservations
      * recorded yet, a text message.
      */
     public void printAllReservations() {
@@ -182,7 +182,7 @@ public final class ReservationService {
 
 // FIXME: make this class nested and static
 /**
- * Helper for representing results of  {@link service.ReservationService#checkDates(Reservation, Date, Date) checkDates}
+ * Helper for representing results of  {@link ReservationService#checkDates(Reservation, Date, Date) checkDates}
  * method
  */
 final class DatesCheckResult {

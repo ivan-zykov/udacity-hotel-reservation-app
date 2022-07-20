@@ -1,10 +1,10 @@
-package api;
+package com.udacity.hotel.api;
 
-import model.Customer;
-import model.IRoom;
-import model.Reservation;
-import service.CustomerService;
-import service.ReservationService;
+import com.udacity.hotel.model.Customer;
+import com.udacity.hotel.model.IRoom;
+import com.udacity.hotel.model.Reservation;
+import com.udacity.hotel.service.CustomerService;
+import com.udacity.hotel.service.ReservationService;
 
 import java.util.Collection;
 import java.util.Date;
@@ -29,9 +29,9 @@ public final class HotelResource {
     /**
      * Provides unique instance of this singleton service.
      *
-     * @param customerService       customerService object that handles {@link model.Customer}s
-     * @param reservationService    reservationService object that handles {@link model.IRoom}s and
-     *                              {@link model.Reservation}s
+     * @param customerService       customerService object that handles {@link Customer}s
+     * @param reservationService    reservationService object that handles {@link IRoom}s and
+     *                              {@link Reservation}s
      * @return                      hotelResource object of this service
      */
     public static HotelResource getInstance(CustomerService customerService,
@@ -55,7 +55,7 @@ public final class HotelResource {
     }
 
     /**
-     * Calls a service to record a new {@link model.Customer} with supplied data.
+     * Calls a service to record a new {@link Customer} with supplied data.
      *
      * @param email     string with customer's email
      * @param firstName string with customer's first name
@@ -76,7 +76,7 @@ public final class HotelResource {
     }
 
     /**
-     * Calls a service to get a {@link model.Customer} with the supplied email and reserve a room for the acquired
+     * Calls a service to get a {@link Customer} with the supplied email and reserve a room for the acquired
      * customer.
      *
      * @param customerEmail string with the email of the customer booking a room
@@ -94,7 +94,7 @@ public final class HotelResource {
     }
 
     /**
-     * Calls a service to get a {@link model.Customer} with the supplied email and get all their reservations.
+     * Calls a service to get a {@link Customer} with the supplied email and get all their reservations.
      *
      * @param customerEmail string with the email of the customer booking a room
      * @return              collection of reservations recorded for the customer with supplied email
