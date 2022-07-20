@@ -11,15 +11,36 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Console UI for administrators.
+ */
 public final class AdminMenu extends Menu {
 
     private final AdminResource adminResource;
 
+    /**
+     * Constructor of this class.
+     *
+     * @param adminResource adminResource object of the API to services with functionality for admins
+     * @param scanner       scanner object that reads user's input
+     */
     public AdminMenu(AdminResource adminResource, Scanner scanner) {
         super(scanner);
         this.adminResource = adminResource;
     }
 
+    /**
+     * Prints menu to the console, reads administrator's input for the selected menu option and performs the
+     * corresponding action utilising APIs to services.
+     * <p>Performed actions include:</p>
+     * <ul>
+     *     <li>printing all {@link model.Customer}s recorded so far</li>
+     *     <li>printing all {@link model.IRoom}s</li>
+     *     <li>printing all {@link model.Reservation}s</li>
+     *     <li>recording one or multiple new rooms with data provided by the console input</li>
+     *     <li>navigating to the main menu</li>
+     * </ul>
+     */
     public void open() {
 
         boolean keepRunning = true;

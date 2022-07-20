@@ -12,13 +12,23 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+/**
+ * Console UI for a regular users.
+ */
 public final class MainMenu extends Menu {
 
     private final AdminMenu adminMenu;
     private final HotelResource hotelResource;
     private final DateFormat simpleDateFormat;
 
-
+    /**
+     * Constructor of this class.
+     *
+     * @param adminMenu         adminMenu object of the menu for admins
+     * @param hotelResource     hotelResource object of the API to services with functionality for regular users
+     * @param scanner           scanner object that reads user's input
+     * @param simpleDateFormat  dateFormat object that parses and validates dates from scanner
+     */
     public MainMenu(AdminMenu adminMenu, HotelResource hotelResource,
                     Scanner scanner, DateFormat simpleDateFormat) {
         super(scanner);
@@ -27,6 +37,19 @@ public final class MainMenu extends Menu {
         this.simpleDateFormat = simpleDateFormat;
     }
 
+    /**
+     * Prints menu to the console, reads user's input for the selected menu option and performs the corresponding
+     * action utilising APIs to services.
+     * <p>Performed actions include:</p>
+     * <ul>
+     *     <li>finding free {@link model.IRoom}s for the supplied dates and booking a selected room for the
+     *     corresponding {@link model.Customer}</li>
+     *     <li>printing all reservations of a specified customer</li>
+     *     <li>creating a new account that is recording a new customer with data from user's input</li>
+     *     <li>navigating to administrator's menu</li>
+     *     <li>exiting and terminating the app</li>
+     * </ul>
+     */
     public void open() {
 
         boolean keepRunning = true;
