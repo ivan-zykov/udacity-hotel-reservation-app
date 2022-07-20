@@ -6,6 +6,10 @@ import model.Reservation;
 
 import java.util.*;
 
+/**
+ * A singleton service to keep track, record and retrieve {@link model.IRoom}s and {@link model.Reservation}s.
+ * Also, prints all reservations available.
+ */
 public final class ReservationService {
 
     private static ReservationService INSTANCE;
@@ -18,6 +22,11 @@ public final class ReservationService {
         rooms = new HashMap<>();
     }
 
+    /**
+     * Provides the unique instance of this singleton service.
+     *
+     * @return  reservationService object of this service
+     */
     public static ReservationService getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new ReservationService();
@@ -26,10 +35,21 @@ public final class ReservationService {
         return INSTANCE;
     }
 
+    /**
+     * Returns all rooms recorded so far.
+     *
+     * @return  map of rooms
+     */
     public Map<String, IRoom> getRooms() {
         return rooms;
     }
 
+    /**
+     * Records the supplied room if a room with the same number was not recorded yet.
+     *
+     * @param   room                        iRoom, an object of a room to add
+     * @throws  IllegalArgumentException    if a room with the same ID already exists
+     */
     public void addRoom(IRoom room) {
         if (rooms.containsKey(room.getRoomNumber())) {
             throw new IllegalArgumentException("Room number " + room.getRoomNumber() +
@@ -39,6 +59,13 @@ public final class ReservationService {
         }
     }
 
+    /**
+     * Returns an room if one was already recorded with the supplied ID.
+     *
+     * @param   roomId                      string for room's ID
+     * @return                              iRoom corresponding to supplied ID
+     * @throws  IllegalArgumentException    if there is no room with supplied ID
+     */
     public IRoom getARoom(String roomId) {
         if (rooms.containsKey(roomId)) {
             return rooms.get(roomId);
@@ -48,6 +75,16 @@ public final class ReservationService {
         }
     }
 
+    /**
+     * Creates a new reservation and if the same reservation was not recorded yet, records it.
+     *
+     * @param customer      customer for whom the reservation is made
+     * @param room          iRoom which is reserved
+     * @param checkInDate   date object of check-in
+     * @param checkOutDate  date object of check-out
+     * @return              reservation newly created
+     * @throws IllegalArgumentException if the supplied room is already reserved for exactly the same supplied days
+     */
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate,
                                     Date checkOutDate) {
         Reservation newReservation = new Reservation(customer, room, checkInDate,
@@ -60,6 +97,13 @@ public final class ReservationService {
         return newReservation;
     }
 
+    /**
+     * Finds rooms available for booking withing the supplied dates.
+     *
+     * @param checkInDate   date object of check-in
+     * @param checkOutDate  date object of check-out
+     * @return              collection of rooms available for the supplied dates
+     */
     public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
         // Copy all rooms
         Map<String, IRoom> availableRooms = new HashMap<>(this.rooms);
@@ -79,6 +123,14 @@ public final class ReservationService {
         return new ArrayList<>(availableRooms.values());
     }
 
+    /**
+     * Checks if the supplied reservation conflicts with the supplied check-in and check-out dates.
+     *
+     * @param reservation   reservation to compare with the supplied dates
+     * @param checkIn       date object of check-in
+     * @param checkOut      date object of check-out
+     * @return              datesCheckResult object of a helper class containing a check result for each date
+     */
     DatesCheckResult checkDates(Reservation reservation, Date checkIn, Date checkOut) {
         boolean isCheckInOK = false;
         if (checkIn.before(reservation.getCheckInDate()) ||
@@ -95,6 +147,12 @@ public final class ReservationService {
         return result;
     }
 
+    /**
+     * Finds all reservations for the supplied customer.
+     *
+     * @param customer  customer for whom reservations are searched
+     * @return          collection for reservations for the supplied customer
+     */
     public Collection<Reservation> getCustomersReservation(Customer customer) {
 
         List<Reservation> customersReservations = new ArrayList<>();
@@ -107,6 +165,10 @@ public final class ReservationService {
         return customersReservations;
     }
 
+    /**
+     * Prints to the console all {@link model.Reservation}s for all {@link model.Customer}s or, if no reservations
+     * recorded yet, a text message.
+     */
     public void printAllReservations() {
         if (this.reservations.isEmpty()) {
             System.out.println("There are still no reservations");
@@ -118,13 +180,21 @@ public final class ReservationService {
     }
 }
 
+// FIXME: make this class nested and static
 /**
- * Helper class for ReservationService::checkDates()
+ * Helper for representing results of  {@link service.ReservationService#checkDates(Reservation, Date, Date) checkDates}
+ * method
  */
 final class DatesCheckResult {
 
     private final boolean isCheckInOK, isCheckOutOK;
 
+    /**
+     * Constructor for this class.
+     *
+     * @param isCheckInOK   boolean indicating if the check-in date conflicts with the reservation
+     * @param isCheckOutOK  boolean indicating if the check-out date conflicts with the reservation
+     */
     public DatesCheckResult(boolean isCheckInOK, boolean isCheckOutOK) {
         this.isCheckInOK = isCheckInOK;
         this.isCheckOutOK = isCheckOutOK;
