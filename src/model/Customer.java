@@ -2,10 +2,22 @@ package model;
 
 import java.util.regex.Pattern;
 
+/**
+ * A customer who uses the app to search for a free {@link model.IRoom} and book one.
+ * Holds basic information about a customer.
+ */
 public class Customer implements Comparable<Customer> {
 
     final private String firstName, lastName, email;
 
+    /**
+     * Constructor of this class.
+     *
+     * @param firstName                 string, first name of this customer
+     * @param lastName                  string, last name of this customer
+     * @param email                     string, email of this customer
+     * @throws IllegalArgumentException if the supplied email is of wrong format
+     */
     public Customer(String firstName, String lastName, String email) {
         if (isValidEmail(email)) {
             this.email = email;
@@ -29,6 +41,11 @@ public class Customer implements Comparable<Customer> {
         return email;
     }
 
+    /**
+     * Returns basic data of this customer and formats its string representation.
+     *
+     * @return      string representation of the customer's data
+     */
     @Override
     public String toString() {
         return "Customer " + firstName + " " + lastName + ", " + email + ".";

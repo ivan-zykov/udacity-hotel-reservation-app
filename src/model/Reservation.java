@@ -2,12 +2,23 @@ package model;
 
 import java.util.Date;
 
+/**
+ * An object of a reservation of a room for specific dates for a customer.
+ */
 public class Reservation {
 
     private Customer customer;
     private IRoom room;
     private Date checkInDate, checkOutDate;
 
+    /**
+     * Constructor for this class.
+     *
+     * @param customer      customer who makes this reservation
+     * @param room          iRoom which is reserved
+     * @param checkInDate   date of check in
+     * @param checkOutDate  date of check out
+     */
     public Reservation(Customer customer, IRoom room, Date checkInDate,
                        Date checkOutDate) {
         this.customer = customer;
@@ -33,6 +44,11 @@ public class Reservation {
         return checkOutDate;
     }
 
+    /**
+     * Includes basic data about this reservation and formats its string representation.
+     *
+     * @return      string representation of this reservation
+     */
     @Override
     public String toString() {
         return "Reservation for \r\n" +
@@ -42,7 +58,7 @@ public class Reservation {
     }
 
     /**
-     * Inspired by an article on www.baeldung.com
+     * @see <span>Inspired by an article on <a href="https://www.baeldung.com/">baeldung.com</a></span>
      */
     @Override
     public final boolean equals(Object o) {
@@ -67,7 +83,7 @@ public class Reservation {
     }
 
     /**
-     * Inspired by an article on www.baeldung.com
+     * @see <span>Inspired by an article on <a href="https://www.baeldung.com/">baeldung.com</a></span>
      */
     @Override
     public final int hashCode() {

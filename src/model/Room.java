@@ -1,11 +1,21 @@
 package model;
 
+/**
+ * An object of a normal room that is not for free and holds basic information about it.
+ */
 public class Room implements IRoom {
 
     final private String roomNumber;
     final private Double roomPrice;
     final private RoomType roomType;
 
+    /**
+     * Constructor for this class.
+     *
+     * @param roomNumber    string, room number
+     * @param roomPrice     string, room price
+     * @param roomType      string, type of the room
+     */
     public Room(String roomNumber, Double roomPrice, RoomType roomType) {
         this.roomNumber = roomNumber;
         this.roomPrice = roomPrice;
@@ -36,6 +46,11 @@ public class Room implements IRoom {
         return false;
     }
 
+    /**
+     * Includes basic data about the room and formats its string representation.
+     *
+     * @return      string representation of the customer's data
+     */
     @Override
     public String toString() {
         return "Room number: " + roomNumber + ", price: " + roomPrice +
