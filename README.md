@@ -21,12 +21,12 @@ git clone https://github.com/IvanZet/udacity-hotel-reservation-app.git ivans-hot
 ```
 
 ## How to run it in IDEA
-Open `src/HotelApplication.java` file and run the `main()` function.
+Open `src/main/java/com/udacity/hotel/HotelApplication.java` file and run the `main()` function.
 
 ## How to run it in terminal
 Navigate to `src/` dir of the project
 ```bash
-cd ivans-hotel-app/hotel/src/main/java
+cd ivans-hotel-app/src/main/java
 ```
 Compile the project
 ```bash
