@@ -57,7 +57,7 @@ public class Customer implements Comparable<Customer> {
     }
 
     private boolean isValidEmail(String email) {
-        final String emailRegex = "^(.+)@(.+).(.+)$";
+        final String emailRegex = "^(.+)@(.+)[.](.+)$";
         Pattern emailPattern = Pattern.compile(emailRegex);
         return emailPattern.matcher(email).matches();
     }
