@@ -58,7 +58,7 @@ public class Room implements IRoom {
     }
 
     /**
-     * Inspired by an article on www.baeldung.com
+     * @see <span>Inspired by an article on <a href="https://www.baeldung.com/">baeldung.com</a></span>
      */
     @Override
     public final boolean equals(Object o) {
@@ -74,7 +74,7 @@ public class Room implements IRoom {
     }
 
     /**
-     * Inspired by an article on www.baeldung.com
+     * @see <span>Inspired by an article on <a href="https://www.baeldung.com/">baeldung.com</a></span>
      */
     @Override
     public final int hashCode() {
