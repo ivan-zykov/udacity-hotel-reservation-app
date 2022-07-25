@@ -87,6 +87,11 @@ public final class ReservationService {
      */
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate,
                                     Date checkOutDate) {
+        /**
+         * FIXME: refactor creating new reservation via factory.
+         *      1. Create nested public final static class
+         *      2. Refactor creating a reservation everywhere else
+         */
         Reservation newReservation = new Reservation(customer, room, checkInDate,
                 checkOutDate);
         if (reservations.contains(newReservation)) {
@@ -177,6 +182,10 @@ public final class ReservationService {
                 System.out.println(aRes);
             }
         }
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
     }
 
     /**
