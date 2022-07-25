@@ -178,33 +178,32 @@ public final class ReservationService {
             }
         }
     }
-}
-
-// FIXME: make this class nested and static
-/**
- * Helper for representing results of  {@link ReservationService#checkDates(Reservation, Date, Date) checkDates}
- * method
- */
-final class DatesCheckResult {
-
-    private final boolean isCheckInOK, isCheckOutOK;
 
     /**
-     * Constructor for this class.
-     *
-     * @param isCheckInOK   boolean indicating if the check-in date conflicts with the reservation
-     * @param isCheckOutOK  boolean indicating if the check-out date conflicts with the reservation
+     * Helper for representing results of  {@link ReservationService#checkDates(Reservation, Date, Date) checkDates}
+     * method
      */
-    public DatesCheckResult(boolean isCheckInOK, boolean isCheckOutOK) {
-        this.isCheckInOK = isCheckInOK;
-        this.isCheckOutOK = isCheckOutOK;
-    }
+    final static class DatesCheckResult {
 
-    public boolean getIsCheckInOK() {
-        return isCheckInOK;
-    }
+        private final boolean isCheckInOK, isCheckOutOK;
 
-    public boolean getIsCheckOutOK() {
-        return isCheckOutOK;
+        /**
+         * Constructor for this class.
+         *
+         * @param isCheckInOK   boolean indicating if the check-in date conflicts with the reservation
+         * @param isCheckOutOK  boolean indicating if the check-out date conflicts with the reservation
+         */
+        public DatesCheckResult(boolean isCheckInOK, boolean isCheckOutOK) {
+            this.isCheckInOK = isCheckInOK;
+            this.isCheckOutOK = isCheckOutOK;
+        }
+
+        public boolean getIsCheckInOK() {
+            return isCheckInOK;
+        }
+
+        public boolean getIsCheckOutOK() {
+            return isCheckOutOK;
+        }
     }
 }
