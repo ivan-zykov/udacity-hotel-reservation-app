@@ -14,34 +14,20 @@ import java.util.Date;
  */
 public final class HotelResource {
 
-    private static HotelResource INSTANCE;
-
     private final CustomerService customerService;
     private final ReservationService reservationService;
 
-    private HotelResource(CustomerService customerService,
-                          ReservationService reservationService) {
-
-        this.customerService = customerService;
-        this.reservationService = reservationService;
-    }
-
     /**
-     * Provides unique instance of this singleton service.
+     * Constructor of this class.
      *
      * @param customerService       customerService object that handles {@link Customer}s
      * @param reservationService    reservationService object that handles {@link IRoom}s and
      *                              {@link Reservation}s
-     * @return                      hotelResource object of this service
      */
-    public static HotelResource getInstance(CustomerService customerService,
-                                            ReservationService reservationService) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new HotelResource(customerService, reservationService);
-        }
-
-        return INSTANCE;
+    public HotelResource(CustomerService customerService,
+                          ReservationService reservationService) {
+        this.customerService = customerService;
+        this.reservationService = reservationService;
     }
 
     /**

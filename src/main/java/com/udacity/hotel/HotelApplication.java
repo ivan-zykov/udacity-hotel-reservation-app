@@ -35,7 +35,7 @@ public final class HotelApplication {
         Scanner scanner = new Scanner(System.in);
         DateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         AdminMenu adminMenu = new AdminMenu(adminResource, scanner);
-        HotelResource hotelResource = HotelResource.getInstance(customerService,
+        HotelResource hotelResource = new HotelResource(customerService,
                 reservationService);
         MainMenu mainMenu = new MainMenu(adminMenu, hotelResource, scanner,
                 simpleDateFormat);
