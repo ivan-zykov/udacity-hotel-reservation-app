@@ -16,32 +16,20 @@ import java.util.Map;
  */
 public final class AdminResource {
 
-    private static AdminResource INSTANCE;
-
     private final CustomerService customerService;
     private final ReservationService reservationService;
 
-    private AdminResource(CustomerService customerService,
-                          ReservationService reservationService) {
-        this.customerService = customerService;
-        this.reservationService = reservationService;
-    }
-
     /**
-     * Provides unique instance of this singleton service.
+     * Constructor of this class.
      *
      * @param customerService       customerService object that handles {@link Customer}s
      * @param reservationService    reservationService object that handles {@link IRoom}s and
      *                              {@link Reservation}s
-     * @return                      adminResource object of this service
      */
-    public static AdminResource getInstance(CustomerService customerService,
-                                            ReservationService reservationService) {
-        if (INSTANCE == null) {
-            INSTANCE = new AdminResource(customerService, reservationService);
-        }
-
-        return INSTANCE;
+    public AdminResource(CustomerService customerService,
+                          ReservationService reservationService) {
+        this.customerService = customerService;
+        this.reservationService = reservationService;
     }
 
     /**

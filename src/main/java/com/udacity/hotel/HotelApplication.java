@@ -31,8 +31,7 @@ public final class HotelApplication {
         // Instantiate classes
         CustomerService customerService = CustomerService.getInstance();
         ReservationService reservationService = ReservationService.getInstance();
-        AdminResource adminResource = AdminResource.getInstance(customerService,
-                reservationService);
+        AdminResource adminResource = new AdminResource(customerService, reservationService);
         Scanner scanner = new Scanner(System.in);
         DateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         AdminMenu adminMenu = new AdminMenu(adminResource, scanner);
