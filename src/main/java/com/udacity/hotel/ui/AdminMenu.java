@@ -50,12 +50,7 @@ public final class AdminMenu extends Menu {
             try {
                 printMenu();
 
-                int input = Integer.parseInt(scanner.next());
-
-                // Clean scanner
-                if (scanner.hasNextLine()) {
-                    scanner.nextLine();
-                }
+                int input = Integer.parseInt(scanner.nextLine());
 
                 switch (input) {
                     case 1:
@@ -166,7 +161,7 @@ public final class AdminMenu extends Menu {
             RoomType roomType = RoomType.SINGLE;
             boolean isBadRoomType = true;
             while (isBadRoomType) {
-                input = scanner.next();
+                input = scanner.nextLine();
                 // TODO: refactor using switch
                 if ("d".equalsIgnoreCase(input)) {
                     isBadRoomType = false;
@@ -185,15 +180,11 @@ public final class AdminMenu extends Menu {
             System.out.println("Add another room? (y/n)");
             boolean isBadInput = true;
             while (isBadInput) {
-                input = scanner.next();
+                input = scanner.nextLine();
                 switch (input.toLowerCase()) {
                     case "y":
                         // Restart inner while loop
                         isBadInput = false;
-                        // Clean scanner
-                        if (scanner.hasNextLine()) {
-                            scanner.nextLine();
-                        }
                         break;
                     case "n":
                         // Exit both loops
