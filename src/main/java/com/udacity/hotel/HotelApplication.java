@@ -5,6 +5,7 @@ import com.udacity.hotel.api.HotelResource;
 import com.udacity.hotel.service.CustomerService;
 import com.udacity.hotel.service.ReservationService;
 import com.udacity.hotel.ui.AdminMenu;
+import com.udacity.hotel.ui.ExitHelper;
 import com.udacity.hotel.ui.MainMenu;
 
 import java.text.DateFormat;
@@ -34,7 +35,7 @@ public final class HotelApplication {
         AdminResource adminResource = new AdminResource(customerService, reservationService);
         Scanner scanner = new Scanner(System.in);
         DateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        AdminMenu adminMenu = new AdminMenu(adminResource, scanner);
+        AdminMenu adminMenu = new AdminMenu(adminResource, scanner, new ExitHelper());
         HotelResource hotelResource = new HotelResource(customerService,
                 reservationService);
         MainMenu mainMenu = new MainMenu(adminMenu, hotelResource, scanner,

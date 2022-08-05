@@ -18,6 +18,7 @@ import java.util.Scanner;
 public final class AdminMenu extends Menu {
 
     private final AdminResource adminResource;
+    private final ExitHelper exitHelper;
 
     /**
      * Constructor of this class.
@@ -25,9 +26,10 @@ public final class AdminMenu extends Menu {
      * @param adminResource adminResource object of the API to services with functionality for admins
      * @param scanner       scanner object that reads user's input
      */
-    public AdminMenu(AdminResource adminResource, Scanner scanner) {
+    public AdminMenu(AdminResource adminResource, Scanner scanner, ExitHelper exitHelper) {
         super(scanner);
         this.adminResource = adminResource;
+        this.exitHelper = exitHelper;
     }
 
     /**
@@ -55,15 +57,19 @@ public final class AdminMenu extends Menu {
                 switch (input) {
                     case 1:
                         seeAllCustomers();
+                        if (exitHelper.exit()) { return; }
                         break;
                     case 2:
                         seeAllRooms();
+                        if (exitHelper.exit()) { return; }
                         break;
                     case 3:
                         seeAllReservations();
+                        if (exitHelper.exit()) { return; }
                         break;
                     case 4:
                         addARoom();
+                        if (exitHelper.exit()) { return; }
                         break;
                     case 5:
                         System.out.println("Returning to the main menu");
@@ -72,6 +78,7 @@ public final class AdminMenu extends Menu {
                     default:
                         System.out.println("Please enter a number representing" +
                                 "a menu option from above");
+                        if (exitHelper.exit()) { return; }
                 }
             } catch (NumberFormatException ex) {
                 System.out.println("Please enter a number");
@@ -81,6 +88,7 @@ public final class AdminMenu extends Menu {
                 System.out.println("Unknown error occurred.");
                 System.out.println(ex.getLocalizedMessage());
             }
+            if (exitHelper.exit()) { return; }
         }
     }
 
@@ -137,9 +145,11 @@ public final class AdminMenu extends Menu {
                     } else {
                         System.out.println("You have already added a room with " +
                                 "room number " + input);
+                        if (exitHelper.exit()) { return; }
                     }
                 } else {
                     System.out.println("Room number should be an integer number");
+                    if (exitHelper.exit()) { return; }
                 }
             }
 
@@ -153,6 +163,7 @@ public final class AdminMenu extends Menu {
                     roomPrice = Double.parseDouble(input);
                 } else {
                     System.out.println("Room price should be a decimal number");
+                    if (exitHelper.exit()) { return; }
                 }
             }
 
@@ -172,6 +183,7 @@ public final class AdminMenu extends Menu {
                 else {
                     System.out.println("Enter \"S\" for single or \"D\" " +
                             "for double");
+                    if (exitHelper.exit()) { return; }
                 }
             }
 
@@ -194,6 +206,7 @@ public final class AdminMenu extends Menu {
                     default:
                         // Keep inside inner loop
                         System.out.println("Enter \"y\" for yes or \"n\" for no");
+                        if (exitHelper.exit()) { return; }
                 }
             }
         }
