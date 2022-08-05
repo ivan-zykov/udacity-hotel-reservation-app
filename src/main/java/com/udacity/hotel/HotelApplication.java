@@ -10,6 +10,7 @@ import com.udacity.hotel.ui.MainMenu;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 // FIXME: add @author and @see as below to all classes
@@ -39,7 +40,7 @@ public final class HotelApplication {
         HotelResource hotelResource = new HotelResource(customerService,
                 reservationService);
         MainMenu mainMenu = new MainMenu(adminMenu, hotelResource, scanner,
-                simpleDateFormat);
+                simpleDateFormat, new ExitHelper(), new Date());
 
         // Run the app
         mainMenu.open();

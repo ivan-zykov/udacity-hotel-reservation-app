@@ -21,6 +21,8 @@ public final class MainMenu extends Menu {
     private final AdminMenu adminMenu;
     private final HotelResource hotelResource;
     private final DateFormat simpleDateFormat;
+    private final ExitHelper exitHelper;
+    private final Date now;
 
     /**
      * Constructor of this class.
@@ -31,11 +33,14 @@ public final class MainMenu extends Menu {
      * @param simpleDateFormat  dateFormat object that parses and validates dates from scanner
      */
     public MainMenu(AdminMenu adminMenu, HotelResource hotelResource,
-                    Scanner scanner, DateFormat simpleDateFormat) {
+                    Scanner scanner, DateFormat simpleDateFormat, ExitHelper exitHelper,
+                    Date now) {
         super(scanner);
         this.adminMenu = adminMenu;
         this.hotelResource = hotelResource;
         this.simpleDateFormat = simpleDateFormat;
+        this.exitHelper = exitHelper;
+        this.now = now;
     }
 
     /**
@@ -59,11 +64,7 @@ public final class MainMenu extends Menu {
             try {
                 printMenu();
 
-                int input = Integer.parseInt(scanner.next());
-                // Clean scanner
-                if (scanner.hasNextLine()) {
-                    scanner.nextLine();
-                }
+                int input = Integer.parseInt(scanner.nextLine());
 
                 switch (input) {
                     case 1:
@@ -71,9 +72,11 @@ public final class MainMenu extends Menu {
                         break;
                     case 2:
                         seeCustomersReservations();
+                        if (exitHelper.exit() || exitHelper.exitNested()) { return; }
                         break;
                     case 3:
                         createNewAccount();
+                        if (exitHelper.exit() || exitHelper.exitNested()) { return; }
                         break;
                     case 4:
                         goToAdminMenu();
@@ -95,6 +98,7 @@ public final class MainMenu extends Menu {
                 System.out.println("Unknown error occurred.");
                 System.out.println(ex.getLocalizedMessage());
             }
+            if (exitHelper.exit() || exitHelper.exitNested()) { return; }
         }
     }
 
@@ -121,24 +125,27 @@ public final class MainMenu extends Menu {
             System.out.println("Enter check-in date in format mm/dd/yyyy " +
                     "Example: 05/30/2022");
             Date checkIn = readDate();
+            if (exitHelper.exitNested() && checkIn == null) { return; }
 
             // Read check-out date
             System.out.println("Enter check-out date in format mm/dd/yyyy " +
                     "Example: 05/30/2022");
             Date checkOut = readDate();
+            if (exitHelper.exitNested() && checkOut == null) { return; }
 
             // Check that check-in is before check-out
             if (checkIn.after(checkOut)) {
                 System.out.println("Your check-in date is later than checkout " +
                         "date. Please reenter dates");
+                if (exitHelper.exit()) { return; }
                 continue;
             }
 
             // Check that both dates are in the future
-            Date now = new Date();
             if (checkIn.before(now) || checkOut.before(now)) {
                 System.out.println("At least one of the dates is in the past. " +
                         "Please reenter dates");
+                if (exitHelper.exit()) { return; }
                 continue;
             }
 
@@ -198,6 +205,7 @@ public final class MainMenu extends Menu {
                     default:
                         // Keep asking
                         System.out.println("Enter \"y\" for yes or \"n\" for no");
+                        if (exitHelper.exit()) { return; }
                 }
             }
 
@@ -219,6 +227,7 @@ public final class MainMenu extends Menu {
                     default:
                         // Keep asking
                         System.out.println("Enter \"y\" for yes or \"n\" for no");
+                        if (exitHelper.exit()) { return; }
                 }
             }
 
@@ -228,7 +237,7 @@ public final class MainMenu extends Menu {
 
             // Check that customer is registered
             if (! customerAlreadyExists(email)) {
-                System.out.println("You are still no registered with this email. " +
+                System.out.println("You are still not registered with this email. " +
                         "Please create an account");
                 keepFindingAndReservingARoom = false;
                 continue;
@@ -242,6 +251,7 @@ public final class MainMenu extends Menu {
                 String input = scanner.nextLine();
                 if (! isNumber(input)) {
                     System.out.println("Room number should be an integer number");
+                    if (exitHelper.exit()) { return; }
                     continue;
                 }
                 // Check that the room is available for booking
@@ -256,6 +266,7 @@ public final class MainMenu extends Menu {
                     System.out.println("The room you picked is actually not " +
                             "available. Please enter a room number from the the " +
                             "list above");
+                    if (exitHelper.exit()) { return; }
                     continue;
                 }
 
@@ -283,6 +294,7 @@ public final class MainMenu extends Menu {
             String input = scanner.nextLine();
             if (! isValidDate(input)) {
                 System.out.println("Renter the date in format mm/dd/yyyy");
+                if (exitHelper.exitNested()) { return null; }
                 continue;
             }
             try {
@@ -290,6 +302,7 @@ public final class MainMenu extends Menu {
                 date = simpleDateFormat.parse(input);
             } catch (ParseException ex) {
                 System.out.println("Try entering the date again");
+                if (exitHelper.exitNested()) { return null; }
                 continue;
             }
             // TODO: Move checking that the date is in the future to here
@@ -325,11 +338,13 @@ public final class MainMenu extends Menu {
         // Read customer's email
         System.out.println("Please enter your email");
         String email = readEmail();
+        if (exitHelper.exitNested()) { return; }
 
         // Check that customer is registered
         if (! customerAlreadyExists(email)) {
             System.out.println("You are still no registered with this email. " +
                     "Please create an account");
+            if (exitHelper.exit()) { return; }
         }
 
         // Get customer's reservations
@@ -354,19 +369,23 @@ public final class MainMenu extends Menu {
 
             System.out.println("Enter your email");
             String email = readEmail();
+            if (exitHelper.exitNested() && email == null) { return; }
 
             // Check that customer with this email already exists
             if (customerAlreadyExists(email)) {
                 System.out.println("Customer with this email already " +
                         "registered.");
+                if (exitHelper.exit()) { return; }
                 continue;
             }
 
             System.out.println("Enter your first name");
             String firstName = readName(true);
+            if (exitHelper.exitNested() && firstName == null) { return; }
 
             System.out.println("Enter your last name");
             String lastName = readName(false);
+            if (exitHelper.exitNested() && lastName == null) { return; }
 
             // Stop outer loop
             keepAddingNewAccount = false;
@@ -386,6 +405,7 @@ public final class MainMenu extends Menu {
             if (! isValidEmail(input)) {
                 System.out.println("It is not a valid email. Please enter like " +
                         "example@mail.com");
+                if (exitHelper.exitNested()) { return null; }
                 continue;
             }
 
@@ -419,6 +439,7 @@ public final class MainMenu extends Menu {
             if (! hasCharacters(input)) {
                 System.out.println("Your " + nameType + " name should have at " +
                         "least one letter.");
+                if (exitHelper.exitNested()) { return null; }
                 continue;
             }
 
