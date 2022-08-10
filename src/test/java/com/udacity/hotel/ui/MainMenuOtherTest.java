@@ -163,7 +163,8 @@ class MainMenuOtherTest {
         Date checkIn = cal.getTime();
         cal.set(2099, Calendar.MAY, 21);
         Date checkOut = cal.getTime();
-        var reservation = new Reservation(customer, room, checkIn, checkOut);
+        var reservationFactory = new ReservationFactory();
+        Reservation reservation = reservationFactory.create(customer, room, checkIn, checkOut);
         when(hotelResource.getCustomersReservations(email)).thenReturn(List.of(reservation));
 
         // Force exiting the app after the info message

@@ -3,6 +3,7 @@ package com.udacity.hotel.service;
 import com.udacity.hotel.model.Customer;
 import com.udacity.hotel.model.IRoom;
 import com.udacity.hotel.model.Reservation;
+import com.udacity.hotel.model.ReservationFactory;
 
 import java.util.*;
 
@@ -16,10 +17,12 @@ public final class ReservationService {
 
     private final Set<Reservation> reservations;
     private final Map<String, IRoom> rooms;
+    private final ReservationFactory reservationFactory;
 
-    private ReservationService() {
+    private ReservationService(ReservationFactory reservationFactory) {
         reservations = new HashSet<>();
         rooms = new HashMap<>();
+        this.reservationFactory = reservationFactory;
     }
 
     /**
@@ -27,9 +30,9 @@ public final class ReservationService {
      *
      * @return  reservationService object of this service
      */
-    public static ReservationService getInstance() {
+    public static ReservationService getInstance(ReservationFactory reservationFactory) {
         if (INSTANCE == null) {
-            INSTANCE = new ReservationService();
+            INSTANCE = new ReservationService(reservationFactory);
         }
 
         return INSTANCE;
@@ -87,12 +90,7 @@ public final class ReservationService {
      */
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate,
                                     Date checkOutDate) {
-        /**
-         * FIXME: refactor creating new reservation via factory.
-         *      1. Create nested public final static class
-         *      2. Refactor creating a reservation everywhere else
-         */
-        Reservation newReservation = new Reservation(customer, room, checkInDate,
+        Reservation newReservation = reservationFactory.create(customer, room, checkInDate,
                 checkOutDate);
         if (reservations.contains(newReservation)) {
             throw new IllegalArgumentException("This room is already reserved for these " +

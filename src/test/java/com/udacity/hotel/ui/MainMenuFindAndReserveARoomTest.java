@@ -39,6 +39,7 @@ class MainMenuFindAndReserveARoomTest {
     private static ByteArrayOutputStream outContent;
     private Date nowStubbed;
     private DateFormat dateFormat;
+    private ReservationFactory reservationFactory;
 
     @Mock
     private AdminMenu adminMenu;
@@ -64,6 +65,7 @@ class MainMenuFindAndReserveARoomTest {
         cal.set(YEAR_NOW, MONTH_NOW, DAY_NOW);
         nowStubbed = cal.getTime();
         mainMenu = new MainMenu(adminMenu, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
+        reservationFactory = new ReservationFactory();
     }
 
     @AfterAll
@@ -510,7 +512,7 @@ class MainMenuFindAndReserveARoomTest {
         when(hotelResource.getRoom(roomNumberToBook)).thenReturn(room);
 
         // Stub making a reservations
-        var reservation = new Reservation(customer, room, checkInDate, checkOutDate);
+        var reservation = reservationFactory.create(customer, room, checkInDate, checkOutDate);
         when(hotelResource.bookARoom(email, room, checkInDate, checkOutDate)).thenReturn(reservation);
 
         // Run this test

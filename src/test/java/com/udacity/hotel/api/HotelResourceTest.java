@@ -76,7 +76,8 @@ class HotelResourceTest {
     void bookARoom() {
         hotelResource.createACustomer(email, firstName, lastName);
         var customer = new Customer(firstName, lastName, email);
-        var reservation = new Reservation(customer, room, checkIn, checkOut);
+        var reservationFactory = new ReservationFactory();
+        Reservation reservation = reservationFactory.create(customer, room, checkIn, checkOut);
         when(customerService.getCustomer(email)).thenReturn(customer);
         when(reservationService.reserveARoom(customer, room, checkIn, checkOut))
                 .thenReturn(reservation);
@@ -87,7 +88,8 @@ class HotelResourceTest {
     void getCustomersReservations() {
         var customer = new Customer(firstName, lastName, email);
         when(customerService.getCustomer(email)).thenReturn(customer);
-        var reservation = new Reservation(customer, room, checkIn, checkOut);
+        var reservationFactory = new ReservationFactory();
+        Reservation reservation = reservationFactory.create(customer, room, checkIn, checkOut);
         when(reservationService.getCustomersReservation(customer)).thenReturn(List.of(reservation));
         Collection<Reservation> allReservations = hotelResource.getCustomersReservations(email);
         assertEquals(1, allReservations.size());

@@ -2,6 +2,7 @@ package com.udacity.hotel;
 
 import com.udacity.hotel.api.AdminResource;
 import com.udacity.hotel.api.HotelResource;
+import com.udacity.hotel.model.ReservationFactory;
 import com.udacity.hotel.service.CustomerService;
 import com.udacity.hotel.service.ReservationService;
 import com.udacity.hotel.ui.AdminMenu;
@@ -32,7 +33,7 @@ public final class HotelApplication {
 
         // Instantiate classes
         CustomerService customerService = CustomerService.getInstance();
-        ReservationService reservationService = ReservationService.getInstance();
+        ReservationService reservationService = ReservationService.getInstance(new ReservationFactory());
         AdminResource adminResource = new AdminResource(customerService, reservationService);
         Scanner scanner = new Scanner(System.in);
         DateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");

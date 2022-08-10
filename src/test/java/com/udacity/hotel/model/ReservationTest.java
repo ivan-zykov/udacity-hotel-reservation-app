@@ -25,6 +25,7 @@ class ReservationTest {
     private final static int OUT_DATE = 25;
     private static Date checkIn;
     private static Date checkOut;
+    private ReservationFactory reservationFactory;
 
     @Mock
     private static Customer customer;
@@ -42,7 +43,8 @@ class ReservationTest {
 
     @BeforeEach
     void init() {
-        reservation = new Reservation(customer, room, checkIn, checkOut);
+        reservationFactory = new ReservationFactory();
+        reservation = reservationFactory.create(customer, room, checkIn, checkOut);
     }
 
     @Test
@@ -71,14 +73,14 @@ class ReservationTest {
      */
     @Test
     void equals_allSame() {
-        var reservationSame = new Reservation(customer, room, checkIn, checkOut);
+        Reservation reservationSame = reservationFactory.create(customer, room, checkIn, checkOut);
         assertEquals(reservation, reservationSame);
     }
 
     @Test
     void equals_roomOther() {
         var roomOther = new Room("1", 10.0D, RoomType.SINGLE);
-        var reservationOther = new Reservation(customer, roomOther, checkIn, checkOut);
+        Reservation reservationOther = reservationFactory.create(customer, roomOther, checkIn, checkOut);
         assertNotEquals(reservation, reservationOther);
     }
 
@@ -86,7 +88,7 @@ class ReservationTest {
     void equals_checkInOther() {
         cal.set(YEAR, MONTH, IN_DATE + 1);
         Date checkInOther = cal.getTime();
-        var reservationOther = new Reservation(customer, room, checkInOther, checkOut);
+        Reservation reservationOther = reservationFactory.create(customer, room, checkInOther, checkOut);
         assertNotEquals(reservation, reservationOther);
     }
 
@@ -94,14 +96,14 @@ class ReservationTest {
     void equals_checkOutOther() {
         cal.set(YEAR, MONTH, OUT_DATE + 1);
         Date checkOutOther = cal.getTime();
-        var reservationOther = new Reservation(customer, room, checkIn, checkOutOther);
+        Reservation reservationOther = reservationFactory.create(customer, room, checkIn, checkOutOther);
         assertNotEquals(reservation, reservationOther);
     }
 
     @Test
     void equals_allNull() {
-        var allNull1 = new Reservation(customer, null, null, null);
-        var allNull2 = new Reservation(customer, null, null, null);
+        Reservation allNull1 = reservationFactory.create(customer, null, null, null);
+        Reservation allNull2 = reservationFactory.create(customer, null, null, null);
         assertEquals(allNull1, allNull2);
     }
 }

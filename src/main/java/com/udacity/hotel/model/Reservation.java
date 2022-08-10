@@ -19,7 +19,7 @@ public class Reservation {
      * @param checkInDate   date of check in
      * @param checkOutDate  date of check out
      */
-    public Reservation(Customer customer, IRoom room, Date checkInDate,
+    Reservation(Customer customer, IRoom room, Date checkInDate,
                        Date checkOutDate) {
         this.customer = customer;
         this.room = room;

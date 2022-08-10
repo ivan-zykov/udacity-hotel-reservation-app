@@ -33,7 +33,8 @@ class ReservationServiceTest {
 
     @BeforeAll
     static void initAll() {
-        reservationService = ReservationService.getInstance();
+        var reservationFactory = new ReservationFactory();
+        reservationService = ReservationService.getInstance(reservationFactory);
         numberRoom1 = "1";
         room1 = new Room(numberRoom1, 10.0D, RoomType.SINGLE);
         cal = Calendar.getInstance();
@@ -56,7 +57,8 @@ class ReservationServiceTest {
 
     @Test
     void getInstance() {
-        ReservationService reservationServiceOther = ReservationService.getInstance();
+        var reservationFactory = new ReservationFactory();
+        ReservationService reservationServiceOther = ReservationService.getInstance(reservationFactory);
         assertSame(reservationServiceOther, reservationService);
     }
 
