@@ -78,7 +78,6 @@ public final class AdminMenu extends Menu {
                     default:
                         System.out.println("Please enter a number representing" +
                                 "a menu option from above");
-                        if (exitHelper.exit()) { return; }
                 }
             } catch (NumberFormatException ex) {
                 System.out.println("Please enter a number");
