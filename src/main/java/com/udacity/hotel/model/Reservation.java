@@ -25,7 +25,6 @@ public class Reservation {
                        Date checkOutDate) {
         this.customer = customer;
         this.room = room;
-//        TODO: validate dates?
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
     }

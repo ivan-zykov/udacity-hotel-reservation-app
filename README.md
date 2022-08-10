@@ -49,6 +49,7 @@ java com.udacity.hotel.HotelApplication
 ## TODO optional
 - [x] Catch exceptions later in UI?
 - [x] Ensure that entered check in date is earlier that check out date
+- [ ] Validate check-in and check-out dates in constructor of Reservation class
 - [x] Fix duplicate booking
 - [x] Refactor suggesting other dates
 - [ ] Sort elements in collections when printing them (reservations, customers)
