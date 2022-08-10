@@ -143,14 +143,6 @@ public final class MainMenu extends Menu {
                 continue;
             }
 
-            // Check that both dates are in the future
-            if (checkIn.before(now) || checkOut.before(now)) {
-                System.out.println("At least one of the dates is in the past. " +
-                        "Please reenter dates");
-                if (exitHelper.exit()) { return; }
-                continue;
-            }
-
             // Find available rooms for initial dates
             Collection<IRoom> availableRooms = hotelResource.findARoom(checkIn,
                     checkOut);
@@ -307,7 +299,11 @@ public final class MainMenu extends Menu {
                 if (exitHelper.exitNested()) { return null; }
                 continue;
             }
-            // TODO: Move checking that the date is in the future to here
+            if (date.before(now)) {
+                System.out.println("This date is in the past. Please reenter the date");
+                if (exitHelper.exitNested()) { return null; }
+                continue;
+            }
             keepReadingDate = false;
         }
         return date;

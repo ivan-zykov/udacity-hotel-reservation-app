@@ -2,10 +2,7 @@ package com.udacity.hotel.ui;
 
 import com.udacity.hotel.api.HotelResource;
 import com.udacity.hotel.model.*;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -121,6 +118,24 @@ class MainMenuFindAndReserveARoomTest {
             () -> assertTrue(outContent.toString().endsWith("Try entering the date again\r\n"))
         );
     }
+    @Test
+    void findAndReserveARoom_checkInIsInThePast() {
+        // Stub user's input: check-in date is in the past
+        when(scanner.nextLine()).thenReturn("1", "01/01/2019");
+
+        // Force exiting the app after incorrect input
+        when(exitHelper.exitNested()).thenReturn(true);
+
+        // Run this test
+        mainMenu.open();
+
+        assertAll(
+                () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022")),
+                () -> assertTrue(outContent.toString().endsWith("This date is in the past. " +
+                        "Please reenter the date\r\n"))
+        );
+    }
 
     @Test
     void findAndReserveARoom_invalidCheckOut() {
@@ -175,6 +190,25 @@ class MainMenuFindAndReserveARoomTest {
     }
 
     @Test
+    void findAndReserveARoom_checkOutIsInThePast() {
+        // Stub user's input: check-out date is in the past
+        when(scanner.nextLine()).thenReturn("1", "05/30/2023", "01/20/2019");
+
+        // Force exiting the app after incorrect input
+        when(exitHelper.exitNested()).thenReturn(true);
+
+        // Run this test
+        mainMenu.open();
+
+        assertAll(
+                () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022")),
+                () -> assertTrue(outContent.toString().endsWith("This date is in the past. " +
+                        "Please reenter the date\r\n"))
+        );
+    }
+
+    @Test
     void findAndReserveARoom_checkInAfterCheckout() {
         // Stub user's input:
         when(scanner.nextLine()).thenReturn("1", "06/10/2023", "05/30/2023");
@@ -187,31 +221,6 @@ class MainMenuFindAndReserveARoomTest {
 
         assertTrue(outContent.toString().endsWith("Your check-in date is later than checkout " +
                 "date. Please reenter dates\r\n"));
-    }
-
-    @ParameterizedTest(name = "[{index}] Check-in: {0}, check-out: {1}, Now: {2}")
-    @MethodSource("provide_datesInThePast")
-    // String nowTestName is used in test's name
-    void findAndReserveARoom_datesInThePast(String checkIn, String checkOut, String nowTestName) {
-        // Stub user's input
-        when(scanner.nextLine()).thenReturn("1", checkIn, checkOut);
-
-        // Force exiting the app after incorrect input
-        when(exitHelper.exit()).thenReturn(true);
-
-        // Run this test
-        mainMenu.open();
-
-        assertTrue(outContent.toString().endsWith("At least one of the dates is in the past. " +
-                "Please reenter dates\r\n"));
-    }
-
-    private static Stream<Arguments> provide_datesInThePast() {
-        String nowStr = MONTH_NOW + "/" + DAY_NOW + "/" + YEAR_NOW;
-        return Stream.of(
-                Arguments.of("01/01/2019", "05/30/2023", nowStr),
-                Arguments.of("01/01/2019", "01/20/2019", nowStr)
-        );
     }
 
     @ParameterizedTest(name = "[{index}] Message: {1}")
