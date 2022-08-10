@@ -4,6 +4,8 @@ import java.util.Date;
 
 /**
  * Instantiates {@link Reservation} class.
+ *
+ * @author Ivan V. Zykov
  */
 public final class ReservationFactory {
     public Reservation create(Customer customer, IRoom room, Date checkIn, Date checkOut) {

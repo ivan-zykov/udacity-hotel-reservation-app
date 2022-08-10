@@ -14,6 +14,8 @@ import java.util.Scanner;
 
 /**
  * Console UI for administrators.
+ *
+ * @author Ivan V. Zykov
  */
 public final class AdminMenu extends Menu {
 

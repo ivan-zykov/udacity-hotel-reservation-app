@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 /**
  * A customer who uses the app to search for a free {@link IRoom} and book one.
  * Holds basic information about a customer.
+ *
+ * @author Ivan V. Zykov
  */
 public class Customer implements Comparable<Customer> {
 

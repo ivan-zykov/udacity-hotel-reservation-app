@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 /**
  * Console UI which serves to provide common methods and dependencies.
+ *
+ * @author Ivan V. Zykov
  */
 abstract class Menu {
 

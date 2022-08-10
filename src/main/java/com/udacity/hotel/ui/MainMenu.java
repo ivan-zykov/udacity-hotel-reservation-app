@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 
 /**
  * Console UI for a regular users.
+ *
+ * @author Ivan V. Zykov
  */
 public final class MainMenu extends Menu {
 

@@ -4,6 +4,8 @@ import java.util.Date;
 
 /**
  * An object of a reservation of a room for specific dates for a customer.
+ *
+ * @author Ivan V. Zykov
  */
 public class Reservation {
 

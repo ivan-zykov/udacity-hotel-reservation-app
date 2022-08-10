@@ -10,6 +10,8 @@ import java.util.*;
 /**
  * A singleton service to keep track, record and retrieve {@link IRoom}s and {@link Reservation}s.
  * Also, prints all reservations available.
+ *
+ * @author Ivan V. Zykov
  */
 public final class ReservationService {
 

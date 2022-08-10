@@ -6,6 +6,8 @@ import java.util.*;
 
 /**
  * A singleton service to keep track of {@link Customer}s, record new and retrieve existing ones.
+ *
+ * @author Ivan V. Zykov
  */
 public final class CustomerService {
 

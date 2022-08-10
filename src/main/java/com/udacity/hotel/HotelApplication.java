@@ -14,13 +14,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-// FIXME: add @author and @see as below to all classes
 /**
  * Main class of this application which instantiates all required classes and prints the main menu in the console.
  *
- * @author Ivan Zykov
- * @see <span>A part of the first project of Java Programing nanodegree by
- * <a href="https://www.udacity.com/">Udacity</a></span>
+ * @author Ivan V. Zykov
+ * @see <a href="https://www.udacity.com/">First project of Java Programing nanodegree by Udacity</a>
  */
 public final class HotelApplication {
 

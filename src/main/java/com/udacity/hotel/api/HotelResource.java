@@ -11,6 +11,7 @@ import java.util.Date;
 
 /**
  * API which serves as intermediary between the customer UI and the services.
+ *  @author Ivan V. Zykov
  */
 public final class HotelResource {
 

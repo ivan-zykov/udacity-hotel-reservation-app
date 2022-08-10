@@ -2,6 +2,8 @@ package com.udacity.hotel.model;
 
 /**
  * An object of a normal room that is not for free and holds basic information about it.
+ *
+ * @author Ivan V. Zykov
  */
 public class Room implements IRoom {
 

@@ -2,6 +2,8 @@ package com.udacity.hotel.ui;
 
 /**
  * Helper class to exit from UI menus prematurely for testing purposes.
+ *
+ * @author Ivan V. Zykov
  */
 public class ExitHelper {
     /**

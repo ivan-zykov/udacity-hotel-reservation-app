@@ -13,6 +13,8 @@ import java.util.Map;
 
 /**
  * API which serves as intermediary between the admin UI and the services.
+ *
+ *  @author Ivan V. Zykov
  */
 public final class AdminResource {
 
