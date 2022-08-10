@@ -164,23 +164,25 @@ public final class AdminMenu extends Menu {
                 }
             }
 
-            System.out.println("Choose room type. \"S\" for single or " +
-                    "\"D\" for double");
+            System.out.println("Choose room type. \"s\" for single or " +
+                    "\"d\" for double");
             RoomType roomType = RoomType.SINGLE;
             boolean isBadRoomType = true;
             while (isBadRoomType) {
                 input = scanner.nextLine();
-                // TODO: refactor using switch
-                if ("d".equalsIgnoreCase(input)) {
-                    isBadRoomType = false;
-                    roomType = RoomType.DOUBLE;
-                } else if ("s".equalsIgnoreCase(input)) {
-                    isBadRoomType = false;
-                }
-                else {
-                    System.out.println("Enter \"S\" for single or \"D\" " +
-                            "for double");
-                    if (exitHelper.exit()) { return; }
+                switch (input) {
+                    case "d", "D" -> {
+                        isBadRoomType = false;
+                        roomType = RoomType.DOUBLE;
+                    }
+                    case "s", "S" -> isBadRoomType = false;
+                    default -> {
+                        System.out.println("Enter \"s\" for single or \"d\" " +
+                                "for double");
+                        if (exitHelper.exit()) {
+                            return;
+                        }
+                    }
                 }
             }
 

@@ -114,9 +114,9 @@ class AdminMenuAddRoomTest {
         assertAll(
             () -> assertTrue(outContent.toString().contains("Enter room number")),
             () -> assertTrue(outContent.toString().contains("Enter room price")),
-            () -> assertTrue(outContent.toString().contains("Choose room type. \"S\" for single or " +
-                        "\"D\" for double\r\n")),
-            () -> assertTrue(outContent.toString().endsWith("Enter \"S\" for single or \"D\" for double\r\n"))
+            () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
+                        "\"d\" for double\r\n")),
+            () -> assertTrue(outContent.toString().endsWith("Enter \"s\" for single or \"d\" for double\r\n"))
         );
     }
 
@@ -131,8 +131,8 @@ class AdminMenuAddRoomTest {
         assertAll(
             () -> assertTrue(outContent.toString().contains("Enter room number")),
             () -> assertTrue(outContent.toString().contains("Enter room price")),
-            () -> assertTrue(outContent.toString().contains("Choose room type. \"S\" for single or " +
-                        "\"D\" for double\r\n")),
+            () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
+                        "\"d\" for double\r\n")),
             () -> assertTrue(outContent.toString().contains("Add another room? (y/n)")),
             () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no\r\n"))
         );
@@ -151,8 +151,8 @@ class AdminMenuAddRoomTest {
         assertAll(
             () -> assertTrue(outContent.toString().contains("Enter room number")),
             () -> assertTrue(outContent.toString().contains("Enter room price")),
-            () -> assertTrue(outContent.toString().contains("Choose room type. \"S\" for single or " +
-                    "\"D\" for double\r\n")),
+            () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
+                    "\"d\" for double\r\n")),
             () -> assertTrue(outContent.toString().contains("Add another room? (y/n)")),
             () -> assertTrue(outContent.toString().endsWith("Rooms were successfully added\r\n"))
         );
@@ -186,8 +186,8 @@ class AdminMenuAddRoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter room number")),
                 () -> assertTrue(outContent.toString().contains("Enter room price")),
-                () -> assertTrue(outContent.toString().contains("Choose room type. \"S\" for single or " +
-                        "\"D\" for double\r\n")),
+                () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
+                        "\"d\" for double\r\n")),
                 () -> assertTrue(outContent.toString().contains("Add another room? (y/n)")),
                 () -> assertTrue(outContent.toString().endsWith("Rooms were successfully added\r\n"))
         );
