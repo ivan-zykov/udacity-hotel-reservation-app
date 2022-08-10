@@ -135,20 +135,19 @@ public final class AdminMenu extends Menu {
             boolean isBadRoomNumber = true;
             while (isBadRoomNumber) {
                 input = scanner.nextLine();
-                // TODO: Refactor into separate reversed ifs with continue
-                if (isNumber(input)) {
-                    if (isNewRoomNumber(newRooms, input)) {
-                        isBadRoomNumber = false;
-                        roomNumber = input;
-                    } else {
-                        System.out.println("You have already added a room with " +
-                                "room number " + input);
-                        if (exitHelper.exit()) { return; }
-                    }
-                } else {
+                if (! isNumber(input)) {
                     System.out.println("Room number should be an integer number");
                     if (exitHelper.exit()) { return; }
+                    continue;
                 }
+                if (! isNewRoomNumber(newRooms, input)) {
+                    System.out.println("You have already added a room with " +
+                            "room number " + input);
+                    if (exitHelper.exit()) { return; }
+                    continue;
+                }
+                isBadRoomNumber = false;
+                roomNumber = input;
             }
 
             System.out.println("Enter room price");
