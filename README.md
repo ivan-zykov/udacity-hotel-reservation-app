@@ -53,7 +53,7 @@ java com.udacity.hotel.HotelApplication
 - [x] Fix duplicate booking
 - [x] Refactor suggesting other dates
 - [ ] Sort elements in collections when printing them (reservations, customers)
-- [ ] Add option to add a class for free room
+- [ ] Add option to add a room using FreeRoom class
 - [x] Make classes final where applicable
 - [x] Check PROJECT SPECIFICATION
 - [ ] Add variables' values to exception messages

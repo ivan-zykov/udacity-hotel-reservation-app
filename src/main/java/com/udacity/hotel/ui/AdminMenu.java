@@ -125,9 +125,6 @@ public final class AdminMenu extends Menu {
     }
 
     private void addARoom() {
-
-        // TODO: add option to add a room using FreeRoom class
-
         boolean keepAddingRooms = true;
         List<IRoom> newRooms = new ArrayList<>();
 
