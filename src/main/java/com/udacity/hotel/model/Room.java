@@ -38,16 +38,6 @@ public class Room implements IRoom {
         return roomType;
     }
 
-    // TODO: Method is never used. Why is it required in the project?
-    @Override
-    public boolean isFree() {
-        if (roomPrice == 0.0) {
-            return true;
-        }
-
-        return false;
-    }
-
     /**
      * Includes basic data about the room and formats its string representation.
      *

@@ -20,14 +20,6 @@ class RoomTest {
     }
 
     @Test
-    void isFree() {
-        assertFalse(room.isFree());
-
-        var roomFree = new Room("2", 0.0D, RoomType.SINGLE);
-        assertTrue(roomFree.isFree());
-    }
-
-    @Test
     void toStringTest() {
         assertEquals("Room number: 1, price: 10.0, type: SINGLE.", room.toString());
     }
