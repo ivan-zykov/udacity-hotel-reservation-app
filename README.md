@@ -42,7 +42,7 @@ java com.udacity.hotel.HotelApplication
 - [x] Add description
 - [x] Add JavaDock for methods, especially public ones
 - [x] Add unit tests
-- [ ] Clean FIXME and TODO tags
+- [x] Clean FIXME and TODO tags
 - [ ] Fix IDEA’s standard linter errors
 - [ ] Add IDEA's plug-in to catch code style errors (Sonar) and fix errors
 
