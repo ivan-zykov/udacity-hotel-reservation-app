@@ -7,9 +7,9 @@ package com.udacity.hotel.model;
  */
 public class Room implements IRoom {
 
-    final private String roomNumber;
-    final private Double roomPrice;
-    final private RoomType roomType;
+    private final String roomNumber;
+    private final Double roomPrice;
+    private final RoomType roomType;
 
     /**
      * Constructor for this class.
@@ -29,14 +29,6 @@ public class Room implements IRoom {
         return roomNumber;
     }
 
-    public Double getRoomPrice() {
-        return roomPrice;
-    }
-
-    public RoomType getRoomType() {
-        return roomType;
-    }
-
     /**
      * Includes basic data about the room and formats its string representation.
      *
@@ -48,25 +40,18 @@ public class Room implements IRoom {
                 ", type: " + roomType + ".";
     }
 
-    /**
-     * @see <span>Inspired by an article on <a href="https://www.baeldung.com/">baeldung.com</a></span>
-     */
     @Override
     public final boolean equals(Object o) {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof Room)) {
+        if (!(o instanceof Room other)) {
             return false;
         }
-        Room other = (Room)o;
         return (roomNumber == null && other.getRoomNumber() == null) ||
                 (roomNumber != null && roomNumber.equals(other.getRoomNumber()));
     }
 
-    /**
-     * @see <span>Inspired by an article on <a href="https://www.baeldung.com/">baeldung.com</a></span>
-     */
     @Override
     public final int hashCode() {
         int result = 17;

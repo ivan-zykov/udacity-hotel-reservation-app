@@ -39,11 +39,6 @@ class RoomTest {
     }
 
     @Test
-    void equalsTest_otherObj() {
-        assertNotEquals("a", room);
-    }
-
-    @Test
     void equalsTest_nullNumbers() {
         var nullNumber1 = new Room(null, 10.0D, RoomType.SINGLE);
         var nullNumber2 = new Room(null, 10.0D, RoomType.SINGLE);
