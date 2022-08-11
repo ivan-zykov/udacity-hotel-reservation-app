@@ -9,9 +9,10 @@ import java.util.Date;
  */
 public class Reservation {
 
-    private Customer customer;
-    private IRoom room;
-    private Date checkInDate, checkOutDate;
+    private final Customer customer;
+    private final IRoom room;
+    private final Date checkInDate;
+    private final Date checkOutDate;
 
     /**
      * Constructor for this class.
@@ -58,18 +59,14 @@ public class Reservation {
                 "Dates: " + checkInDate + " - " + checkOutDate + ".";
     }
 
-    /**
-     * @see <span>Inspired by an article on <a href="https://www.baeldung.com/">baeldung.com</a></span>
-     */
     @Override
     public final boolean equals(Object o) {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof Reservation)) {
+        if (!(o instanceof Reservation other)) {
             return false;
         }
-        Reservation other = (Reservation)o;
         // Compare rooms
         boolean roomsEquals = (room == null && other.getRoom() == null) ||
                 (room != null && room.equals(other.getRoom()));
@@ -83,9 +80,6 @@ public class Reservation {
         return roomsEquals && checkInEquals && checkOutEquals;
     }
 
-    /**
-     * @see <span>Inspired by an article on <a href="https://www.baeldung.com/">baeldung.com</a></span>
-     */
     @Override
     public final int hashCode() {
         int result = 17;

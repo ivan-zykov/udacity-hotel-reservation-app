@@ -63,11 +63,6 @@ class ReservationTest {
         assertTrue(reservation.toString().contains("Dates: " + checkIn + " - " + checkOut + "."));
     }
 
-    @Test
-    void equals_otherObj() {
-        assertNotEquals("a", reservation);
-    }
-
     /**
      * Not using parameters here because in provider (method source) room from comes as null.
      */
