@@ -33,7 +33,6 @@ public class Room implements IRoom {
         return roomPrice;
     }
 
-    @Override
     public RoomType getRoomType() {
         return roomType;
     }

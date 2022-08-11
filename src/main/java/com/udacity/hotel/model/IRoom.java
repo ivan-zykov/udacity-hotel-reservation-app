@@ -6,8 +6,5 @@ package com.udacity.hotel.model;
  * @author Ivan V. Zykov
  */
 public interface IRoom {
-
-    public String getRoomNumber();
-    public Double getRoomPrice();
-    public RoomType getRoomType();
+    String getRoomNumber();
 }
