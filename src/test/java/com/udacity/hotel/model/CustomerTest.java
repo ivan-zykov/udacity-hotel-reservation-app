@@ -21,7 +21,7 @@ class CustomerTest {
 
     @ParameterizedTest(name = "[{index}] Invalid email: {0}")
     @MethodSource("provide_invalidEmails")
-    public void constructor_invalidEmail_exception(String email) {
+    void constructor_invalidEmail_exception(String email) {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> new Customer("I", "Z", email)
@@ -40,25 +40,7 @@ class CustomerTest {
     }
 
     @Test
-    public void toStringTest() {
+    void toStringTest() {
         assertEquals("Customer I Z, i@z.com.", customer.toString());
-    }
-
-    /**
-     * Check the difference between first characters of compared emails which is returned by compareTo method.
-     */
-    @ParameterizedTest(name = "[{index}] email 1: i@z.com, email 2: {0}")
-    @MethodSource("provide_compareToTest")
-    public void compareToTest(String emailOther, int expectedComparison) {
-        var customerOther = new Customer("A", "B", emailOther);
-        assertEquals(expectedComparison, customer.compareTo(customerOther));
-    }
-
-    private static Stream<Arguments> provide_compareToTest() {
-        return Stream.of(
-                Arguments.of("a@z.com", 8),
-                Arguments.of("i@z.com", 0),
-                Arguments.of("z@z.com", -17)
-        );
     }
 }

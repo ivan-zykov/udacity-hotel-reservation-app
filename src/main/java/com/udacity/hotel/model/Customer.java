@@ -8,9 +8,11 @@ import java.util.regex.Pattern;
  *
  * @author Ivan V. Zykov
  */
-public class Customer implements Comparable<Customer> {
+public class Customer {
 
-    final private String firstName, lastName, email;
+    private final String firstName;
+    private final String email;
+    private final String lastName;
 
     /**
      * Constructor of this class.
@@ -54,8 +56,18 @@ public class Customer implements Comparable<Customer> {
     }
 
     @Override
-    public int compareTo(Customer customer) {
-        return this.email.compareTo(customer.getEmail());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Customer customer = (Customer) o;
+
+        return email.equals(customer.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return email.hashCode();
     }
 
     private boolean isValidEmail(String email) {

@@ -162,7 +162,7 @@ public final class ReservationService {
 
         List<Reservation> customersReservations = new ArrayList<>();
         for (Reservation aReservation: this.reservations) {
-            if (aReservation.getCustomer().compareTo(customer) == 0) {
+            if (aReservation.getCustomer().equals(customer)) {
                 customersReservations.add(aReservation);
             }
         }
