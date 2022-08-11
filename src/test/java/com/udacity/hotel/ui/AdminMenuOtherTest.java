@@ -1,9 +1,7 @@
 package com.udacity.hotel.ui;
 
 import com.udacity.hotel.api.AdminResource;
-import com.udacity.hotel.model.Customer;
-import com.udacity.hotel.model.Room;
-import com.udacity.hotel.model.RoomType;
+import com.udacity.hotel.model.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -11,8 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -131,14 +128,45 @@ class AdminMenuOtherTest {
     }
 
     @Test
-    void seeAllReservations() {
-        // Stub scanner
+    void seeAllReservations_noReservations() {
+        // Stub user's input
         when(scanner.nextLine()).thenReturn("3");
+
+        // Stub having no reservations
+        when(adminResource.getAllReservations()).thenReturn(Set.of());
 
         // Run this test
         adminMenu.open();
 
-        verify(adminResource, times(1)).displayAllReservations();
+        assertTrue(outContent.toString().endsWith("There are still no reservations\r\n"));
+    }
+
+    @Test
+    void seeAllReservations_oneReservation() {
+        // Stub user's input
+        when(scanner.nextLine()).thenReturn("3");
+
+        // Create a reservation
+        var room = new Room("1", 10.0D, RoomType.SINGLE);
+        var customerI = new Customer("I", "Z", "i@z.com");
+        Calendar cal = Calendar.getInstance();
+        int year = 2023;
+        int month = Calendar.MAY;
+        int day = 20;
+        cal.set(year, month, day);
+        Date checkIn = cal.getTime();
+        cal.add(Calendar.DATE, 7);
+        Date checkOut = cal.getTime();
+        var reservationFactory = new ReservationFactory();
+        Reservation reservation = reservationFactory.create(customerI, room, checkIn, checkOut);
+
+        // Stub having one reservation
+        when(adminResource.getAllReservations()).thenReturn(Set.of(reservation));
+
+        // Run this test
+        adminMenu.open();
+
+        assertTrue(outContent.toString().endsWith(reservation + "\r\n"));
     }
 
     @Test

@@ -7,10 +7,7 @@ import com.udacity.hotel.model.Reservation;
 import com.udacity.hotel.model.Room;
 import com.udacity.hotel.model.RoomType;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Console UI for administrators.
@@ -121,7 +118,14 @@ public final class AdminMenu extends Menu {
     }
 
     private void seeAllReservations() {
-        adminResource.displayAllReservations();
+        Set<Reservation> allReservations = adminResource.getAllReservations();
+        if (allReservations.isEmpty()) {
+            System.out.println("There are still no reservations");
+            return;
+        }
+        for (Reservation reservation: allReservations) {
+            System.out.println(reservation);
+        }
     }
 
     private void addARoom() {

@@ -6,10 +6,7 @@ import com.udacity.hotel.model.Reservation;
 import com.udacity.hotel.service.CustomerService;
 import com.udacity.hotel.service.ReservationService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * API which serves as intermediary between the admin UI and the services.
@@ -77,9 +74,11 @@ public final class AdminResource {
     }
 
     /**
-     * Calls a service to print all recorded reservations to the console.
+     * Calls a service to get all recorded reservations
+     *
+     * @return  set of all reservations
      */
-    public void displayAllReservations() {
-        reservationService.printAllReservations();
+    public Set<Reservation> getAllReservations() {
+        return reservationService.getAllReservations();
     }
 }

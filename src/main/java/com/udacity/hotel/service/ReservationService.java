@@ -170,21 +170,7 @@ public final class ReservationService {
         return customersReservations;
     }
 
-    /**
-     * Prints to the console all {@link Reservation}s for all {@link Customer}s or, if no reservations
-     * recorded yet, a text message.
-     */
-    public void printAllReservations() {
-        if (this.reservations.isEmpty()) {
-            System.out.println("There are still no reservations");
-        } else {
-            for (Reservation aRes: this.reservations) {
-                System.out.println(aRes);
-            }
-        }
-    }
-
-    public Set<Reservation> getReservations() {
+    public Set<Reservation> getAllReservations() {
         return reservations;
     }
 

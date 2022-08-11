@@ -72,8 +72,8 @@ class AdminResourceTest {
     }
 
     @Test
-    void displayAllReservations() {
-        adminResource.displayAllReservations();
-        verify(reservationService, times(1)).printAllReservations();
+    void getAllReservations() {
+        adminResource.getAllReservations();
+        verify(reservationService, times(1)).getAllReservations();
     }
 }

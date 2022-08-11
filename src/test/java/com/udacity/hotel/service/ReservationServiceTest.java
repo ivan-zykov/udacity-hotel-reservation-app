@@ -8,8 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Stream;
@@ -113,7 +111,7 @@ class ReservationServiceTest {
         assertEquals(checkOut, reservation.getCheckOutDate());
 
         // Check reservation was added to all reservations
-        Set<Reservation> allReservations = reservationService.getReservations();
+        Set<Reservation> allReservations = reservationService.getAllReservations();
         assertEquals(1, allReservations.size());
         assertTrue(allReservations.contains(reservation));
 
@@ -206,7 +204,7 @@ class ReservationServiceTest {
         cal.set(YEAR, MONTH, 6);
         Date checkOutTwo = cal.getTime();
         Reservation reservationTwo = reservationService.reserveARoom(customerOther, room1, checkInTwo, checkOutTwo);
-        Set<Reservation> allReservations = reservationService.getReservations();
+        Set<Reservation> allReservations = reservationService.getAllReservations();
         assertEquals(2, allReservations.size());
         assertTrue(allReservations.contains(reservationTwo));
         customersReservations = reservationService.getCustomersReservation(customer);
@@ -222,26 +220,5 @@ class ReservationServiceTest {
         customersReservations = reservationService.getCustomersReservation(customer);
         assertEquals(2, customersReservations.size());
         assertTrue(customersReservations.contains(reservationThree));
-    }
-
-    @Test
-    void printAllReservations() {
-        var outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        // Initially empty
-        reservationService.printAllReservations();
-        assertEquals("There are still no reservations\r\n", outContent.toString());
-
-        // Make a reservation
-        reservationService.reserveARoom(customer, room1, checkIn, checkOut);
-        reservationService.printAllReservations();
-        assertTrue(outContent.toString().contains(customer.toString()));
-        assertTrue(outContent.toString().contains(room1.toString()));
-        assertTrue(outContent.toString().contains(checkIn.toString()));
-        assertTrue(outContent.toString().contains(checkOut.toString()));
-
-        // Restore the standard out
-        System.setOut(System.out);
     }
 }
