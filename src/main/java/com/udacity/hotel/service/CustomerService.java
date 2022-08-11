@@ -11,7 +11,7 @@ import java.util.*;
  */
 public final class CustomerService {
 
-    private static CustomerService INSTANCE;
+    private static CustomerService instance;
 
     private final Map<String, Customer> customers;
 
@@ -25,11 +25,11 @@ public final class CustomerService {
      * @return      customerService representing this service
      */
     public static CustomerService getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new CustomerService();
+        if (instance == null) {
+            instance = new CustomerService();
         }
 
-        return INSTANCE;
+        return instance;
     }
 
     /**
@@ -70,10 +70,6 @@ public final class CustomerService {
      * @return      collection of customers
      */
     public Collection<Customer> getAllCustomers() {
-        List<Customer> allCustomers = new ArrayList<>();
-        for (String email: this.customers.keySet()) {
-            allCustomers.add(this.customers.get(email));
-        }
-        return allCustomers;
+        return customers.values();
     }
 }
