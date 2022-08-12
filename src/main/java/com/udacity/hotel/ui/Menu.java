@@ -9,21 +9,18 @@ import java.util.Scanner;
  */
 abstract class Menu {
 
-    protected final Scanner scanner;
+    final Scanner scanner;
 
     /**
      * Constructor of this class.
      *
      * @param scanner   scanner object that reads user's input
      */
-    public Menu(Scanner scanner) {
+    Menu(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    /**
-     * @see <span>Inspired by an article on <a href="https://www.baeldung.com/">baeldung.com</a></span>
-     */
-    protected boolean isNumber(String strInt) {
+    boolean isNumber(String strInt) {
         if (strInt == null) {
             return false;
         }
