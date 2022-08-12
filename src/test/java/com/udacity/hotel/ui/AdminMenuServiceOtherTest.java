@@ -2,7 +2,10 @@ package com.udacity.hotel.ui;
 
 import com.udacity.hotel.api.AdminResource;
 import com.udacity.hotel.model.*;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -12,24 +15,20 @@ import java.io.PrintStream;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
- * For other methods except addRoom().
+ * For other methods except adding a room.
  */
 @ExtendWith(MockitoExtension.class)
-class AdminMenuOtherTest {
+class AdminMenuServiceOtherTest {
 
-    private AdminMenu adminMenu;
+    private AdminMenuService adminMenuService;
 
     private static ByteArrayOutputStream outContent;
 
     @Mock
-    private AdminResource adminResource;
-    @Mock
-    private Scanner scanner;
-    @Mock
-    private ExitHelper exitHelper;
+    AdminResource adminResource;
 
     @BeforeAll
     static void initAll() {
@@ -40,9 +39,7 @@ class AdminMenuOtherTest {
 
     @BeforeEach
     void init() {
-        adminMenu = new AdminMenu(adminResource, scanner, exitHelper);
-        // Force exiting the app after incorrect input
-        when(exitHelper.exit()).thenReturn(true);
+        adminMenuService = new AdminMenuService(adminResource, null, null);
     }
 
     @AfterAll
@@ -52,100 +49,82 @@ class AdminMenuOtherTest {
     }
 
     @Test
-    void printMenu_returnToMainMenu() {
-        when(scanner.nextLine()).thenReturn("5");
-        adminMenu.open();
+    void printMenu() {
+        // Run this test
+        adminMenuService.printMenu();
+
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Admin menu of Vanya's Hotel Reservation App")),
-            () -> assertTrue(outContent.toString().contains("1. See all Customers")),
-            () -> assertTrue(outContent.toString().contains("2. See all Rooms")),
-            () -> assertTrue(outContent.toString().contains("3. See all Reservations")),
-            () -> assertTrue(outContent.toString().contains("4. Add a room")),
-            () -> assertTrue(outContent.toString().contains("5. Back to Main Menu")),
-            () -> assertTrue(outContent.toString().contains("Select a menu option")),
-            () -> assertTrue(outContent.toString().endsWith("Returning to the main menu\r\n"))
+                () -> assertTrue(outContent.toString().contains("Admin menu of Vanya's Hotel Reservation App")),
+                () -> assertTrue(outContent.toString().contains("1. See all Customers")),
+                () -> assertTrue(outContent.toString().contains("2. See all Rooms")),
+                () -> assertTrue(outContent.toString().contains("3. See all Reservations")),
+                () -> assertTrue(outContent.toString().contains("4. Add a room")),
+                () -> assertTrue(outContent.toString().contains("5. Back to Main Menu")),
+                () -> assertTrue(outContent.toString().endsWith("Select a menu option\r\n"))
         );
     }
 
     @Test
-    void seeAllCustomers_empty() {
-        // Stub scanner
-        when(scanner.nextLine()).thenReturn("1");
-
+    void showAllCustomers_empty() {
         // Stub adminResource
         when(adminResource.getAllCustomers()).thenReturn(List.of());
 
         // Run this test
-        adminMenu.open();
+        adminMenuService.showAllCustomers();
 
         assertTrue(outContent.toString().endsWith("There are no registered customers yet. You can add " +
                 "one in main menu" + "\r\n"));
     }
 
     @Test
-    void seeAllCustomers_one() {
-        // Stub scanner
-        when(scanner.nextLine()).thenReturn("1");
-
+    void showAllCustomers_one() {
         // Stub adminResource
         var customer = new Customer("I", "Z", "i@z.com");
         when(adminResource.getAllCustomers()).thenReturn(List.of(customer));
 
         // Run this test
-        adminMenu.open();
+        adminMenuService.showAllCustomers();
 
         assertTrue(outContent.toString().endsWith(customer + "\r\n"));
     }
 
     @Test
-    void seeAllRooms_empty() {
-        // Stub scanner
-        when(scanner.nextLine()).thenReturn("2");
-
+    void showAllRooms_empty() {
         // Stub adminResource
         when(adminResource.getAllRooms()).thenReturn(List.of());
 
         // Run this test
-        adminMenu.open();
+        adminMenuService.showAllRooms();
 
         assertTrue(outContent.toString().endsWith("There are no rooms yet. Please add some" +
                 "\r\n"));
     }
 
     @Test
-    void seeAllRooms_one() {
-        // Stub scanner
-        when(scanner.nextLine()).thenReturn("2");
-
+    void showAllRooms_one() {
         // Stub adminResource
         var room = new Room("1", 10.0D, RoomType.SINGLE);
         when(adminResource.getAllRooms()).thenReturn(List.of(room));
 
         // Run this test
-        adminMenu.open();
+        adminMenuService.showAllRooms();
 
         assertTrue(outContent.toString().endsWith(room + "\r\n"));
     }
 
     @Test
-    void seeAllReservations_noReservations() {
-        // Stub user's input
-        when(scanner.nextLine()).thenReturn("3");
-
+    void showAllReservations_noReservations() {
         // Stub having no reservations
         when(adminResource.getAllReservations()).thenReturn(Set.of());
 
         // Run this test
-        adminMenu.open();
+        adminMenuService.showAllReservations();
 
         assertTrue(outContent.toString().endsWith("There are still no reservations\r\n"));
     }
 
     @Test
-    void seeAllReservations_oneReservation() {
-        // Stub user's input
-        when(scanner.nextLine()).thenReturn("3");
-
+    void showAllReservations_oneReservation() {
         // Create a reservation
         var room = new Room("1", 10.0D, RoomType.SINGLE);
         var customerI = new Customer("I", "Z", "i@z.com");
@@ -164,20 +143,32 @@ class AdminMenuOtherTest {
         when(adminResource.getAllReservations()).thenReturn(Set.of(reservation));
 
         // Run this test
-        adminMenu.open();
+        adminMenuService.showAllReservations();
 
         assertTrue(outContent.toString().endsWith(reservation + "\r\n"));
     }
 
     @Test
-    void nonExistingMenuNumber() {
-        // Stub scanner
-        when(scanner.nextLine()).thenReturn("99");
-
+    void notifyReturningToMainMenu() {
         // Run this test
-        adminMenu.open();
+        adminMenuService.notifyReturningToMainMenu();
 
-        assertTrue(outContent.toString().endsWith("Please enter a number representing" +
-                "a menu option from above\r\n"));
+        assertTrue(outContent.toString().endsWith("Returning to the main menu\r\n"));
+    }
+
+    @Test
+    void notifyWrongMenuNumber() {
+        // Run this test
+        adminMenuService.notifyNonExistingMenuNumber();
+
+        assertTrue(outContent.toString().endsWith("Please enter a number representing a menu option from above\r\n"));
+    }
+
+    @Test
+    void menuNotANumber() {
+        // Run this test
+        adminMenuService.menuNotANumber();
+
+        assertTrue(outContent.toString().endsWith("Please enter a number\r\n"));
     }
 }

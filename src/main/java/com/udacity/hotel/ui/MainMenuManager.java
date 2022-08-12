@@ -14,13 +14,13 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
- * Console UI for a regular users.
+ * Console UI for regular users.
  *
  * @author Ivan V. Zykov
  */
-public final class MainMenu extends Menu {
+public final class MainMenuManager extends MenuManager {
 
-    private final AdminMenu adminMenu;
+    private final AdminMenuManager adminMenuManager;
     private final HotelResource hotelResource;
     private final DateFormat simpleDateFormat;
     private final ExitHelper exitHelper;
@@ -29,16 +29,16 @@ public final class MainMenu extends Menu {
     /**
      * Constructor of this class.
      *
-     * @param adminMenu         adminMenu object of the menu for admins
+     * @param adminMenuManager  adminMenuManager object of the menu for admins
      * @param hotelResource     hotelResource object of the API to services with functionality for regular users
      * @param scanner           scanner object that reads user's input
      * @param simpleDateFormat  dateFormat object that parses and validates dates from scanner
      */
-    public MainMenu(AdminMenu adminMenu, HotelResource hotelResource,
-                    Scanner scanner, DateFormat simpleDateFormat, ExitHelper exitHelper,
-                    Date now) {
+    public MainMenuManager(AdminMenuManager adminMenuManager, HotelResource hotelResource,
+                           Scanner scanner, DateFormat simpleDateFormat, ExitHelper exitHelper,
+                           Date now) {
         super(scanner);
-        this.adminMenu = adminMenu;
+        this.adminMenuManager = adminMenuManager;
         this.hotelResource = hotelResource;
         this.simpleDateFormat = simpleDateFormat;
         this.exitHelper = exitHelper;
@@ -453,6 +453,6 @@ public final class MainMenu extends Menu {
     }
 
     private void goToAdminMenu() {
-        adminMenu.open();
+        adminMenuManager.open();
     }
 }

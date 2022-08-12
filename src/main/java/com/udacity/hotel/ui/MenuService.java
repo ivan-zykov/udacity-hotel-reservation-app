@@ -3,11 +3,11 @@ package com.udacity.hotel.ui;
 import java.util.Scanner;
 
 /**
- * Console UI which serves to provide common methods and dependencies.
+ * A parent class for menu services.
  *
  * @author Ivan V. Zykov
  */
-abstract class Menu {
+abstract class MenuService {
 
     final Scanner scanner;
 
@@ -16,8 +16,13 @@ abstract class Menu {
      *
      * @param scanner   scanner object that reads user's input
      */
-    Menu(Scanner scanner) {
+    MenuService(Scanner scanner) {
         this.scanner = scanner;
+    }
+
+    // TODO: move it to a dedicated ConsolePrinter class
+    <T> void print(T text) {
+        System.out.println(text);
     }
 
     boolean isNumber(String strInt) {
@@ -29,7 +34,6 @@ abstract class Menu {
         } catch (NumberFormatException ex) {
             return false;
         }
-
         return true;
     }
 }

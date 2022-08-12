@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MainMenuExceptionTest {
 
-    private MainMenu mainMenu;
+    private MainMenuManager mainMenu;
 
     private static ByteArrayOutputStream outContent;
 
@@ -42,7 +42,7 @@ class MainMenuExceptionTest {
 
     @BeforeEach
     void init() {
-        mainMenu = new MainMenu(null, hotelResource, scanner, null, exitHelper, null);
+        mainMenu = new MainMenuManager(null, hotelResource, scanner, null, exitHelper, null);
         // Force exiting the app after incorrect input
         when(exitHelper.exit()).thenReturn(true);
     }

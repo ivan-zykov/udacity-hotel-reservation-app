@@ -8,30 +8,30 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MenuTest {
+class MenuManagerTest {
 
-    static class MenuImpl extends Menu {
-        MenuImpl() {
+    static class MenuManagerImpl extends MenuManager {
+        MenuManagerImpl() {
             super(new Scanner(System.in));
         }
     }
 
-    private Menu menu;
+    private MenuManager menuManager;
 
     @BeforeEach
     void init() {
-        menu = new MenuImpl();
+        menuManager = new MenuManagerImpl();
     }
 
     @ParameterizedTest(name = "[{index}] Input: \"{0}\"")
     @ValueSource(strings = {"2", "02", "2 "})
     void isNumber_true(String num) {
-        assertTrue(menu.isNumber(num));
+        assertTrue(menuManager.isNumber(num));
     }
 
     @ParameterizedTest(name = "[{index}] Input: \"{0}\"")
     @ValueSource(strings = {"a", "A", "!", "2a", "2!", "", "\n"})
     void isNumber_false(String num) {
-        assertFalse(menu.isNumber(num));
+        assertFalse(menuManager.isNumber(num));
     }
 }

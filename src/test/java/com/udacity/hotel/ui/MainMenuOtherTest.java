@@ -25,13 +25,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MainMenuOtherTest {
 
-    private MainMenu mainMenu;
+    private MainMenuManager mainMenu;
 
     private static ByteArrayOutputStream outContent;
     private Date now;
 
     @Mock
-    private AdminMenu adminMenu;
+    private AdminMenuManager adminMenuManager;
     @Mock
     private HotelResource hotelResource;
     @Mock
@@ -52,7 +52,7 @@ class MainMenuOtherTest {
         Calendar cal = Calendar.getInstance();
         cal.set(2022, Calendar.AUGUST, 8);
         now = cal.getTime();
-        mainMenu = new MainMenu(adminMenu, hotelResource, scanner, dateFormat, exitHelper, now);
+        mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner, dateFormat, exitHelper, now);
     }
 
     @AfterAll
@@ -297,7 +297,7 @@ class MainMenuOtherTest {
         // Run this test
         mainMenu.open();
 
-        verify(adminMenu, times(1)).open();
+        verify(adminMenuManager, times(1)).open();
     }
 
     @Test

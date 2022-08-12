@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MainMenuFindAndReserveARoomTest {
 
-    private MainMenu mainMenu;
+    private MainMenuManager mainMenu;
 
     private final static int YEAR_NOW = 2022;
     private final static int MONTH_NOW = Calendar.AUGUST;
@@ -39,7 +39,7 @@ class MainMenuFindAndReserveARoomTest {
     private ReservationFactory reservationFactory;
 
     @Mock
-    private AdminMenu adminMenu;
+    private AdminMenuManager adminMenuManager;
     @Mock
     private HotelResource hotelResource;
     @Mock
@@ -61,7 +61,7 @@ class MainMenuFindAndReserveARoomTest {
         Calendar cal = Calendar.getInstance();
         cal.set(YEAR_NOW, MONTH_NOW, DAY_NOW);
         nowStubbed = cal.getTime();
-        mainMenu = new MainMenu(adminMenu, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
+        mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
         reservationFactory = new ReservationFactory();
     }
 
@@ -107,7 +107,7 @@ class MainMenuFindAndReserveARoomTest {
         when(exitHelper.exitNested()).thenReturn(true);
 
         // Instantiate SUT with stubbed dateFormat
-        var mainMenu = new MainMenu(adminMenu, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
+        var mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
 
         // Run this test
         mainMenu.open();
@@ -177,7 +177,7 @@ class MainMenuFindAndReserveARoomTest {
         when(exitHelper.exitNested()).thenReturn(true);
 
         // Instantiate SUT with stubbed dateFormat
-        var mainMenu = new MainMenu(adminMenu, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
+        var mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
 
         // Run this test
         mainMenu.open();
