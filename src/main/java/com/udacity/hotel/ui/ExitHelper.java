@@ -5,13 +5,13 @@ package com.udacity.hotel.ui;
  *
  * @author Ivan V. Zykov
  */
-public class ExitHelper {
+public final class ExitHelper {
     /**
      * Enables exiting the app by stubbing this method to return true in tests.
      *
      * @return  boolean, always false for prod env
      */
-    public boolean exit() {
+    boolean exit() {
         return false;
     }
 
@@ -21,7 +21,7 @@ public class ExitHelper {
      *
      * @return  boolean, always false for prod env
      */
-    public boolean exitNested() {
+    boolean exitNested() {
         return false;
     }
 }
