@@ -5,10 +5,7 @@ import com.udacity.hotel.api.HotelResource;
 import com.udacity.hotel.model.ReservationFactory;
 import com.udacity.hotel.service.CustomerService;
 import com.udacity.hotel.service.ReservationService;
-import com.udacity.hotel.ui.AdminMenuManager;
-import com.udacity.hotel.ui.AdminMenuService;
-import com.udacity.hotel.ui.ExitHelper;
-import com.udacity.hotel.ui.MainMenuManager;
+import com.udacity.hotel.ui.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,8 +37,9 @@ public final class HotelApplication {
         AdminMenuManager adminMenuManager = new AdminMenuManager(scanner, exitHelper, adminMenuService);
         HotelResource hotelResource = new HotelResource(customerService,
                 reservationService);
-        MainMenuManager mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner,
-                simpleDateFormat, new ExitHelper(), new Date());
+        Date now = new Date();
+        MainMenuService mainMenuService = new MainMenuService(now, hotelResource, scanner, exitHelper, simpleDateFormat);
+        MainMenuManager mainMenu = new MainMenuManager(adminMenuManager, exitHelper, mainMenuService, scanner);
 
         // Run the app
         mainMenu.open();

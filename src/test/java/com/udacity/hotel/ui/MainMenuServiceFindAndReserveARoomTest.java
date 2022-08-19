@@ -19,16 +19,12 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * For findAndReserveARoom() method.
- */
 @ExtendWith(MockitoExtension.class)
-class MainMenuFindAndReserveARoomTest {
+class MainMenuServiceFindAndReserveARoomTest {
 
-    private MainMenuManager mainMenu;
+    private MainMenuService mainMenuService;
 
     private final static int YEAR_NOW = 2022;
     private final static int MONTH_NOW = Calendar.AUGUST;
@@ -39,13 +35,11 @@ class MainMenuFindAndReserveARoomTest {
     private ReservationFactory reservationFactory;
 
     @Mock
-    private AdminMenuManager adminMenuManager;
+    HotelResource hotelResource;
     @Mock
-    private HotelResource hotelResource;
+    Scanner scanner;
     @Mock
-    private Scanner scanner;
-    @Mock
-    private ExitHelper exitHelper;
+    ExitHelper exitHelper;
 
     @BeforeAll
     static void initAll() {
@@ -61,7 +55,7 @@ class MainMenuFindAndReserveARoomTest {
         Calendar cal = Calendar.getInstance();
         cal.set(YEAR_NOW, MONTH_NOW, DAY_NOW);
         nowStubbed = cal.getTime();
-        mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
+        mainMenuService = new MainMenuService(nowStubbed, hotelResource, scanner, exitHelper, dateFormat);
         reservationFactory = new ReservationFactory();
     }
 
@@ -71,35 +65,36 @@ class MainMenuFindAndReserveARoomTest {
         System.setOut(System.out);
     }
 
+    // FIXME: continue here. Move tests below
     @Test
     void findAndReserveARoom_invalidCheckIn() {
         // Stub user's input:
-        when(scanner.nextLine()).thenReturn("1", "a");
+        when(scanner.nextLine()).thenReturn("a");
 
         // Force exiting the app after incorrect input
         when(exitHelper.exitNested()).thenReturn(true);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
-                    "Example: 05/30/2022")),
-            () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy\r\n"))
+                () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022")),
+                () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy\r\n"))
         );
     }
 
     @Test
     void findAndReserveARoom_parseExceptionCheckIn() {
         // Stub user's input:
-        when(scanner.nextLine()).thenReturn("1", "05/30/2023");
+        when(scanner.nextLine()).thenReturn("05/30/2023");
 
         // Stub failing to parse input date
-        DateFormat dateFormat = mock(SimpleDateFormat.class);
+        DateFormat dateFormatStubbed = mock(SimpleDateFormat.class);
         try {
-            when(dateFormat.parse(any()))
-                .thenReturn(null)
-                .thenThrow(new ParseException("test error", 0));
+            when(dateFormatStubbed.parse(any()))
+                    .thenReturn(null)
+                    .thenThrow(new ParseException("test error", 0));
         }
         catch (ParseException e) {/*obsolete*/}
 
@@ -107,27 +102,28 @@ class MainMenuFindAndReserveARoomTest {
         when(exitHelper.exitNested()).thenReturn(true);
 
         // Instantiate SUT with stubbed dateFormat
-        var mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
+        MainMenuService mainMenuService = new MainMenuService(nowStubbed, hotelResource, scanner, exitHelper,
+                dateFormatStubbed);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
-                    "Example: 05/30/2022")),
-            () -> assertTrue(outContent.toString().endsWith("Try entering the date again\r\n"))
+                () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022")),
+                () -> assertTrue(outContent.toString().endsWith("Try entering the date again\r\n"))
         );
     }
     @Test
     void findAndReserveARoom_checkInIsInThePast() {
         // Stub user's input: check-in date is in the past
-        when(scanner.nextLine()).thenReturn("1", "01/01/2019");
+        when(scanner.nextLine()).thenReturn("01/01/2019");
 
         // Force exiting the app after incorrect input
         when(exitHelper.exitNested()).thenReturn(true);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
@@ -140,25 +136,25 @@ class MainMenuFindAndReserveARoomTest {
     @Test
     void findAndReserveARoom_invalidCheckOut() {
         // Stub user's input:
-        when(scanner.nextLine()).thenReturn("1", "05/30/2023", "a");
+        when(scanner.nextLine()).thenReturn("05/30/2023", "a");
 
         // Force exiting the app after incorrect input
         when(exitHelper.exitNested()).thenReturn(true);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
-                    "Example: 05/30/2022")),
-            () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy\r\n"))
+                () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022")),
+                () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy\r\n"))
         );
     }
 
     @Test
     void findAndReserveARoom_parseExceptionCheckOut() {
         // Stub user's input:
-        when(scanner.nextLine()).thenReturn("1", "05/30/2023", "06/10/2023");
+        when(scanner.nextLine()).thenReturn("05/30/2023", "06/10/2023");
 
         // Stub failing to parse input date
         DateFormat dateFormat = mock(SimpleDateFormat.class);
@@ -177,28 +173,29 @@ class MainMenuFindAndReserveARoomTest {
         when(exitHelper.exitNested()).thenReturn(true);
 
         // Instantiate SUT with stubbed dateFormat
-        var mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
+//        var mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
+        var mainMenuService = new MainMenuService(nowStubbed, hotelResource, scanner, exitHelper, dateFormat);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
-                    "Example: 05/30/2022")),
-            () -> assertTrue(outContent.toString().endsWith("Try entering the date again\r\n"))
+                () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022")),
+                () -> assertTrue(outContent.toString().endsWith("Try entering the date again\r\n"))
         );
     }
 
     @Test
     void findAndReserveARoom_checkOutIsInThePast() {
         // Stub user's input: check-out date is in the past
-        when(scanner.nextLine()).thenReturn("1", "05/30/2023", "01/20/2019");
+        when(scanner.nextLine()).thenReturn("05/30/2023", "01/20/2019");
 
         // Force exiting the app after incorrect input
         when(exitHelper.exitNested()).thenReturn(true);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
@@ -211,13 +208,13 @@ class MainMenuFindAndReserveARoomTest {
     @Test
     void findAndReserveARoom_checkInAfterCheckout() {
         // Stub user's input:
-        when(scanner.nextLine()).thenReturn("1", "06/10/2023", "05/30/2023");
+        when(scanner.nextLine()).thenReturn("06/10/2023", "05/30/2023");
 
         // Force exiting the app after incorrect input
         when(exitHelper.exit()).thenReturn(true);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertTrue(outContent.toString().endsWith("Your check-in date is later than checkout " +
                 "date. Please reenter dates\r\n"));
@@ -225,12 +222,12 @@ class MainMenuFindAndReserveARoomTest {
 
     @ParameterizedTest(name = "[{index}] Message: {1}")
     @MethodSource("provide_roomsAndInfoMessage")
-    void findAndReserveARoom_noRoomsOnTheDates_backToMainMenu(
+    void findAndReserveARoom_noRoomsOnTheDates(
             Collection<IRoom> roomsNextDays, String message) {
         // Stub user's input
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
-        when(scanner.nextLine()).thenReturn("1", checkInString, checkOutString, "5");
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString);
 
         // Prepare dates
         Date checkInDate = null;
@@ -260,14 +257,12 @@ class MainMenuFindAndReserveARoomTest {
         when(hotelResource.findARoom(checkInDateNext, checkOutDateNext)).thenReturn(roomsNextDays);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("No rooms found for selected dates. Trying to find" +
-                    " a room in the next 7 days")),
-            () -> assertTrue(outContent.toString().contains(message)),
-            // Redirecting back to the main menu and exiting
-            () -> assertTrue(outContent.toString().endsWith("Exiting the app\r\n"))
+                () -> assertTrue(outContent.toString().contains("No rooms found for selected dates. Trying to find" +
+                        " a room in the next 7 days")),
+                () -> assertTrue(outContent.toString().contains(message))
         );
     }
 
@@ -282,11 +277,11 @@ class MainMenuFindAndReserveARoomTest {
     }
 
     @Test
-    void findAndReserveARoom_noBooking_backToMainMenu() {
+    void findAndReserveARoom_noBooking() {
         // Stub user's input with no to question about booking a room
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
-        when(scanner.nextLine()).thenReturn("1", checkInString, checkOutString, "n", "5");
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "n");
 
         // Prepare dates
         Date checkInDate = null;
@@ -302,13 +297,12 @@ class MainMenuFindAndReserveARoomTest {
         when(hotelResource.findARoom(checkInDate, checkOutDate)).thenReturn(List.of(room));
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Would you like to book one of the rooms above? " +
-                    "(y/n)")),
-            // Redirecting back to the main menu and exiting
-            () -> assertTrue(outContent.toString().endsWith("Exiting the app\r\n"))
+                () -> assertTrue(outContent.toString().contains(room.toString())),
+                () -> assertTrue(outContent.toString().endsWith("Would you like to book one of the rooms above? " +
+                        "(y/n)\r\n"))
         );
     }
 
@@ -317,7 +311,7 @@ class MainMenuFindAndReserveARoomTest {
         // Stub user's input with invalid answer about booking a room
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
-        when(scanner.nextLine()).thenReturn("1", checkInString, checkOutString, "a");
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "a");
 
         // Prepare dates
         Date checkInDate = null;
@@ -336,21 +330,21 @@ class MainMenuFindAndReserveARoomTest {
         when(exitHelper.exit()).thenReturn(true);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Would you like to book one of the rooms above? " +
-                    "(y/n)")),
-            () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no\r\n"))
+                () -> assertTrue(outContent.toString().contains("Would you like to book one of the rooms above? " +
+                        "(y/n)")),
+                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no\r\n"))
         );
     }
 
     @Test
-    void findAndReserveARoom_noUserAccount_backToMainMenu() {
+    void findAndReserveARoom_noUserAccount() {
         // Stub user's input
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
-        when(scanner.nextLine()).thenReturn("1", checkInString, checkOutString, "y", "n", "5");
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "y", "n");
 
         // Prepare dates
         Date checkInDate = null;
@@ -366,12 +360,11 @@ class MainMenuFindAndReserveARoomTest {
         when(hotelResource.findARoom(checkInDate, checkOutDate)).thenReturn(List.of(room));
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Do you have an account?")),
-            () -> assertTrue(outContent.toString().contains("Please create an account in main menu")),
-            () -> assertTrue(outContent.toString().endsWith("Exiting the app\r\n"))
+                () -> assertTrue(outContent.toString().contains("Do you have an account?")),
+                () -> assertTrue(outContent.toString().endsWith("Please create an account in main menu\r\n"))
         );
     }
 
@@ -380,7 +373,7 @@ class MainMenuFindAndReserveARoomTest {
         // Stub user's input with invalid answer about having and account
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
-        when(scanner.nextLine()).thenReturn("1", checkInString, checkOutString, "y", "a");
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "y", "a");
 
         // Prepare dates
         Date checkInDate = null;
@@ -399,22 +392,21 @@ class MainMenuFindAndReserveARoomTest {
         when(exitHelper.exit()).thenReturn(true);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Do you have an account?")),
-            () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no\r\n"))
+                () -> assertTrue(outContent.toString().contains("Do you have an account?")),
+                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no\r\n"))
         );
     }
 
     @Test
-    void findAndReserveARoom_customerDoesNotExist_backToMainMenu() {
+    void findAndReserveARoom_customerDoesNotExist() {
         // Stub user's input
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
         String email = "i@z.com";
-        when(scanner.nextLine()).thenReturn("1", checkInString, checkOutString, "y", "y",
-                email, "5");
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "y", "y", email);
 
         // Prepare dates
         Date checkInDate = null;
@@ -433,13 +425,12 @@ class MainMenuFindAndReserveARoomTest {
         when(hotelResource.getCustomer(email)).thenReturn(null);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Please enter your email")),
-            () -> assertTrue(outContent.toString().contains("You are still not registered with this email. " +
-                    "Please create an account")),
-            () -> assertTrue(outContent.toString().endsWith("Exiting the app\r\n"))
+                () -> assertTrue(outContent.toString().contains("Please enter your email")),
+                () -> assertTrue(outContent.toString().contains("You are still not registered with this email. " +
+                        "Please create an account\r\n"))
         );
     }
 
@@ -450,7 +441,7 @@ class MainMenuFindAndReserveARoomTest {
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
         String email = "i@z.com";
-        when(scanner.nextLine()).thenReturn("1", checkInString, checkOutString, "y", "y",
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "y", "y",
                 email, roomNumber);
 
         // Prepare dates
@@ -474,11 +465,11 @@ class MainMenuFindAndReserveARoomTest {
         when(exitHelper.exit()).thenReturn(true);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
         assertAll(
-            () -> assertTrue(outContent.toString().contains("Please enter which room to book")),
-            () -> assertTrue(outContent.toString().endsWith(message + "\r\n"))
+                () -> assertTrue(outContent.toString().contains("Please enter which room to book")),
+                () -> assertTrue(outContent.toString().endsWith(message + "\r\n"))
         );
     }
 
@@ -491,14 +482,14 @@ class MainMenuFindAndReserveARoomTest {
     }
 
     @Test
-    void findAndReserveARoom_success_backToMainMenu() {
+    void findAndReserveARoom_success() {
         // Stub user's input
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
         String email = "i@z.com";
         String roomNumberToBook = "1";
-        when(scanner.nextLine()).thenReturn("1", checkInString, checkOutString, "y", "y",
-                email, roomNumberToBook, "5");
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "y", "y",
+                email, roomNumberToBook);
 
         // Prepare dates
         Date checkInDate = null;
@@ -525,11 +516,8 @@ class MainMenuFindAndReserveARoomTest {
         when(hotelResource.bookARoom(email, room, checkInDate, checkOutDate)).thenReturn(reservation);
 
         // Run this test
-        mainMenu.open();
+        mainMenuService.findAndReserveARoom();
 
-        assertAll(
-            () -> assertTrue(outContent.toString().contains(reservation.toString())),
-            () -> assertTrue(outContent.toString().endsWith("Exiting the app\r\n"))
-        );
+        assertTrue(outContent.toString().endsWith(reservation + "\r\n"));
     }
 }
