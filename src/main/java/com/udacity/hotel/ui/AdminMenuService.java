@@ -125,9 +125,10 @@ public class AdminMenuService extends MenuService {
 
     private String readRoomNumber(List<IRoom> newRooms) {
         print("Enter room number");
-        String input = scanner.nextLine();
+        String input = "";
         boolean isBadRoomNumber = true;
         while (isBadRoomNumber) {
+            input = scanner.nextLine();
             if (! isNumber(input)) {
                 print("Room number should be an integer number");
                 if (exitHelper.exit()) { return null; }
