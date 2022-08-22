@@ -63,7 +63,7 @@ class MainMenuManagerTest {
 
         verify(mainMenuService, times(1)).printMenu();
 
-        assertTrue(outContent.toString().endsWith("Exiting the app\r\n"));
+        assertTrue(outContent.toString().endsWith("Exiting the app" + System.lineSeparator()));
     }
 
     @Test
@@ -118,7 +118,7 @@ class MainMenuManagerTest {
         // Run this test
         mainMenuManager.open();
 
-        assertTrue(outContent.toString().endsWith("Exiting the app\r\n"));
+        assertTrue(outContent.toString().endsWith("Exiting the app" + System.lineSeparator()));
         verify(scanner, times(1)).close();
     }
 
@@ -131,7 +131,7 @@ class MainMenuManagerTest {
         mainMenuManager.open();
 
         assertTrue(outContent.toString().contains("Please enter a number representing" +
-                "a menu option from above\r\n"));
+                "a menu option from above" + System.lineSeparator()));
     }
 
     @Test
@@ -147,7 +147,7 @@ class MainMenuManagerTest {
 
         verify(mainMenuService, times(1)).printMenu();
 
-        assertTrue(outContent.toString().endsWith("Please enter a number\r\n"));
+        assertTrue(outContent.toString().endsWith("Please enter a number" + System.lineSeparator()));
     }
 
     @Test
@@ -168,7 +168,7 @@ class MainMenuManagerTest {
         // Run this test
         mainMenuManager.open();
 
-        assertTrue(outContent.toString().endsWith(message + "\r\n"));
+        assertTrue(outContent.toString().endsWith(message + System.lineSeparator()));
     }
 
     @Test
@@ -191,7 +191,7 @@ class MainMenuManagerTest {
 
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Unknown error occurred.")),
-                () -> assertTrue(outContent.toString().endsWith(message + "\r\n"))
+                () -> assertTrue(outContent.toString().endsWith(message + System.lineSeparator()))
         );
     }
 }

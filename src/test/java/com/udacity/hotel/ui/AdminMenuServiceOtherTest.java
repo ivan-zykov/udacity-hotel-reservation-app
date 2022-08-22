@@ -60,7 +60,7 @@ class AdminMenuServiceOtherTest {
                 () -> assertTrue(outContent.toString().contains("3. See all Reservations")),
                 () -> assertTrue(outContent.toString().contains("4. Add a room")),
                 () -> assertTrue(outContent.toString().contains("5. Back to Main Menu")),
-                () -> assertTrue(outContent.toString().endsWith("Select a menu option\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Select a menu option" + System.lineSeparator()))
         );
     }
 
@@ -73,7 +73,7 @@ class AdminMenuServiceOtherTest {
         adminMenuService.showAllCustomers();
 
         assertTrue(outContent.toString().endsWith("There are no registered customers yet. You can add " +
-                "one in main menu" + "\r\n"));
+                "one in main menu" + System.lineSeparator()));
     }
 
     @Test
@@ -85,7 +85,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllCustomers();
 
-        assertTrue(outContent.toString().endsWith(customer + "\r\n"));
+        assertTrue(outContent.toString().endsWith(customer + System.lineSeparator()));
     }
 
     @Test
@@ -96,8 +96,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllRooms();
 
-        assertTrue(outContent.toString().endsWith("There are no rooms yet. Please add some" +
-                "\r\n"));
+        assertTrue(outContent.toString().endsWith("There are no rooms yet. Please add some" + System.lineSeparator()));
     }
 
     @Test
@@ -109,7 +108,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllRooms();
 
-        assertTrue(outContent.toString().endsWith(room + "\r\n"));
+        assertTrue(outContent.toString().endsWith(room + System.lineSeparator()));
     }
 
     @Test
@@ -120,7 +119,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllReservations();
 
-        assertTrue(outContent.toString().endsWith("There are still no reservations\r\n"));
+        assertTrue(outContent.toString().endsWith("There are still no reservations" + System.lineSeparator()));
     }
 
     @Test
@@ -145,7 +144,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllReservations();
 
-        assertTrue(outContent.toString().endsWith(reservation + "\r\n"));
+        assertTrue(outContent.toString().endsWith(reservation + System.lineSeparator()));
     }
 
     @Test
@@ -153,7 +152,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.notifyReturningToMainMenu();
 
-        assertTrue(outContent.toString().endsWith("Returning to the main menu\r\n"));
+        assertTrue(outContent.toString().endsWith("Returning to the main menu" + System.lineSeparator()));
     }
 
     @Test
@@ -161,7 +160,8 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.notifyNonExistingMenuNumber();
 
-        assertTrue(outContent.toString().endsWith("Please enter a number representing a menu option from above\r\n"));
+        assertTrue(outContent.toString().endsWith("Please enter a number representing a menu option from above" +
+                System.lineSeparator()));
     }
 
     @Test
@@ -169,6 +169,6 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.menuNotANumber();
 
-        assertTrue(outContent.toString().endsWith("Please enter a number\r\n"));
+        assertTrue(outContent.toString().endsWith("Please enter a number" + System.lineSeparator()));
     }
 }

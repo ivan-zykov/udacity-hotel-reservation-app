@@ -80,7 +80,8 @@ class MainMenuServiceFindAndReserveARoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
                         "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy" +
+                        System.lineSeparator()))
         );
     }
 
@@ -111,7 +112,7 @@ class MainMenuServiceFindAndReserveARoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
                         "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("Try entering the date again\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Try entering the date again" + System.lineSeparator()))
         );
     }
     @Test
@@ -129,7 +130,7 @@ class MainMenuServiceFindAndReserveARoomTest {
                 () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
                         "Example: 05/30/2022")),
                 () -> assertTrue(outContent.toString().endsWith("This date is in the past. " +
-                        "Please reenter the date\r\n"))
+                        "Please reenter the date" + System.lineSeparator()))
         );
     }
 
@@ -147,7 +148,8 @@ class MainMenuServiceFindAndReserveARoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
                         "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy" +
+                        System.lineSeparator()))
         );
     }
 
@@ -182,7 +184,7 @@ class MainMenuServiceFindAndReserveARoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
                         "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("Try entering the date again\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Try entering the date again" + System.lineSeparator()))
         );
     }
 
@@ -201,7 +203,7 @@ class MainMenuServiceFindAndReserveARoomTest {
                 () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
                         "Example: 05/30/2022")),
                 () -> assertTrue(outContent.toString().endsWith("This date is in the past. " +
-                        "Please reenter the date\r\n"))
+                        "Please reenter the date" + System.lineSeparator()))
         );
     }
 
@@ -217,7 +219,7 @@ class MainMenuServiceFindAndReserveARoomTest {
         mainMenuService.findAndReserveARoom();
 
         assertTrue(outContent.toString().endsWith("Your check-in date is later than checkout " +
-                "date. Please reenter dates\r\n"));
+                "date. Please reenter dates" + System.lineSeparator()));
     }
 
     @ParameterizedTest(name = "[{index}] Message: {1}")
@@ -302,7 +304,7 @@ class MainMenuServiceFindAndReserveARoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains(room.toString())),
                 () -> assertTrue(outContent.toString().endsWith("Would you like to book one of the rooms above? " +
-                        "(y/n)\r\n"))
+                        "(y/n)" + System.lineSeparator()))
         );
     }
 
@@ -335,7 +337,8 @@ class MainMenuServiceFindAndReserveARoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Would you like to book one of the rooms above? " +
                         "(y/n)")),
-                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no" +
+                        System.lineSeparator()))
         );
     }
 
@@ -364,7 +367,8 @@ class MainMenuServiceFindAndReserveARoomTest {
 
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Do you have an account?")),
-                () -> assertTrue(outContent.toString().endsWith("Please create an account in main menu\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Please create an account in main menu" +
+                        System.lineSeparator()))
         );
     }
 
@@ -396,7 +400,8 @@ class MainMenuServiceFindAndReserveARoomTest {
 
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Do you have an account?")),
-                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no" +
+                        System.lineSeparator()))
         );
     }
 
@@ -430,7 +435,7 @@ class MainMenuServiceFindAndReserveARoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Please enter your email")),
                 () -> assertTrue(outContent.toString().contains("You are still not registered with this email. " +
-                        "Please create an account\r\n"))
+                        "Please create an account" + System.lineSeparator()))
         );
     }
 
@@ -469,7 +474,7 @@ class MainMenuServiceFindAndReserveARoomTest {
 
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Please enter which room to book")),
-                () -> assertTrue(outContent.toString().endsWith(message + "\r\n"))
+                () -> assertTrue(outContent.toString().endsWith(message + System.lineSeparator()))
         );
     }
 
@@ -518,6 +523,6 @@ class MainMenuServiceFindAndReserveARoomTest {
         // Run this test
         mainMenuService.findAndReserveARoom();
 
-        assertTrue(outContent.toString().endsWith(reservation + "\r\n"));
+        assertTrue(outContent.toString().endsWith(reservation + System.lineSeparator()));
     }
 }

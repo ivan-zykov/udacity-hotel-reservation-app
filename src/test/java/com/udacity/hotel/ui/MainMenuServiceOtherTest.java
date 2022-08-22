@@ -61,7 +61,8 @@ class MainMenuServiceOtherTest {
                 () -> assertTrue(outContent.toString().contains("3. Create an account")),
                 () -> assertTrue(outContent.toString().contains("4. Admin")),
                 () -> assertTrue(outContent.toString().contains("5. Exit")),
-                () -> assertTrue(outContent.toString().endsWith("Please enter a number to select a menu option\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Please enter a number to select a menu option" +
+                        System.lineSeparator()))
         );
     }
 
@@ -79,7 +80,7 @@ class MainMenuServiceOtherTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Please enter your email")),
                 () -> assertTrue(outContent.toString().endsWith("It is not a valid email. Please enter like " +
-                        "example@mail.com\r\n"))
+                        "example@mail.com" + System.lineSeparator()))
         );
     }
 
@@ -101,7 +102,7 @@ class MainMenuServiceOtherTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Please enter your email")),
                 () -> assertTrue(outContent.toString().endsWith("You are still no registered with this email. " +
-                        "Please create an account\r\n"))
+                        "Please create an account" + System.lineSeparator()))
         );
     }
 
@@ -126,7 +127,8 @@ class MainMenuServiceOtherTest {
 
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Please enter your email")),
-                () -> assertTrue(outContent.toString().endsWith("You still have no reservations with us\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("You still have no reservations with us" +
+                        System.lineSeparator()))
         );
     }
 
@@ -159,7 +161,7 @@ class MainMenuServiceOtherTest {
 
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Your reservations:")),
-                () -> assertTrue(outContent.toString().endsWith(reservation + "\r\n"))
+                () -> assertTrue(outContent.toString().endsWith(reservation + System.lineSeparator()))
         );
     }
 
@@ -177,7 +179,7 @@ class MainMenuServiceOtherTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter your email")),
                 () -> assertTrue(outContent.toString().endsWith("It is not a valid email. Please enter like " +
-                        "example@mail.com\r\n"))
+                        "example@mail.com" + System.lineSeparator()))
         );
     }
 
@@ -200,7 +202,7 @@ class MainMenuServiceOtherTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter your email")),
                 () -> assertTrue(outContent.toString().endsWith("Customer with this email already " +
-                        "registered.\r\n"))
+                        "registered." + System.lineSeparator()))
         );
     }
 
@@ -222,7 +224,7 @@ class MainMenuServiceOtherTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter your first name")),
                 () -> assertTrue(outContent.toString().endsWith("Your first name should have at " +
-                        "least one letter.\r\n"))
+                        "least one letter." + System.lineSeparator()))
         );
     }
 
@@ -244,7 +246,7 @@ class MainMenuServiceOtherTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter your last name")),
                 () -> assertTrue(outContent.toString().endsWith("Your last name should have at " +
-                        "least one letter.\r\n"))
+                        "least one letter." + System.lineSeparator()))
         );
     }
 
@@ -267,6 +269,6 @@ class MainMenuServiceOtherTest {
 
         verify(hotelResource, times(1)).createACustomer(email, firstName, lastName);
 
-        assertTrue(outContent.toString().endsWith("Your account successfully created\r\n"));
+        assertTrue(outContent.toString().endsWith("Your account successfully created" + System.lineSeparator()));
     }
 }

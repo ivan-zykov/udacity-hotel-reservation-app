@@ -53,9 +53,9 @@ public class Reservation {
      */
     @Override
     public String toString() {
-        return "Reservation for \r\n" +
-                customer + "\r\n" +
-                room + "\r\n" +
+        return "Reservation for " + System.lineSeparator() +
+                customer + System.lineSeparator() +
+                room + System.lineSeparator() +
                 "Dates: " + checkInDate + " - " + checkOutDate + ".";
     }
 

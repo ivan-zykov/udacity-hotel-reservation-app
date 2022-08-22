@@ -138,14 +138,15 @@ class AdminMenuManagerTest {
         // Run this test
         adminMenuManager.open();
 
-        assertTrue(outContent.toString().endsWith(message + "\r\n"));
+        assertTrue(outContent.toString().endsWith(message + System.lineSeparator()));
     }
 
     private static Stream<Arguments> provideExceptionAndMessage() {
         String message = "Test message";
         return Stream.of(
                 Arguments.of(new IllegalArgumentException(message), message),
-                Arguments.of(new RuntimeException(message), "Unknown error occurred.\r\n" + message)
+                Arguments.of(new RuntimeException(message), "Unknown error occurred." +
+                        System.lineSeparator() + message)
         );
     }
 }

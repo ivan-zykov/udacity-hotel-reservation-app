@@ -64,7 +64,7 @@ class AdminMenuServiceAddRoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter room number")),
                 () -> assertTrue(outContent.toString().endsWith("Room number should be an integer number" +
-                        "\r\n"))
+                        System.lineSeparator()))
         );
     }
 
@@ -83,7 +83,7 @@ class AdminMenuServiceAddRoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter room number")),
                 () -> assertTrue(outContent.toString().endsWith("You have already added a room with " +
-                        "room number " + roomNumber + "\r\n"))
+                        "room number " + roomNumber + System.lineSeparator()))
         );
     }
 
@@ -98,7 +98,8 @@ class AdminMenuServiceAddRoomTest {
         assertAll(
                 () -> assertTrue(outContent.toString().contains("Enter room number")),
                 () -> assertTrue(outContent.toString().contains("Enter room price")),
-                () -> assertTrue(outContent.toString().endsWith("Room price should be a decimal number\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Room price should be a decimal number" +
+                        System.lineSeparator()))
         );
     }
 
@@ -114,8 +115,9 @@ class AdminMenuServiceAddRoomTest {
                 () -> assertTrue(outContent.toString().contains("Enter room number")),
                 () -> assertTrue(outContent.toString().contains("Enter room price")),
                 () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
-                        "\"d\" for double\r\n")),
-                () -> assertTrue(outContent.toString().endsWith("Enter \"s\" for single or \"d\" for double\r\n"))
+                        "\"d\" for double" + System.lineSeparator())),
+                () -> assertTrue(outContent.toString().endsWith("Enter \"s\" for single or \"d\" for double" +
+                        System.lineSeparator()))
         );
     }
 
@@ -134,9 +136,10 @@ class AdminMenuServiceAddRoomTest {
                 () -> assertTrue(outContent.toString().contains("Enter room number")),
                 () -> assertTrue(outContent.toString().contains("Enter room price")),
                 () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
-                        "\"d\" for double\r\n")),
+                        "\"d\" for double" + System.lineSeparator())),
                 () -> assertTrue(outContent.toString().contains("Add another room? (y/n)")),
-                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no" +
+                        System.lineSeparator()))
         );
     }
 
@@ -154,9 +157,10 @@ class AdminMenuServiceAddRoomTest {
                 () -> assertTrue(outContent.toString().contains("Enter room number")),
                 () -> assertTrue(outContent.toString().contains("Enter room price")),
                 () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
-                        "\"d\" for double\r\n")),
+                        "\"d\" for double" + System.lineSeparator())),
                 () -> assertTrue(outContent.toString().contains("Add another room? (y/n)")),
-                () -> assertTrue(outContent.toString().endsWith("Rooms were successfully added\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Rooms were successfully added" +
+                        System.lineSeparator()))
         );
 
         List<IRoom> newRooms = List.of(new Room(roomNumber, Double.parseDouble(roomPrice), RoomType.SINGLE));
@@ -188,9 +192,10 @@ class AdminMenuServiceAddRoomTest {
                 () -> assertTrue(outContent.toString().contains("Enter room number")),
                 () -> assertTrue(outContent.toString().contains("Enter room price")),
                 () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
-                        "\"d\" for double\r\n")),
+                        "\"d\" for double" + System.lineSeparator())),
                 () -> assertTrue(outContent.toString().contains("Add another room? (y/n)")),
-                () -> assertTrue(outContent.toString().endsWith("Rooms were successfully added\r\n"))
+                () -> assertTrue(outContent.toString().endsWith("Rooms were successfully added" +
+                        System.lineSeparator()))
         );
 
         List<IRoom> newRooms = List.of(
