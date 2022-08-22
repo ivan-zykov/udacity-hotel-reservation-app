@@ -14,7 +14,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
- * Performs an action selected in the {@link MenuManager}.
+ * Performs an action selected in the {@link MainMenuManager}.
  * <p>Actions include:</p>
  * <ul>
  *     <li>finding free {@link IRoom}s for the supplied dates and booking a selected room for the

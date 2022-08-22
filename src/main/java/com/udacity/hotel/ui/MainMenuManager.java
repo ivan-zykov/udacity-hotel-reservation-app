@@ -7,11 +7,12 @@ import java.util.Scanner;
  *
  * @author Ivan V. Zykov
  */
-public final class MainMenuManager extends MenuManager {
+public final class MainMenuManager implements MenuManager {
 
-    private final AdminMenuManager adminMenuManager;
+    private final MenuManager adminMenuManager;
     private final ExitHelper exitHelper;
     private final MainMenuService mainMenuService;
+    private final Scanner scanner;
 
     /**
      * Constructor of this class.
@@ -21,18 +22,19 @@ public final class MainMenuManager extends MenuManager {
      * @param mainMenuService   mainMenuService object that performs an action corresponding to the selected menu
      * @param scanner           scanner object that reads user's input
      */
-    public MainMenuManager(AdminMenuManager adminMenuManager, ExitHelper exitHelper, MainMenuService mainMenuService,
+    public MainMenuManager(MenuManager adminMenuManager, ExitHelper exitHelper, MainMenuService mainMenuService,
                            Scanner scanner) {
-        super(scanner);
         this.adminMenuManager = adminMenuManager;
         this.exitHelper = exitHelper;
         this.mainMenuService = mainMenuService;
+        this.scanner = scanner;
     }
 
     /**
      * Prints menu to the console, reads user's input for the selected menu option and performs the corresponding
      * action utilising main menu service.
      */
+    @Override
     public void open() {
         boolean keepRunning = true;
         while (keepRunning) {

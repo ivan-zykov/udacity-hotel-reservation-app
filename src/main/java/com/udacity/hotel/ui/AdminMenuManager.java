@@ -7,10 +7,11 @@ import java.util.*;
  *
  * @author Ivan V. Zykov
  */
-public final class AdminMenuManager extends MenuManager {
+public final class AdminMenuManager implements MenuManager {
 
     private final ExitHelper exitHelper;
     private final AdminMenuService adminMenuService;
+    private final Scanner scanner;
 
     /**
      * Constructor of this class.
@@ -20,9 +21,9 @@ public final class AdminMenuManager extends MenuManager {
      * @param adminMenuService  adminMenuService object that performs an action corresponding to the selected menu
      */
     public AdminMenuManager(Scanner scanner, ExitHelper exitHelper, AdminMenuService adminMenuService) {
-        super(scanner);
         this.exitHelper = exitHelper;
         this.adminMenuService = adminMenuService;
+        this.scanner = scanner;
     }
 
     /**
