@@ -1,6 +1,7 @@
 package com.udacity.hotel.ui;
 
 import com.udacity.hotel.api.HotelResource;
+import com.udacity.hotel.model.Customer;
 import com.udacity.hotel.model.IRoom;
 import com.udacity.hotel.model.Reservation;
 
@@ -13,7 +14,16 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
- * TODO: add JavaDocks
+ * Performs an action selected in the {@link MenuManager}.
+ * <p>Actions include:</p>
+ * <ul>
+ *     <li>finding free {@link IRoom}s for the supplied dates and booking a selected room for the
+ *     corresponding {@link Customer}</li>
+ *     <li>printing all {@link Reservation}s of a specified customer</li>
+ *     <li>creating a new account that is recording a new customer with data from user's input</li>
+ *     <li>navigating to administrator's menu</li>
+ *     <li>exiting and terminating the app</li>
+ * </ul>
  *
  * @author Ivan V. Zykov
  */
@@ -24,6 +34,15 @@ public class MainMenuService extends MenuService {
     private final HotelResource hotelResource;
     private final DateFormat simpleDateFormat;
 
+    /**
+     * Constructor of this class.
+     *
+     * @param now               date object of the current date
+     * @param hotelResource     hotelResource object of the API to services with functionality for regular users
+     * @param scanner           scanner object that reads user's input
+     * @param exitHelper        exitHelper object that allows breaking loops during tests
+     * @param simpleDateFormat  simpleDateFormat object that helps to parse dates from user's input
+     */
     public MainMenuService (Date now, HotelResource hotelResource, Scanner scanner, ExitHelper exitHelper,
                             DateFormat simpleDateFormat) {
         super(scanner);
@@ -33,6 +52,9 @@ public class MainMenuService extends MenuService {
         this.simpleDateFormat = simpleDateFormat;
     }
 
+    /**
+     * Prints menu for regular users to the console.
+     */
     public void printMenu() {
         print("");
         print("Welcome to Vanya's Hotel Reservation App");
@@ -46,6 +68,10 @@ public class MainMenuService extends MenuService {
         print("Please enter a number to select a menu option");
     }
 
+    /**
+     * Gets all recorded reservations for the customer identified by the email from user's input. Also, checks that
+     * a user is registered with the provided email.
+     */
     public void showCustomersReservations() {
         // Read customer's email
         print("Please enter your email");
@@ -102,6 +128,10 @@ public class MainMenuService extends MenuService {
         return hotelResource.getCustomer(email) != null;
     }
 
+    /**
+     * Records a new customer with data from user's input. Also, checks that the provided email doesn't belong to
+     * already registered customer.
+     */
     public void createNewAccount() {
         boolean keepAddingNewAccount = true;
         while (keepAddingNewAccount) {
@@ -163,6 +193,11 @@ public class MainMenuService extends MenuService {
         return input.matches(".*[a-zA-Z]+.*");
     }
 
+    /**
+     * Searches available rooms for the dates from user's input and if one found, books it for the customer. If no
+     * rooms found for the provided dates, searches rooms for the next seven days. While booking also checks that
+     * customer with the email from the input is already registered.
+     */
     public void findAndReserveARoom() {
 
         boolean keepFindingAndReservingARoom = true;

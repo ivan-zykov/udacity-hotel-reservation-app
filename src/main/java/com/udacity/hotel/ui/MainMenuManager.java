@@ -1,13 +1,9 @@
 package com.udacity.hotel.ui;
 
-import com.udacity.hotel.model.IRoom;
-import com.udacity.hotel.model.Customer;
-
 import java.util.Scanner;
 
 /**
- * TODO: edit JavaDocs
- * Console UI for regular users.
+ * Menu manager of the console UI for regular users.
  *
  * @author Ivan V. Zykov
  */
@@ -21,7 +17,8 @@ public final class MainMenuManager extends MenuManager {
      * Constructor of this class.
      *
      * @param adminMenuManager  adminMenuManager object of the menu for admins
-     * @param mainMenuService   todo: describe this
+     * @param exitHelper        exitHelper object that allows breaking loops during tests
+     * @param mainMenuService   mainMenuService object that performs an action corresponding to the selected menu
      * @param scanner           scanner object that reads user's input
      */
     public MainMenuManager(AdminMenuManager adminMenuManager, ExitHelper exitHelper, MainMenuService mainMenuService,
@@ -34,16 +31,7 @@ public final class MainMenuManager extends MenuManager {
 
     /**
      * Prints menu to the console, reads user's input for the selected menu option and performs the corresponding
-     * action utilising APIs to services.
-     * <p>Performed actions include:</p>
-     * <ul>
-     *     <li>finding free {@link IRoom}s for the supplied dates and booking a selected room for the
-     *     corresponding {@link Customer}</li>
-     *     <li>printing all reservations of a specified customer</li>
-     *     <li>creating a new account that is recording a new customer with data from user's input</li>
-     *     <li>navigating to administrator's menu</li>
-     *     <li>exiting and terminating the app</li>
-     * </ul>
+     * action utilising main menu service.
      */
     public void open() {
         boolean keepRunning = true;
@@ -57,6 +45,7 @@ public final class MainMenuManager extends MenuManager {
                     case 3 -> mainMenuService.createNewAccount();
                     case 4 -> goToAdminMenu();
                     case 5 -> {
+                        // TODO: refactor to use dedicated printer here and when handling exceptions
                         System.out.println("Exiting the app");
                         keepRunning = false;
                         scanner.close();
