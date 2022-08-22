@@ -39,6 +39,7 @@ public class AdminMenuService extends MenuService {
     /**
      * Prints admin menu to the console.
      */
+    @Override
     public void printMenu() {
         print("");
         print("Admin menu of Vanya's Hotel Reservation App");

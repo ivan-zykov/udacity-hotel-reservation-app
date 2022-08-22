@@ -20,6 +20,11 @@ abstract class MenuService {
         this.scanner = scanner;
     }
 
+    /**
+     * Prints menu to the console.
+     */
+    public abstract void printMenu();
+
     // TODO: move it to a dedicated ConsolePrinter class
     <T> void print(T text) {
         System.out.println(text);

@@ -55,6 +55,7 @@ public class MainMenuService extends MenuService {
     /**
      * Prints menu for regular users to the console.
      */
+    @Override
     public void printMenu() {
         print("");
         print("Welcome to Vanya's Hotel Reservation App");
