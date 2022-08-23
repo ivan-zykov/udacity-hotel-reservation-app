@@ -12,6 +12,7 @@ public final class AdminMenuManager implements MenuManager {
     private final ExitHelper exitHelper;
     private final AdminMenuService adminMenuService;
     private final Scanner scanner;
+    private final ConsolePrinter consolePrinter;
 
     /**
      * Constructor of this class.
@@ -20,10 +21,12 @@ public final class AdminMenuManager implements MenuManager {
      * @param exitHelper        exitHelper object that allows breaking loops during tests
      * @param adminMenuService  adminMenuService object that performs an action corresponding to the selected menu
      */
-    public AdminMenuManager(Scanner scanner, ExitHelper exitHelper, AdminMenuService adminMenuService) {
+    public AdminMenuManager(Scanner scanner, ExitHelper exitHelper, AdminMenuService adminMenuService,
+                            ConsolePrinter consolePrinter) {
         this.exitHelper = exitHelper;
         this.adminMenuService = adminMenuService;
         this.scanner = scanner;
+        this.consolePrinter = consolePrinter;
     }
 
     /**
@@ -42,19 +45,18 @@ public final class AdminMenuManager implements MenuManager {
                     case 3 -> adminMenuService.showAllReservations();
                     case 4 -> adminMenuService.addARoom();
                     case 5 -> {
-                        adminMenuService.notifyReturningToMainMenu();
+                        consolePrinter.print("Returning to the main menu");
                         keepRunning = false;
                     }
-                    default -> adminMenuService.notifyNonExistingMenuNumber();
+                    default -> consolePrinter.print("Please enter a number representing a menu option from above");
                 }
             } catch (NumberFormatException ex) {
-                // TODO: refactor to use dedicated printer here and when handling other exceptions
-                adminMenuService.menuNotANumber();
+                consolePrinter.print("Please enter a number");
             } catch (IllegalArgumentException ex) {
-                System.out.println(ex.getLocalizedMessage());
+                consolePrinter.print(ex.getLocalizedMessage());
             } catch (Exception ex) {
-                System.out.println("Unknown error occurred.");
-                System.out.println(ex.getLocalizedMessage());
+                consolePrinter.print("Unknown error occurred.");
+                consolePrinter.print(ex.getLocalizedMessage());
             }
             if (exitHelper.exit()) { return; }
         }

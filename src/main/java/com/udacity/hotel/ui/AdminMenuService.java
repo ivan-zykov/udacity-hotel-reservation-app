@@ -224,17 +224,4 @@ public class AdminMenuService extends MenuService {
         }
         return keepAddingRooms;
     }
-
-    // TODO: add JavaDoc here and for other notify*() methods
-    public void notifyReturningToMainMenu() {
-        print("Returning to the main menu");
-    }
-
-    public void notifyNonExistingMenuNumber() {
-        print("Please enter a number representing a menu option from above");
-    }
-
-    public void menuNotANumber() {
-        print("Please enter a number");
-    }
 }

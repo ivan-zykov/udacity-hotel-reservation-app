@@ -34,11 +34,13 @@ public final class HotelApplication {
         DateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         ExitHelper exitHelper = new ExitHelper();
         AdminMenuService adminMenuService = new AdminMenuService(adminResource, scanner, exitHelper);
-        MenuManager adminMenuManager = new AdminMenuManager(scanner, exitHelper, adminMenuService);
+        ConsolePrinter consolePrinter = new ConsolePrinterImpl();
+        MenuManager adminMenuManager = new AdminMenuManager(scanner, exitHelper, adminMenuService, consolePrinter);
         HotelResource hotelResource = new HotelResource(customerService,
                 reservationService);
         Date now = new Date();
-        MainMenuService mainMenuService = new MainMenuService(now, hotelResource, scanner, exitHelper, simpleDateFormat);
+        MainMenuService mainMenuService = new MainMenuService(now, hotelResource, scanner, exitHelper,
+                simpleDateFormat);
         MenuManager mainMenuManager = new MainMenuManager(adminMenuManager, exitHelper, mainMenuService, scanner);
 
         // Run the app

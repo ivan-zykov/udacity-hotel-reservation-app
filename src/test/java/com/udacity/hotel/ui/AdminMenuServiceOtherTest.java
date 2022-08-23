@@ -146,29 +146,4 @@ class AdminMenuServiceOtherTest {
 
         assertTrue(outContent.toString().endsWith(reservation + System.lineSeparator()));
     }
-
-    @Test
-    void notifyReturningToMainMenu() {
-        // Run this test
-        adminMenuService.notifyReturningToMainMenu();
-
-        assertTrue(outContent.toString().endsWith("Returning to the main menu" + System.lineSeparator()));
-    }
-
-    @Test
-    void notifyWrongMenuNumber() {
-        // Run this test
-        adminMenuService.notifyNonExistingMenuNumber();
-
-        assertTrue(outContent.toString().endsWith("Please enter a number representing a menu option from above" +
-                System.lineSeparator()));
-    }
-
-    @Test
-    void menuNotANumber() {
-        // Run this test
-        adminMenuService.menuNotANumber();
-
-        assertTrue(outContent.toString().endsWith("Please enter a number" + System.lineSeparator()));
-    }
 }

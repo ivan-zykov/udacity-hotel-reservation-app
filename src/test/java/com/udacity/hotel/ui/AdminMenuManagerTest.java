@@ -8,12 +8,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,25 +18,18 @@ class AdminMenuManagerTest {
 
     private AdminMenuManager adminMenuManager;
 
-    private static ByteArrayOutputStream outContent;
-
     @Mock
     private Scanner scanner;
     @Mock
     private ExitHelper exitHelper;
     @Mock
     private AdminMenuService adminMenuService;
-
-    @BeforeAll
-    static void initAll() {
-        // Overtake printing to the console
-        outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-    }
+    @Mock
+    private ConsolePrinterImpl consolePrinter;
 
     @BeforeEach
     void init() {
-        adminMenuManager = new AdminMenuManager(scanner, exitHelper, adminMenuService);
+        adminMenuManager = new AdminMenuManager(scanner, exitHelper, adminMenuService, consolePrinter);
         when(exitHelper.exit()).thenReturn(true);
     }
 
@@ -58,7 +48,7 @@ class AdminMenuManagerTest {
         adminMenuManager.open();
 
         verify(adminMenuService, times(1)).printMenu();
-        verify(adminMenuService, times(1)).notifyReturningToMainMenu();
+        verify(consolePrinter, times(1)).print("Returning to the main menu");
     }
 
     @Test
@@ -114,7 +104,8 @@ class AdminMenuManagerTest {
         // Run this test
         adminMenuManager.open();
 
-        verify(adminMenuService, times(1)).notifyNonExistingMenuNumber();
+        verify(consolePrinter, times(1))
+                .print("Please enter a number representing a menu option from above");
     }
 
     @Test
@@ -125,7 +116,7 @@ class AdminMenuManagerTest {
         // Run this test
         adminMenuManager.open();
 
-        verify(adminMenuService, times(1)).menuNotANumber();
+        verify(consolePrinter, times(1)).print("Please enter a number");
     }
 
     @ParameterizedTest(name = "[{index}] {0}; Message: {1}")
@@ -138,15 +129,14 @@ class AdminMenuManagerTest {
         // Run this test
         adminMenuManager.open();
 
-        assertTrue(outContent.toString().endsWith(message + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print(message);
     }
 
     private static Stream<Arguments> provideExceptionAndMessage() {
         String message = "Test message";
         return Stream.of(
                 Arguments.of(new IllegalArgumentException(message), message),
-                Arguments.of(new RuntimeException(message), "Unknown error occurred." +
-                        System.lineSeparator() + message)
+                Arguments.of(new RuntimeException(message), message)
         );
     }
 }
