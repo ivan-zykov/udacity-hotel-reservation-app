@@ -33,6 +33,7 @@ public final class AdminMenuManager implements MenuManager {
      * Prints menu to the console, reads administrator's input for the selected menu option and performs the
      * corresponding action utilising admin menu service.
      */
+    @Override
     public void open() {
         boolean keepRunning = true;
         while (keepRunning) {
