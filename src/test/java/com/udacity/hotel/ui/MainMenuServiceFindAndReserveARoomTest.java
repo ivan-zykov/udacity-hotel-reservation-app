@@ -65,7 +65,6 @@ class MainMenuServiceFindAndReserveARoomTest {
         System.setOut(System.out);
     }
 
-    // FIXME: continue here. Move tests below
     @Test
     void findAndReserveARoom_invalidCheckIn() {
         // Stub user's input:
