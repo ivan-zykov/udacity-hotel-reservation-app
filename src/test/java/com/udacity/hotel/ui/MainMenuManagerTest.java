@@ -9,9 +9,6 @@ import java.util.Scanner;
 
 import static org.mockito.Mockito.*;
 
-/**
- * For other methods except findAndReserveARoom().
- */
 @ExtendWith(MockitoExtension.class)
 class MainMenuManagerTest {
 
@@ -19,8 +16,6 @@ class MainMenuManagerTest {
 
     @Mock
     private AdminMenuManager adminMenuManager;
-    @Mock
-    private ExitHelper exitHelper;
     @Mock
     private MainMenuService mainMenuService;
     @Mock
@@ -30,7 +25,7 @@ class MainMenuManagerTest {
 
     @BeforeEach
     void init() {
-        mainMenuManager = new MainMenuManager(adminMenuManager, exitHelper, mainMenuService, scanner, consolePrinter);
+        mainMenuManager = new MainMenuManager(adminMenuManager, mainMenuService, scanner, consolePrinter);
     }
 
     @AfterAll
@@ -122,31 +117,25 @@ class MainMenuManagerTest {
     @Test
     void inputMenuOptionNotNumber() {
         // Stub user's input: menu not a number
-        when(scanner.nextLine()).thenReturn("a");
-
-        // Force exiting the app after exception
-        when(exitHelper.exit()).thenReturn(true);
+        when(scanner.nextLine()).thenReturn("a", "5");
 
         // Run this test
         mainMenuManager.open();
 
-        verify(mainMenuService, times(1)).printMenu();
+        verify(mainMenuService, times(2)).printMenu();
         verify(consolePrinter, times(1)).print("Please enter a number");
     }
 
     @Test
     void handleIllegalArgumentException() {
         // Stub user's input
-        when(scanner.nextLine()).thenReturn("1");
+        when(scanner.nextLine()).thenReturn("1", "5");
 
         // Stub throwing IllegalArgumentException
         String message = "Test message";
         doThrow(new IllegalArgumentException(message))
                 .when(mainMenuService)
                 .findAndReserveARoom();
-
-        // Force exiting the app after exception
-        when(exitHelper.exit()).thenReturn(true);
 
         // Run this test
         mainMenuManager.open();
@@ -158,16 +147,13 @@ class MainMenuManagerTest {
     void handleUnknownException() {
         // Stub user's input
         String email = "i@z.com";
-        when(scanner.nextLine()).thenReturn("1", email);
+        when(scanner.nextLine()).thenReturn("1", email, "5");
 
         // Stub throwing RuntimeException
         String message = "Test message";
         doThrow(new RuntimeException(message))
                 .when(mainMenuService)
                 .findAndReserveARoom();
-
-        // Force exiting the app after exception
-        when(exitHelper.exit()).thenReturn(true);
 
         // Run this test
         mainMenuManager.open();

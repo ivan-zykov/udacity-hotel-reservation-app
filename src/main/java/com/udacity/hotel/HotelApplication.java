@@ -41,7 +41,7 @@ public final class HotelApplication {
         Date now = new Date();
         MainMenuService mainMenuService = new MainMenuService(now, hotelResource, scanner, exitHelper,
                 simpleDateFormat);
-        MenuManager mainMenuManager = new MainMenuManager(adminMenuManager, exitHelper, mainMenuService, scanner,
+        MenuManager mainMenuManager = new MainMenuManager(adminMenuManager, mainMenuService, scanner,
                 consolePrinter);
 
         // Run the app

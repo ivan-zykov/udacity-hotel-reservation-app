@@ -10,7 +10,6 @@ import java.util.Scanner;
 public final class MainMenuManager implements MenuManager {
 
     private final MenuManager adminMenuManager;
-    private final ExitHelper exitHelper;
     private final MainMenuService mainMenuService;
     private final Scanner scanner;
     private final ConsolePrinter consolePrinter;
@@ -19,14 +18,12 @@ public final class MainMenuManager implements MenuManager {
      * Constructor of this class.
      *
      * @param adminMenuManager  adminMenuManager object of the menu for admins
-     * @param exitHelper        exitHelper object that allows breaking loops during tests
      * @param mainMenuService   mainMenuService object that performs an action corresponding to the selected menu
      * @param scanner           scanner object that reads user's input
      */
-    public MainMenuManager(MenuManager adminMenuManager, ExitHelper exitHelper, MainMenuService mainMenuService,
-                           Scanner scanner, ConsolePrinter consolePrinter) {
+    public MainMenuManager(MenuManager adminMenuManager, MainMenuService mainMenuService, Scanner scanner,
+                           ConsolePrinter consolePrinter) {
         this.adminMenuManager = adminMenuManager;
-        this.exitHelper = exitHelper;
         this.mainMenuService = mainMenuService;
         this.scanner = scanner;
         this.consolePrinter = consolePrinter;
@@ -63,8 +60,6 @@ public final class MainMenuManager implements MenuManager {
                 consolePrinter.print("Unknown error occurred.");
                 consolePrinter.print(ex.getLocalizedMessage());
             }
-            // TODO: try removing it. Probably, refactor all tests to exit the app.
-            if (exitHelper.exit()) { return; }
         }
     }
 
