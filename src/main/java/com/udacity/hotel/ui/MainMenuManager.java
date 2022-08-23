@@ -13,6 +13,7 @@ public final class MainMenuManager implements MenuManager {
     private final ExitHelper exitHelper;
     private final MainMenuService mainMenuService;
     private final Scanner scanner;
+    private final ConsolePrinter consolePrinter;
 
     /**
      * Constructor of this class.
@@ -23,11 +24,12 @@ public final class MainMenuManager implements MenuManager {
      * @param scanner           scanner object that reads user's input
      */
     public MainMenuManager(MenuManager adminMenuManager, ExitHelper exitHelper, MainMenuService mainMenuService,
-                           Scanner scanner) {
+                           Scanner scanner, ConsolePrinter consolePrinter) {
         this.adminMenuManager = adminMenuManager;
         this.exitHelper = exitHelper;
         this.mainMenuService = mainMenuService;
         this.scanner = scanner;
+        this.consolePrinter = consolePrinter;
     }
 
     /**
@@ -47,22 +49,21 @@ public final class MainMenuManager implements MenuManager {
                     case 3 -> mainMenuService.createNewAccount();
                     case 4 -> goToAdminMenu();
                     case 5 -> {
-                        // TODO: refactor to use dedicated printer here and when handling exceptions
-                        System.out.println("Exiting the app");
+                        consolePrinter.print("Exiting the app");
                         keepRunning = false;
                         scanner.close();
                     }
-                    default -> System.out.println("Please enter a number representing" +
-                            "a menu option from above");
+                    default -> consolePrinter.print("Please enter a number representing a menu option from above");
                 }
             } catch (NumberFormatException ex) {
-                System.out.println("Please enter a number");
+                consolePrinter.print("Please enter a number");
             } catch (IllegalArgumentException ex) {
-                System.out.println(ex.getLocalizedMessage());
+                consolePrinter.print(ex.getLocalizedMessage());
             } catch (Exception ex) {
-                System.out.println("Unknown error occurred.");
-                System.out.println(ex.getLocalizedMessage());
+                consolePrinter.print("Unknown error occurred.");
+                consolePrinter.print(ex.getLocalizedMessage());
             }
+            // TODO: try removing it. Probably, refactor all tests to exit the app.
             if (exitHelper.exit()) { return; }
         }
     }

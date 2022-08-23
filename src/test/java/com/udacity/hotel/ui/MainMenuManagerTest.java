@@ -5,13 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -22,29 +17,20 @@ class MainMenuManagerTest {
 
     private MainMenuManager mainMenuManager;
 
-    private static ByteArrayOutputStream outContent;
-
     @Mock
     private AdminMenuManager adminMenuManager;
-//    TODO: needed?
     @Mock
     private ExitHelper exitHelper;
     @Mock
     private MainMenuService mainMenuService;
     @Mock
     private Scanner scanner;
-
-    @BeforeAll
-    static void initAll() {
-        // Overtake printing to the console
-        outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-    }
+    @Mock
+    private ConsolePrinter consolePrinter;
 
     @BeforeEach
     void init() {
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        mainMenuManager = new MainMenuManager(adminMenuManager, exitHelper, mainMenuService, scanner);
+        mainMenuManager = new MainMenuManager(adminMenuManager, exitHelper, mainMenuService, scanner, consolePrinter);
     }
 
     @AfterAll
@@ -62,8 +48,7 @@ class MainMenuManagerTest {
         mainMenuManager.open();
 
         verify(mainMenuService, times(1)).printMenu();
-
-        assertTrue(outContent.toString().endsWith("Exiting the app" + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print("Exiting the app");
     }
 
     @Test
@@ -118,7 +103,7 @@ class MainMenuManagerTest {
         // Run this test
         mainMenuManager.open();
 
-        assertTrue(outContent.toString().endsWith("Exiting the app" + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print("Exiting the app");
         verify(scanner, times(1)).close();
     }
 
@@ -130,8 +115,8 @@ class MainMenuManagerTest {
         // Run this test
         mainMenuManager.open();
 
-        assertTrue(outContent.toString().contains("Please enter a number representing" +
-                "a menu option from above" + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print("Please enter a number representing " +
+                "a menu option from above");
     }
 
     @Test
@@ -146,14 +131,12 @@ class MainMenuManagerTest {
         mainMenuManager.open();
 
         verify(mainMenuService, times(1)).printMenu();
-
-        assertTrue(outContent.toString().endsWith("Please enter a number" + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print("Please enter a number");
     }
 
     @Test
     void handleIllegalArgumentException() {
         // Stub user's input
-        String email = "i@z.com";
         when(scanner.nextLine()).thenReturn("1");
 
         // Stub throwing IllegalArgumentException
@@ -168,7 +151,7 @@ class MainMenuManagerTest {
         // Run this test
         mainMenuManager.open();
 
-        assertTrue(outContent.toString().endsWith(message + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print(message);
     }
 
     @Test
@@ -189,9 +172,7 @@ class MainMenuManagerTest {
         // Run this test
         mainMenuManager.open();
 
-        assertAll(
-                () -> assertTrue(outContent.toString().contains("Unknown error occurred.")),
-                () -> assertTrue(outContent.toString().endsWith(message + System.lineSeparator()))
-        );
+        verify(consolePrinter, times(1)).print("Unknown error occurred.");
+        verify(consolePrinter, times(1)).print(message);
     }
 }
