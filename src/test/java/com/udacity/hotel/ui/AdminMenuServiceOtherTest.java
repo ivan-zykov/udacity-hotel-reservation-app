@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
 /**
@@ -27,7 +28,7 @@ class AdminMenuServiceOtherTest {
 
     @BeforeEach
     void init() {
-        adminMenuService = new AdminMenuService(adminResource, null, null, consolePrinter);
+        adminMenuService = new AdminMenuService(adminResource, null, consolePrinter);
     }
 
     @Test
@@ -35,13 +36,16 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.printMenu();
 
-        verify(consolePrinter, times(1)).print("Admin menu of Vanya's Hotel Reservation App");
-        verify(consolePrinter, times(1)).print("1. See all Customers");
-        verify(consolePrinter, times(1)).print("2. See all Rooms");
-        verify(consolePrinter, times(1)).print("3. See all Reservations");
-        verify(consolePrinter, times(1)).print("4. Add a room");
-        verify(consolePrinter, times(1)).print("5. Back to Main Menu");
-        verify(consolePrinter, times(1)).print("Select a menu option");
+        assertAll(
+                () -> verify(consolePrinter, times(1)).print("Admin menu of Vanya's Hotel " +
+                        "Reservation App"),
+                () -> verify(consolePrinter, times(1)).print("1. See all Customers"),
+                () -> verify(consolePrinter, times(1)).print("2. See all Rooms"),
+                () -> verify(consolePrinter, times(1)).print("3. See all Reservations"),
+                () -> verify(consolePrinter, times(1)).print("4. Add a room"),
+                () -> verify(consolePrinter, times(1)).print("5. Back to Main Menu"),
+                () -> verify(consolePrinter, times(1)).print("Select a menu option")
+        );
     }
 
     @Test

@@ -22,21 +22,17 @@ import java.util.*;
 public class AdminMenuService extends MenuService {
     private final AdminResource adminResource;
     private final ConsolePrinter consolePrinter;
-    private final ExitHelper exitHelper;
 
     /**
      * Constructor of this class.
      *
      * @param adminResource     adminResource object of the API to services with functionality for admin users
      * @param scanner           scanner object that reads user's input
-     * @param exitHelper        exitHelper object that allows breaking loops during tests
      * @param consolePrinter    consolePrinter object that prints objects to the console
      */
-    public AdminMenuService(AdminResource adminResource, Scanner scanner, ExitHelper exitHelper,
-                            ConsolePrinter consolePrinter) {
+    public AdminMenuService(AdminResource adminResource, Scanner scanner, ConsolePrinter consolePrinter) {
         super(scanner);
         this.adminResource = adminResource;
-        this.exitHelper = exitHelper;
         this.consolePrinter = consolePrinter;
     }
 
@@ -107,21 +103,11 @@ public class AdminMenuService extends MenuService {
         boolean keepAddingRooms = true;
         while (keepAddingRooms) {
             String roomNumber = readRoomNumber(newRooms);
-            if (exitHelper.exit() && roomNumber == null) { return; }
-
             double roomPrice = readRoomPrice();
-            if (exitHelper.exit() && roomPrice == 0D) { return; }
-
             RoomType roomType = readRoomType();
-            if (exitHelper.exit() && roomType == null) { return; }
-
             newRooms.add(new Room(roomNumber, roomPrice, roomType));
-
             keepAddingRooms = readAddingAnotherRoom();
-            // Using ExitHelper#exitNested() here in order not to break adding just one room.
-            if (exitHelper.exitNested() && ! keepAddingRooms) { return; }
         }
-
         adminResource.addRoom(newRooms);
         consolePrinter.print("Rooms were successfully added");
     }
@@ -134,13 +120,11 @@ public class AdminMenuService extends MenuService {
             input = scanner.nextLine();
             if (! isNumber(input)) {
                 consolePrinter.print("Room number should be an integer number");
-                if (exitHelper.exit()) { return null; }
                 continue;
             }
             if (! isNewRoomNumber(newRooms, input)) {
                 consolePrinter.print("You have already added a room with " +
                         "room number " + input);
-                if (exitHelper.exit()) { return null; }
             } else {
                 isBadRoomNumber = false;
             }
@@ -165,7 +149,6 @@ public class AdminMenuService extends MenuService {
             input = scanner.nextLine();
             if (! isNumber(input)) {
                 consolePrinter.print("Room price should be a decimal number");
-                if (exitHelper.exit()) { return 0D; }
                 continue;
             }
             isBadRoomPrice = false;
@@ -189,13 +172,8 @@ public class AdminMenuService extends MenuService {
                     isBadRoomType = false;
                     roomType = RoomType.SINGLE;
                 }
-                default -> {
-                    consolePrinter.print("Enter \"s\" for single or \"d\" " +
-                            "for double");
-                    if (exitHelper.exit()) {
-                        return null;
-                    }
-                }
+                default -> consolePrinter.print("Enter \"s\" for single or \"d\" " +
+                        "for double");
             }
         }
         return roomType;
@@ -216,13 +194,8 @@ public class AdminMenuService extends MenuService {
                     isBadInput = false;
                     keepAddingRooms = false;
                 }
-                default -> {
-                    // Keep inside inner loop
-                    consolePrinter.print("Enter \"y\" for yes or \"n\" for no");
-                    if (exitHelper.exitNested()) {
-                        return false;
-                    }
-                }
+                default -> // Keep inside inner loop
+                        consolePrinter.print("Enter \"y\" for yes or \"n\" for no");
             }
         }
         return keepAddingRooms;

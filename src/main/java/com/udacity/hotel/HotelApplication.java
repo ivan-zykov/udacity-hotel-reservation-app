@@ -34,7 +34,7 @@ public final class HotelApplication {
         DateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         ExitHelper exitHelper = new ExitHelper();
         ConsolePrinter consolePrinter = new ConsolePrinterImpl();
-        AdminMenuService adminMenuService = new AdminMenuService(adminResource, scanner, exitHelper, consolePrinter);
+        AdminMenuService adminMenuService = new AdminMenuService(adminResource, scanner, consolePrinter);
         MenuManager adminMenuManager = new AdminMenuManager(scanner, adminMenuService, consolePrinter);
         HotelResource hotelResource = new HotelResource(customerService,
                 reservationService);
