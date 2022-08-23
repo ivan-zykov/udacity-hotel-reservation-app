@@ -33,8 +33,8 @@ public final class HotelApplication {
         Scanner scanner = new Scanner(System.in);
         DateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         ExitHelper exitHelper = new ExitHelper();
-        AdminMenuService adminMenuService = new AdminMenuService(adminResource, scanner, exitHelper);
         ConsolePrinter consolePrinter = new ConsolePrinterImpl();
+        AdminMenuService adminMenuService = new AdminMenuService(adminResource, scanner, exitHelper, consolePrinter);
         MenuManager adminMenuManager = new AdminMenuManager(scanner, adminMenuService, consolePrinter);
         HotelResource hotelResource = new HotelResource(customerService,
                 reservationService);

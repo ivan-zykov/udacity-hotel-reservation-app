@@ -2,20 +2,15 @@ package com.udacity.hotel.ui;
 
 import com.udacity.hotel.api.AdminResource;
 import com.udacity.hotel.model.*;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * For other methods except adding a room.
@@ -25,27 +20,14 @@ class AdminMenuServiceOtherTest {
 
     private AdminMenuService adminMenuService;
 
-    private static ByteArrayOutputStream outContent;
-
     @Mock
     AdminResource adminResource;
-
-    @BeforeAll
-    static void initAll() {
-        // Overtake printing to the console
-        outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-    }
+    @Mock
+    ConsolePrinter consolePrinter;
 
     @BeforeEach
     void init() {
-        adminMenuService = new AdminMenuService(adminResource, null, null);
-    }
-
-    @AfterAll
-    static void cleanAll() {
-        // Restore the standard out
-        System.setOut(System.out);
+        adminMenuService = new AdminMenuService(adminResource, null, null, consolePrinter);
     }
 
     @Test
@@ -53,15 +35,13 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.printMenu();
 
-        assertAll(
-                () -> assertTrue(outContent.toString().contains("Admin menu of Vanya's Hotel Reservation App")),
-                () -> assertTrue(outContent.toString().contains("1. See all Customers")),
-                () -> assertTrue(outContent.toString().contains("2. See all Rooms")),
-                () -> assertTrue(outContent.toString().contains("3. See all Reservations")),
-                () -> assertTrue(outContent.toString().contains("4. Add a room")),
-                () -> assertTrue(outContent.toString().contains("5. Back to Main Menu")),
-                () -> assertTrue(outContent.toString().endsWith("Select a menu option" + System.lineSeparator()))
-        );
+        verify(consolePrinter, times(1)).print("Admin menu of Vanya's Hotel Reservation App");
+        verify(consolePrinter, times(1)).print("1. See all Customers");
+        verify(consolePrinter, times(1)).print("2. See all Rooms");
+        verify(consolePrinter, times(1)).print("3. See all Reservations");
+        verify(consolePrinter, times(1)).print("4. Add a room");
+        verify(consolePrinter, times(1)).print("5. Back to Main Menu");
+        verify(consolePrinter, times(1)).print("Select a menu option");
     }
 
     @Test
@@ -72,8 +52,8 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllCustomers();
 
-        assertTrue(outContent.toString().endsWith("There are no registered customers yet. You can add " +
-                "one in main menu" + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print("There are no registered customers yet. You can" +
+                " add one in main menu");
     }
 
     @Test
@@ -85,7 +65,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllCustomers();
 
-        assertTrue(outContent.toString().endsWith(customer + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print(customer);
     }
 
     @Test
@@ -96,7 +76,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllRooms();
 
-        assertTrue(outContent.toString().endsWith("There are no rooms yet. Please add some" + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print("There are no rooms yet. Please add some");
     }
 
     @Test
@@ -108,7 +88,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllRooms();
 
-        assertTrue(outContent.toString().endsWith(room + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print(room);
     }
 
     @Test
@@ -119,7 +99,7 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllReservations();
 
-        assertTrue(outContent.toString().endsWith("There are still no reservations" + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print("There are still no reservations");
     }
 
     @Test
@@ -144,6 +124,6 @@ class AdminMenuServiceOtherTest {
         // Run this test
         adminMenuService.showAllReservations();
 
-        assertTrue(outContent.toString().endsWith(reservation + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print(reservation);
     }
 }

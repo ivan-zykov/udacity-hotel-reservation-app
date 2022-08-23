@@ -21,19 +21,23 @@ import java.util.*;
  */
 public class AdminMenuService extends MenuService {
     private final AdminResource adminResource;
+    private final ConsolePrinter consolePrinter;
     private final ExitHelper exitHelper;
 
     /**
      * Constructor of this class.
      *
-     * @param adminResource adminResource object of the API to services with functionality for admin users
-     * @param scanner       scanner object that reads user's input
-     * @param exitHelper    exitHelper object that allows breaking loops during tests
+     * @param adminResource     adminResource object of the API to services with functionality for admin users
+     * @param scanner           scanner object that reads user's input
+     * @param exitHelper        exitHelper object that allows breaking loops during tests
+     * @param consolePrinter    consolePrinter object that prints objects to the console
      */
-    public AdminMenuService(AdminResource adminResource, Scanner scanner, ExitHelper exitHelper) {
+    public AdminMenuService(AdminResource adminResource, Scanner scanner, ExitHelper exitHelper,
+                            ConsolePrinter consolePrinter) {
         super(scanner);
         this.adminResource = adminResource;
         this.exitHelper = exitHelper;
+        this.consolePrinter = consolePrinter;
     }
 
     /**
@@ -41,16 +45,16 @@ public class AdminMenuService extends MenuService {
      */
     @Override
     public void printMenu() {
-        print("");
-        print("Admin menu of Vanya's Hotel Reservation App");
-        print("----------------------------------------");
-        print("1. See all Customers");
-        print("2. See all Rooms");
-        print("3. See all Reservations");
-        print("4. Add a room");
-        print("5. Back to Main Menu");
-        print("----------------------------------------");
-        print("Select a menu option");
+        consolePrinter.print("");
+        consolePrinter.print("Admin menu of Vanya's Hotel Reservation App");
+        consolePrinter.print("----------------------------------------");
+        consolePrinter.print("1. See all Customers");
+        consolePrinter.print("2. See all Rooms");
+        consolePrinter.print("3. See all Reservations");
+        consolePrinter.print("4. Add a room");
+        consolePrinter.print("5. Back to Main Menu");
+        consolePrinter.print("----------------------------------------");
+        consolePrinter.print("Select a menu option");
     }
 
     /**
@@ -59,12 +63,11 @@ public class AdminMenuService extends MenuService {
     public void showAllCustomers() {
         Collection<Customer> allCustomers = adminResource.getAllCustomers();
         if (allCustomers.isEmpty()) {
-            print("There are no registered customers yet. You can add " +
-                    "one in main menu");
+            consolePrinter.print("There are no registered customers yet. You can add one in main menu");
             return;
         }
         for (Customer aCustomer: allCustomers) {
-            print(aCustomer);
+            consolePrinter.print(aCustomer);
         }
     }
 
@@ -74,11 +77,11 @@ public class AdminMenuService extends MenuService {
     public void showAllRooms() {
         Collection<IRoom> allRooms = adminResource.getAllRooms();
         if (allRooms.isEmpty()) {
-            print("There are no rooms yet. Please add some");
+            consolePrinter.print("There are no rooms yet. Please add some");
             return;
         }
         for (IRoom aRoom: allRooms) {
-            print(aRoom);
+            consolePrinter.print(aRoom);
         }
     }
 
@@ -88,11 +91,11 @@ public class AdminMenuService extends MenuService {
     public void showAllReservations() {
         Set<Reservation> allReservations = adminResource.getAllReservations();
         if (allReservations.isEmpty()) {
-            print("There are still no reservations");
+            consolePrinter.print("There are still no reservations");
             return;
         }
         for (Reservation reservation: allReservations) {
-            print(reservation);
+            consolePrinter.print(reservation);
         }
     }
 
@@ -120,22 +123,22 @@ public class AdminMenuService extends MenuService {
         }
 
         adminResource.addRoom(newRooms);
-        print("Rooms were successfully added");
+        consolePrinter.print("Rooms were successfully added");
     }
 
     private String readRoomNumber(List<IRoom> newRooms) {
-        print("Enter room number");
+        consolePrinter.print("Enter room number");
         String input = "";
         boolean isBadRoomNumber = true;
         while (isBadRoomNumber) {
             input = scanner.nextLine();
             if (! isNumber(input)) {
-                print("Room number should be an integer number");
+                consolePrinter.print("Room number should be an integer number");
                 if (exitHelper.exit()) { return null; }
                 continue;
             }
             if (! isNewRoomNumber(newRooms, input)) {
-                print("You have already added a room with " +
+                consolePrinter.print("You have already added a room with " +
                         "room number " + input);
                 if (exitHelper.exit()) { return null; }
             } else {
@@ -155,13 +158,13 @@ public class AdminMenuService extends MenuService {
     }
 
     private double readRoomPrice() {
-        print("Enter room price");
+        consolePrinter.print("Enter room price");
         boolean isBadRoomPrice = true;
         String input = "";
         while (isBadRoomPrice) {
             input = scanner.nextLine();
             if (! isNumber(input)) {
-                print("Room price should be a decimal number");
+                consolePrinter.print("Room price should be a decimal number");
                 if (exitHelper.exit()) { return 0D; }
                 continue;
             }
@@ -171,7 +174,7 @@ public class AdminMenuService extends MenuService {
     }
 
     private RoomType readRoomType() {
-        print("Choose room type. \"s\" for single or " +
+        consolePrinter.print("Choose room type. \"s\" for single or " +
                 "\"d\" for double");
         RoomType roomType = null;
         boolean isBadRoomType = true;
@@ -187,7 +190,7 @@ public class AdminMenuService extends MenuService {
                     roomType = RoomType.SINGLE;
                 }
                 default -> {
-                    print("Enter \"s\" for single or \"d\" " +
+                    consolePrinter.print("Enter \"s\" for single or \"d\" " +
                             "for double");
                     if (exitHelper.exit()) {
                         return null;
@@ -199,7 +202,7 @@ public class AdminMenuService extends MenuService {
     }
 
     private boolean readAddingAnotherRoom() {
-        print("Add another room? (y/n)");
+        consolePrinter.print("Add another room? (y/n)");
         boolean keepAddingRooms = true;
         boolean isBadInput = true;
         while (isBadInput) {
@@ -215,7 +218,7 @@ public class AdminMenuService extends MenuService {
                 }
                 default -> {
                     // Keep inside inner loop
-                    print("Enter \"y\" for yes or \"n\" for no");
+                    consolePrinter.print("Enter \"y\" for yes or \"n\" for no");
                     if (exitHelper.exitNested()) {
                         return false;
                     }

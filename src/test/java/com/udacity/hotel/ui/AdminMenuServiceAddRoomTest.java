@@ -2,19 +2,14 @@ package com.udacity.hotel.ui;
 
 import com.udacity.hotel.api.AdminResource;
 import com.udacity.hotel.model.*;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -25,32 +20,19 @@ class AdminMenuServiceAddRoomTest {
 
     private AdminMenuService adminMenuService;
 
-    private static ByteArrayOutputStream outContent;
-
     @Mock
     AdminResource adminResource;
     @Mock
     Scanner scanner;
     @Mock
     ExitHelper exitHelper;
-
-    @BeforeAll
-    static void initAll() {
-        // Overtake printing to the console
-        outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-    }
+    @Mock
+    ConsolePrinter consolePrinter;
 
     @BeforeEach
     void init() {
-        adminMenuService = new AdminMenuService(adminResource, scanner, exitHelper);
+        adminMenuService = new AdminMenuService(adminResource, scanner, exitHelper, consolePrinter);
         when(exitHelper.exit()).thenReturn(true);
-    }
-
-    @AfterAll
-    static void cleanAll() {
-        // Restore the standard out
-        System.setOut(System.out);
     }
 
     @Test
@@ -61,11 +43,8 @@ class AdminMenuServiceAddRoomTest {
         // Run this test
         adminMenuService.addARoom();
 
-        assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter room number")),
-                () -> assertTrue(outContent.toString().endsWith("Room number should be an integer number" +
-                        System.lineSeparator()))
-        );
+        verify(consolePrinter, times(1)).print("Enter room number");
+        verify(consolePrinter, times(1)).print("Room number should be an integer number");
     }
 
     @Test
@@ -80,11 +59,9 @@ class AdminMenuServiceAddRoomTest {
         // Run this test
         adminMenuService.addARoom();
 
-        assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter room number")),
-                () -> assertTrue(outContent.toString().endsWith("You have already added a room with " +
-                        "room number " + roomNumber + System.lineSeparator()))
-        );
+        verify(consolePrinter, times(2)).print("Enter room number");
+        verify(consolePrinter, times(1)).print("You have already added a room with room number " +
+                roomNumber);
     }
 
     @Test
@@ -95,12 +72,8 @@ class AdminMenuServiceAddRoomTest {
         // Run this test
         adminMenuService.addARoom();
 
-        assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter room number")),
-                () -> assertTrue(outContent.toString().contains("Enter room price")),
-                () -> assertTrue(outContent.toString().endsWith("Room price should be a decimal number" +
-                        System.lineSeparator()))
-        );
+        verify(consolePrinter, times(1)).print("Enter room price");
+        verify(consolePrinter, times(1)).print("Room price should be a decimal number");
     }
 
     @Test
@@ -111,14 +84,9 @@ class AdminMenuServiceAddRoomTest {
         // Run this test
         adminMenuService.addARoom();
 
-        assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter room number")),
-                () -> assertTrue(outContent.toString().contains("Enter room price")),
-                () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
-                        "\"d\" for double" + System.lineSeparator())),
-                () -> assertTrue(outContent.toString().endsWith("Enter \"s\" for single or \"d\" for double" +
-                        System.lineSeparator()))
-        );
+        verify(consolePrinter, times(1)).print("Choose room type. \"s\" for single or " +
+                "\"d\" for double");
+        verify(consolePrinter, times(1)).print("Enter \"s\" for single or \"d\" for double");
     }
 
     @Test
@@ -132,15 +100,8 @@ class AdminMenuServiceAddRoomTest {
         // Run this test
         adminMenuService.addARoom();
 
-        assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter room number")),
-                () -> assertTrue(outContent.toString().contains("Enter room price")),
-                () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
-                        "\"d\" for double" + System.lineSeparator())),
-                () -> assertTrue(outContent.toString().contains("Add another room? (y/n)")),
-                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no" +
-                        System.lineSeparator()))
-        );
+        verify(consolePrinter, times(1)).print("Add another room? (y/n)");
+        verify(consolePrinter, times(1)).print("Enter \"y\" for yes or \"n\" for no");
     }
 
     @Test
@@ -153,15 +114,8 @@ class AdminMenuServiceAddRoomTest {
         // Run this test
         adminMenuService.addARoom();
 
-        assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter room number")),
-                () -> assertTrue(outContent.toString().contains("Enter room price")),
-                () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
-                        "\"d\" for double" + System.lineSeparator())),
-                () -> assertTrue(outContent.toString().contains("Add another room? (y/n)")),
-                () -> assertTrue(outContent.toString().endsWith("Rooms were successfully added" +
-                        System.lineSeparator()))
-        );
+        verify(consolePrinter, times(1)).print("Add another room? (y/n)");
+        verify(consolePrinter, times(1)).print("Rooms were successfully added");
 
         List<IRoom> newRooms = List.of(new Room(roomNumber, Double.parseDouble(roomPrice), RoomType.SINGLE));
         verify(adminResource, times(1)).addRoom(newRooms);
@@ -188,15 +142,8 @@ class AdminMenuServiceAddRoomTest {
         // Run this test
         adminMenuService.addARoom();
 
-        assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter room number")),
-                () -> assertTrue(outContent.toString().contains("Enter room price")),
-                () -> assertTrue(outContent.toString().contains("Choose room type. \"s\" for single or " +
-                        "\"d\" for double" + System.lineSeparator())),
-                () -> assertTrue(outContent.toString().contains("Add another room? (y/n)")),
-                () -> assertTrue(outContent.toString().endsWith("Rooms were successfully added" +
-                        System.lineSeparator()))
-        );
+        verify(consolePrinter, times(2)).print("Add another room? (y/n)");
+        verify(consolePrinter, times(1)).print("Rooms were successfully added");
 
         List<IRoom> newRooms = List.of(
                 new Room(roomNumber, Double.parseDouble(roomPrice), RoomType.SINGLE),
