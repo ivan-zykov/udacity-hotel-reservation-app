@@ -28,12 +28,6 @@ class MainMenuManagerTest {
         mainMenuManager = new MainMenuManager(adminMenuManager, mainMenuService, scanner, consolePrinter);
     }
 
-    @AfterAll
-    static void cleanAll() {
-        // Restore the standard out
-        System.setOut(System.out);
-    }
-
     @Test
     void printMenu_exitTheApp() {
         // Stub user's input
