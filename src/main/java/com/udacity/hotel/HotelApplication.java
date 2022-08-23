@@ -35,7 +35,7 @@ public final class HotelApplication {
         ExitHelper exitHelper = new ExitHelper();
         AdminMenuService adminMenuService = new AdminMenuService(adminResource, scanner, exitHelper);
         ConsolePrinter consolePrinter = new ConsolePrinterImpl();
-        MenuManager adminMenuManager = new AdminMenuManager(scanner, exitHelper, adminMenuService, consolePrinter);
+        MenuManager adminMenuManager = new AdminMenuManager(scanner, adminMenuService, consolePrinter);
         HotelResource hotelResource = new HotelResource(customerService,
                 reservationService);
         Date now = new Date();

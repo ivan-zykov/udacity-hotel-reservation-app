@@ -9,7 +9,6 @@ import java.util.*;
  */
 public final class AdminMenuManager implements MenuManager {
 
-    private final ExitHelper exitHelper;
     private final AdminMenuService adminMenuService;
     private final Scanner scanner;
     private final ConsolePrinter consolePrinter;
@@ -18,12 +17,9 @@ public final class AdminMenuManager implements MenuManager {
      * Constructor of this class.
      *
      * @param scanner           scanner object that reads user's input
-     * @param exitHelper        exitHelper object that allows breaking loops during tests
      * @param adminMenuService  adminMenuService object that performs an action corresponding to the selected menu
      */
-    public AdminMenuManager(Scanner scanner, ExitHelper exitHelper, AdminMenuService adminMenuService,
-                            ConsolePrinter consolePrinter) {
-        this.exitHelper = exitHelper;
+    public AdminMenuManager(Scanner scanner, AdminMenuService adminMenuService, ConsolePrinter consolePrinter) {
         this.adminMenuService = adminMenuService;
         this.scanner = scanner;
         this.consolePrinter = consolePrinter;
@@ -59,7 +55,6 @@ public final class AdminMenuManager implements MenuManager {
                 consolePrinter.print("Unknown error occurred.");
                 consolePrinter.print(ex.getLocalizedMessage());
             }
-            if (exitHelper.exit()) { return; }
         }
     }
 }

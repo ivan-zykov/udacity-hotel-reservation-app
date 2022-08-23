@@ -21,22 +21,13 @@ class AdminMenuManagerTest {
     @Mock
     private Scanner scanner;
     @Mock
-    private ExitHelper exitHelper;
-    @Mock
     private AdminMenuService adminMenuService;
     @Mock
     private ConsolePrinterImpl consolePrinter;
 
     @BeforeEach
     void init() {
-        adminMenuManager = new AdminMenuManager(scanner, exitHelper, adminMenuService, consolePrinter);
-        when(exitHelper.exit()).thenReturn(true);
-    }
-
-    @AfterAll
-    static void cleanAll() {
-        // Restore the standard out
-        System.setOut(System.out);
+        adminMenuManager = new AdminMenuManager(scanner, adminMenuService, consolePrinter);
     }
 
     @Test
@@ -54,19 +45,18 @@ class AdminMenuManagerTest {
     @Test
     void showAllCustomers() {
         // Stub user's input
-        when(scanner.nextLine()).thenReturn("1");
+        when(scanner.nextLine()).thenReturn("1", "5");
 
         // Run this test
         adminMenuManager.open();
 
-        verify(adminMenuService, times(1)).printMenu();
         verify(adminMenuService, times(1)).showAllCustomers();
     }
 
     @Test
     void showAllRooms() {
         // Stub user's input
-        when(scanner.nextLine()).thenReturn("2");
+        when(scanner.nextLine()).thenReturn("2", "5");
 
         // Run this test
         adminMenuManager.open();
@@ -77,7 +67,7 @@ class AdminMenuManagerTest {
     @Test
     void showAllReservations() {
         // Stub user's input
-        when(scanner.nextLine()).thenReturn("3");
+        when(scanner.nextLine()).thenReturn("3", "5");
 
         // Run this test
         adminMenuManager.open();
@@ -88,7 +78,7 @@ class AdminMenuManagerTest {
     @Test
     void addARoom() {
         // Stub user's input
-        when(scanner.nextLine()).thenReturn("4");
+        when(scanner.nextLine()).thenReturn("4", "5");
 
         // Run this test
         adminMenuManager.open();
@@ -99,7 +89,7 @@ class AdminMenuManagerTest {
     @Test
     void nonExistingMenuNumber() {
         // Stub user's input
-        when(scanner.nextLine()).thenReturn("99");
+        when(scanner.nextLine()).thenReturn("99", "5");
 
         // Run this test
         adminMenuManager.open();
@@ -111,7 +101,7 @@ class AdminMenuManagerTest {
     @Test
     void numberFormatException() {
         // Stub scanner: wrong menu number
-        when(scanner.nextLine()).thenReturn("a");
+        when(scanner.nextLine()).thenReturn("a", "5");
 
         // Run this test
         adminMenuManager.open();
@@ -122,9 +112,12 @@ class AdminMenuManagerTest {
     @ParameterizedTest(name = "[{index}] {0}; Message: {1}")
     @MethodSource("provideExceptionAndMessage")
     void handleIllegalArgumentException_andUnknownError(Exception exception, String message) {
+        // Stub user's input: exit the app
+        when(scanner.nextLine()).thenReturn("1", "5");
+
         doThrow(exception)
                 .when(adminMenuService)
-                .printMenu();
+                .showAllCustomers();
 
         // Run this test
         adminMenuManager.open();
