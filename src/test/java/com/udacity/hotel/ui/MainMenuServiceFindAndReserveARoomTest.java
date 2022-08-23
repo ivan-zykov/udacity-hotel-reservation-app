@@ -10,8 +10,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,205 +24,188 @@ class MainMenuServiceFindAndReserveARoomTest {
 
     private MainMenuService mainMenuService;
 
-    private final static int YEAR_NOW = 2022;
-    private final static int MONTH_NOW = Calendar.AUGUST;
-    private final static int DAY_NOW = 8;
-    private static ByteArrayOutputStream outContent;
     private Date nowStubbed;
     private DateFormat dateFormat;
-    private ReservationFactory reservationFactory;
 
     @Mock
     HotelResource hotelResource;
     @Mock
     Scanner scanner;
     @Mock
-    ExitHelper exitHelper;
-
-    @BeforeAll
-    static void initAll() {
-        // Overtake printing to the console
-        outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-    }
+    ConsolePrinter consolePrinter;
 
     @BeforeEach
     void init() {
         dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         // Stub current date
         Calendar cal = Calendar.getInstance();
-        cal.set(YEAR_NOW, MONTH_NOW, DAY_NOW);
+        cal.set(2022, Calendar.AUGUST, 8);
         nowStubbed = cal.getTime();
-        mainMenuService = new MainMenuService(nowStubbed, hotelResource, scanner, exitHelper, dateFormat);
-        reservationFactory = new ReservationFactory();
-    }
-
-    @AfterAll
-    static void cleanAll() {
-        // Restore the standard out
-        System.setOut(System.out);
+        mainMenuService = new MainMenuService(nowStubbed, hotelResource, scanner, dateFormat, consolePrinter);
     }
 
     @Test
     void findAndReserveARoom_invalidCheckIn() {
-        // Stub user's input:
-        when(scanner.nextLine()).thenReturn("a");
-
-        // Force exiting the app after incorrect input
-        when(exitHelper.exitNested()).thenReturn(true);
+        // Stub user's input: invalid check-in date, rest is to terminate the execution
+        when(scanner.nextLine()).thenReturn("a", "05/30/2023");
 
         // Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
-                        "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy" +
-                        System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Enter check-in date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022"),
+                () -> verify(consolePrinter, times(1)).print("Renter the date in format " +
+                        "mm/dd/yyyy")
         );
     }
 
     @Test
     void findAndReserveARoom_parseExceptionCheckIn() {
         // Stub user's input:
-        when(scanner.nextLine()).thenReturn("05/30/2023");
+        String dateString = "05/30/2023";
+        when(scanner.nextLine()).thenReturn(dateString);
 
-        // Stub failing to parse input date
+        // Stub failing to parse input date and success afterwards
+        Date dateObj = null;
+        try {
+            dateObj = dateFormat.parse(dateString);
+        } catch (ParseException ex) {
+            fail("Parsing date string failed in this test.");
+        }
         DateFormat dateFormatStubbed = mock(SimpleDateFormat.class);
         try {
             when(dateFormatStubbed.parse(any()))
                     .thenReturn(null)
-                    .thenThrow(new ParseException("test error", 0));
+                    .thenThrow(new ParseException("test error", 0))
+                    .thenReturn(dateObj);
         }
         catch (ParseException e) {/*obsolete*/}
 
-        // Force exiting the app after incorrect input
-        when(exitHelper.exitNested()).thenReturn(true);
-
         // Instantiate SUT with stubbed dateFormat
-        MainMenuService mainMenuService = new MainMenuService(nowStubbed, hotelResource, scanner, exitHelper,
-                dateFormatStubbed);
+        MainMenuService mainMenuService = new MainMenuService(nowStubbed, hotelResource, scanner, dateFormatStubbed,
+                consolePrinter);
 
         // Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
-                        "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("Try entering the date again" + System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Enter check-in date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022"),
+                () -> verify(consolePrinter, times(1)).print("Try entering the date again")
         );
     }
     @Test
     void findAndReserveARoom_checkInIsInThePast() {
-        // Stub user's input: check-in date is in the past
-        when(scanner.nextLine()).thenReturn("01/01/2019");
-
-        // Force exiting the app after incorrect input
-        when(exitHelper.exitNested()).thenReturn(true);
+        // Stub user's input: check-in date is in the past, correct date to terminate the test
+        when(scanner.nextLine()).thenReturn("01/01/2019", "05/30/2023");
 
         // Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter check-in date in format mm/dd/yyyy " +
-                        "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("This date is in the past. " +
-                        "Please reenter the date" + System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Enter check-in date in format " +
+                                "mm/dd/yyyy Example: 05/30/2022"),
+                () -> verify(consolePrinter, times(1)).print("This date is in the past. " +
+                        "Please reenter the date")
         );
     }
 
     @Test
     void findAndReserveARoom_invalidCheckOut() {
-        // Stub user's input:
-        when(scanner.nextLine()).thenReturn("05/30/2023", "a");
-
-        // Force exiting the app after incorrect input
-        when(exitHelper.exitNested()).thenReturn(true);
+        // Stub user's input: valid check-in date, invalid check-date date, valid check-out to terminate this test
+        when(scanner.nextLine()).thenReturn("05/30/2023", "a", "06/10/2023");
 
         // Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
-                        "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("Renter the date in format mm/dd/yyyy" +
-                        System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Enter check-out date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022"),
+                () -> verify(consolePrinter, times(1)).print("Renter the date in format " +
+                        "mm/dd/yyyy")
         );
     }
 
     @Test
     void findAndReserveARoom_parseExceptionCheckOut() {
         // Stub user's input:
-        when(scanner.nextLine()).thenReturn("05/30/2023", "06/10/2023");
+        String checkInString = "05/30/2023";
+        String checkOutString = "06/10/2023";
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString);
 
-        // Stub failing to parse input date
-        DateFormat dateFormat = mock(SimpleDateFormat.class);
-        Calendar cal = Calendar.getInstance();
-        cal.set(2099, Calendar.JUNE, 30);
-        Date checkIn = cal.getTime();
+        // Stub failing to parse input date and parsing the rest correctly
+        Date checkInObj = null;
+        Date checkOutObj = null;
         try {
-            when(dateFormat.parse(any()))
+            checkInObj = dateFormat.parse(checkInString);
+            checkOutObj = dateFormat.parse(checkOutString);
+        } catch (ParseException ex) {
+            fail("Parsing date string failed in this test.");
+        }
+        DateFormat dateFormatStubbed = mock(SimpleDateFormat.class);
+        try {
+            when(dateFormatStubbed.parse(any()))
                     .thenReturn(null)
-                    .thenReturn(checkIn)
+                    .thenReturn(checkInObj)
                     .thenReturn(null)
-                    .thenThrow(new ParseException("test error", 0));
-        } catch (ParseException e) {/*obsolete*/}
-
-        // Force exiting the app after incorrect input
-        when(exitHelper.exitNested()).thenReturn(true);
+                    .thenThrow(new ParseException("test error", 0))
+                    .thenReturn(checkOutObj);
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
 
         // Instantiate SUT with stubbed dateFormat
-//        var mainMenu = new MainMenuManager(adminMenuManager, hotelResource, scanner, dateFormat, exitHelper, nowStubbed);
-        var mainMenuService = new MainMenuService(nowStubbed, hotelResource, scanner, exitHelper, dateFormat);
+        var mainMenuService = new MainMenuService(nowStubbed, hotelResource, scanner, dateFormatStubbed,
+                consolePrinter);
 
         // Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
-                        "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("Try entering the date again" + System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Enter check-out date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022"),
+                () -> verify(consolePrinter, times(1)).print("Try entering the date again")
         );
     }
 
     @Test
     void findAndReserveARoom_checkOutIsInThePast() {
-        // Stub user's input: check-out date is in the past
-        when(scanner.nextLine()).thenReturn("05/30/2023", "01/20/2019");
-
-        // Force exiting the app after incorrect input
-        when(exitHelper.exitNested()).thenReturn(true);
+        // Stub user's input: check-out date is in the past, valid check-out to terminate this test
+        when(scanner.nextLine()).thenReturn("05/30/2023", "01/20/2019", "06/10/2023");
 
         // Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Enter check-out date in format mm/dd/yyyy " +
-                        "Example: 05/30/2022")),
-                () -> assertTrue(outContent.toString().endsWith("This date is in the past. " +
-                        "Please reenter the date" + System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Enter check-out date in format mm/dd/yyyy " +
+                        "Example: 05/30/2022"),
+                () -> verify(consolePrinter, times(1)).print("This date is in the past. " +
+                        "Please reenter the date")
         );
     }
 
     @Test
     void findAndReserveARoom_checkInAfterCheckout() {
-        // Stub user's input:
-        when(scanner.nextLine()).thenReturn("06/10/2023", "05/30/2023");
-
-        // Force exiting the app after incorrect input
-        when(exitHelper.exit()).thenReturn(true);
+        /* Stub user's input: check-in after check-out, afterwards, correct check-in and check-out to terminate this
+        test */
+        when(scanner.nextLine()).thenReturn("06/10/2023", "05/30/2023", "06/10/2023", "06/20/2023");
 
         // Run this test
         mainMenuService.findAndReserveARoom();
 
-        assertTrue(outContent.toString().endsWith("Your check-in date is later than checkout " +
-                "date. Please reenter dates" + System.lineSeparator()));
+        assertAll(
+                () -> verify(consolePrinter, times(2)).print("Enter check-in date in format " +
+                        "mm/dd/yyyy Example: 05/30/2022"),
+                () -> verify(consolePrinter, times(2)).print("Enter check-out date in format " +
+                                "mm/dd/yyyy Example: 05/30/2022"),
+                () -> verify(consolePrinter, times(1)).print("Your check-in date is later than " +
+                                "checkout date. Please reenter dates")
+        );
     }
 
-    @ParameterizedTest(name = "[{index}] Message: {1}")
-    @MethodSource("provide_roomsAndInfoMessage")
-    void findAndReserveARoom_noRoomsOnTheDates(
-            Collection<IRoom> roomsNextDays, String message) {
+    @Test
+    void findAndReserveARoom_noRoomsOnTheDates_noRoomsNextSevenDays() {
         // Stub user's input
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
@@ -237,7 +218,56 @@ class MainMenuServiceFindAndReserveARoomTest {
         try {
             checkInDate = dateFormat.parse(checkInString);
             checkOutDate = dateFormat.parse(checkOutString);
-        } catch (ParseException e) {/*obsolete*/}
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
+
+        // Stub finding no available rooms for initial dates
+        when(hotelResource.findARoom(checkInDate, checkOutDate)).thenReturn(List.of());
+
+        // Shift dates by 7 days
+        Calendar cal = Calendar.getInstance();
+        assertNotNull(checkInDate);
+        cal.setTime(checkInDate);
+        cal.add(Calendar.DATE, 7);
+        Date checkInDateNext = cal.getTime();
+
+        assertNotNull(checkOutDate);
+        cal.setTime(checkOutDate);
+        cal.add(Calendar.DATE, 7);
+        Date checkOutDateNext = cal.getTime();
+
+        // Stub no available rooms for the next seven days
+        when(hotelResource.findARoom(checkInDateNext, checkOutDateNext)).thenReturn(List.of());
+
+        // Run this test
+        mainMenuService.findAndReserveARoom();
+
+        assertAll(
+                () -> verify(consolePrinter, times(1)).print("No rooms found for selected " +
+                                "dates. Trying to find a room in the next 7 days"),
+                () -> verify(consolePrinter, times(1)).print("No free rooms in the next 7 days " +
+                                "found. Try different dates")
+        );
+    }
+
+    @Test
+    void findAndReserveARoom_noRoomsOnTheDates_foundRoomsNextSevenDays() {
+        // Stub user's input
+        String checkInString = "05/30/2023";
+        String checkOutString = "06/10/2023";
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString);
+
+        // Prepare dates
+        Date checkInDate = null;
+        Date checkOutDate = null;
+        dateFormat.setLenient(false);
+        try {
+            checkInDate = dateFormat.parse(checkInString);
+            checkOutDate = dateFormat.parse(checkOutString);
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
 
         // Stub finding no available rooms for initial dates
         when(hotelResource.findARoom(checkInDate, checkOutDate)).thenReturn(List.of());
@@ -255,25 +285,17 @@ class MainMenuServiceFindAndReserveARoomTest {
         Date checkOutDateNext = cal.getTime();
 
         // Stub available rooms for the next seven days
-        when(hotelResource.findARoom(checkInDateNext, checkOutDateNext)).thenReturn(roomsNextDays);
+        var room = new Room("1", 10.0D, RoomType.SINGLE);
+        when(hotelResource.findARoom(checkInDateNext, checkOutDateNext)).thenReturn(List.of(room));
 
         // Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("No rooms found for selected dates. Trying to find" +
-                        " a room in the next 7 days")),
-                () -> assertTrue(outContent.toString().contains(message))
-        );
-    }
-
-    private static Stream<Arguments> provide_roomsAndInfoMessage() {
-        var room = new Room("1", 10.0D, RoomType.SINGLE);
-        Collection<IRoom> roomsNextDays = List.of(room);
-        return Stream.of(
-                Arguments.of(List.of(), "No free rooms in the next 7 days found. Try " +
-                        "different dates"),
-                Arguments.of(roomsNextDays, "You can book following rooms")
+                () -> verify(consolePrinter, times(1)).print("No rooms found for selected " +
+                                "dates. Trying to find a room in the next 7 days"),
+                () -> verify(consolePrinter, times(1)).print("You can book following rooms from " +
+                        checkInDateNext + " till " + checkOutDateNext + ":")
         );
     }
 
@@ -291,7 +313,9 @@ class MainMenuServiceFindAndReserveARoomTest {
         try {
             checkInDate = dateFormat.parse(checkInString);
             checkOutDate = dateFormat.parse(checkOutString);
-        } catch (ParseException e) {/*obsolete*/}
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
 
         // Stub finding available room
         var room = new Room("1", 10.0D, RoomType.SINGLE);
@@ -301,9 +325,9 @@ class MainMenuServiceFindAndReserveARoomTest {
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains(room.toString())),
-                () -> assertTrue(outContent.toString().endsWith("Would you like to book one of the rooms above? " +
-                        "(y/n)" + System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print(room),
+                () -> verify(consolePrinter, times(1)).print("Would you like to book one of the " +
+                                "rooms above? (y/n)")
         );
     }
 
@@ -312,7 +336,7 @@ class MainMenuServiceFindAndReserveARoomTest {
         // Stub user's input with invalid answer about booking a room
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
-        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "a");
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "a", "n");
 
         // Prepare dates
         Date checkInDate = null;
@@ -321,23 +345,21 @@ class MainMenuServiceFindAndReserveARoomTest {
         try {
             checkInDate = dateFormat.parse(checkInString);
             checkOutDate = dateFormat.parse(checkOutString);
-        } catch (ParseException e) {/*obsolete*/}
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
 
         // Stub finding available room
         var room = new Room("1", 10.0D, RoomType.SINGLE);
         when(hotelResource.findARoom(checkInDate, checkOutDate)).thenReturn(List.of(room));
 
-        // Force exiting the app after incorrect input
-        when(exitHelper.exit()).thenReturn(true);
-
         // Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Would you like to book one of the rooms above? " +
-                        "(y/n)")),
-                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no" +
-                        System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Would you like to book one of the " +
+                                "rooms above? (y/n)"),
+                () -> verify(consolePrinter, times(1)).print("Enter \"y\" for yes or \"n\" for no")
         );
     }
 
@@ -355,7 +377,9 @@ class MainMenuServiceFindAndReserveARoomTest {
         try {
             checkInDate = dateFormat.parse(checkInString);
             checkOutDate = dateFormat.parse(checkOutString);
-        } catch (ParseException e) {/*obsolete*/}
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
 
         // Stub finding available room
         var room = new Room("1", 10.0D, RoomType.SINGLE);
@@ -365,9 +389,9 @@ class MainMenuServiceFindAndReserveARoomTest {
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Do you have an account?")),
-                () -> assertTrue(outContent.toString().endsWith("Please create an account in main menu" +
-                        System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Do you have an account?"),
+                () -> verify(consolePrinter, times(1)).print("Please create an account in main " +
+                        "menu")
         );
     }
 
@@ -376,7 +400,7 @@ class MainMenuServiceFindAndReserveARoomTest {
         // Stub user's input with invalid answer about having and account
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
-        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "y", "a");
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "y", "a", "n");
 
         // Prepare dates
         Date checkInDate = null;
@@ -385,22 +409,20 @@ class MainMenuServiceFindAndReserveARoomTest {
         try {
             checkInDate = dateFormat.parse(checkInString);
             checkOutDate = dateFormat.parse(checkOutString);
-        } catch (ParseException e) {/*obsolete*/}
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
 
         // Stub finding available room
         var room = new Room("1", 10.0D, RoomType.SINGLE);
         when(hotelResource.findARoom(checkInDate, checkOutDate)).thenReturn(List.of(room));
 
-        // Force exiting the app after incorrect input
-        when(exitHelper.exit()).thenReturn(true);
-
-        // Run this test
+        //  Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Do you have an account?")),
-                () -> assertTrue(outContent.toString().endsWith("Enter \"y\" for yes or \"n\" for no" +
-                        System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Do you have an account?"),
+                () -> verify(consolePrinter, times(1)).print("Enter \"y\" for yes or \"n\" for no")
         );
     }
 
@@ -419,7 +441,9 @@ class MainMenuServiceFindAndReserveARoomTest {
         try {
             checkInDate = dateFormat.parse(checkInString);
             checkOutDate = dateFormat.parse(checkOutString);
-        } catch (ParseException e) {/*obsolete*/}
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
 
         // Stub finding available room
         var room = new Room("1", 10.0D, RoomType.SINGLE);
@@ -432,21 +456,21 @@ class MainMenuServiceFindAndReserveARoomTest {
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Please enter your email")),
-                () -> assertTrue(outContent.toString().contains("You are still not registered with this email. " +
-                        "Please create an account" + System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Please enter your email"),
+                () -> verify(consolePrinter, times(1)).print("You are still not registered with " +
+                                "this email. Please create an account")
         );
     }
 
     @ParameterizedTest(name = "[{index}] Picked room: {0}, Message: {1}")
     @MethodSource("provide_roomNumberAndMessage")
     void findAndReserveARoom_invalidRoomNumber(String roomNumber, String message) {
-        // Stub user's input: invalid room number to book
+        // Stub user's input: invalid room number to book and available room number to terminate this test
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
         String email = "i@z.com";
         when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "y", "y",
-                email, roomNumber);
+                email, roomNumber, "1");
 
         // Prepare dates
         Date checkInDate = null;
@@ -455,7 +479,9 @@ class MainMenuServiceFindAndReserveARoomTest {
         try {
             checkInDate = dateFormat.parse(checkInString);
             checkOutDate = dateFormat.parse(checkOutString);
-        } catch (ParseException e) {/*obsolete*/}
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
 
         // Stub finding available room
         var room = new Room("1", 10.0D, RoomType.SINGLE);
@@ -465,15 +491,12 @@ class MainMenuServiceFindAndReserveARoomTest {
         var customer = new Customer("I", "Z", email);
         when(hotelResource.getCustomer(email)).thenReturn(customer);
 
-        // Force exiting the app after incorrect input
-        when(exitHelper.exit()).thenReturn(true);
-
         // Run this test
         mainMenuService.findAndReserveARoom();
 
         assertAll(
-                () -> assertTrue(outContent.toString().contains("Please enter which room to book")),
-                () -> assertTrue(outContent.toString().endsWith(message + System.lineSeparator()))
+                () -> verify(consolePrinter, times(1)).print("Please enter which room to book"),
+                () -> verify(consolePrinter, times(1)).print(message)
         );
     }
 
@@ -502,7 +525,9 @@ class MainMenuServiceFindAndReserveARoomTest {
         try {
             checkInDate = dateFormat.parse(checkInString);
             checkOutDate = dateFormat.parse(checkOutString);
-        } catch (ParseException e) {/*obsolete*/}
+        } catch (ParseException e) {
+            fail("Parsing date string failed in this test.");
+        }
 
         // Stub finding available room
         var room = new Room("1", 10.0D, RoomType.SINGLE);
@@ -516,12 +541,13 @@ class MainMenuServiceFindAndReserveARoomTest {
         when(hotelResource.getRoom(roomNumberToBook)).thenReturn(room);
 
         // Stub making a reservations
-        var reservation = reservationFactory.create(customer, room, checkInDate, checkOutDate);
+        var reservationFactory = new ReservationFactory();
+        Reservation reservation = reservationFactory.create(customer, room, checkInDate, checkOutDate);
         when(hotelResource.bookARoom(email, room, checkInDate, checkOutDate)).thenReturn(reservation);
 
         // Run this test
         mainMenuService.findAndReserveARoom();
 
-        assertTrue(outContent.toString().endsWith(reservation + System.lineSeparator()));
+        verify(consolePrinter, times(1)).print(reservation);
     }
 }
