@@ -253,10 +253,10 @@ class MainMenuServiceFindAndReserveARoomTest {
 
     @Test
     void findAndReserveARoom_noRoomsOnTheDates_foundRoomsNextSevenDays() {
-        // Stub user's input
+        // Stub user's input: dates and no to booking a room to terminate this test
         String checkInString = "05/30/2023";
         String checkOutString = "06/10/2023";
-        when(scanner.nextLine()).thenReturn(checkInString, checkOutString);
+        when(scanner.nextLine()).thenReturn(checkInString, checkOutString, "n");
 
         // Prepare dates
         Date checkInDate = null;

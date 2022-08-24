@@ -193,7 +193,6 @@ public class MainMenuService extends MenuService {
      */
     public void findAndReserveARoom() {
         boolean keepFindingAndReservingARoom = true;
-        findAndReserveARoom:
         while (keepFindingAndReservingARoom) {
 
             // Read check-in date
@@ -207,39 +206,15 @@ public class MainMenuService extends MenuService {
             Date checkOut = readDate();
 
             // Check that check-in is before check-out
-            if (checkIn != null && checkIn.after(checkOut)) {
+            if (checkIn.after(checkOut)) {
                 consolePrinter.print("Your check-in date is later than checkout " +
                         "date. Please reenter dates");
                 continue;
             }
 
-            // Find available rooms for initial dates
-            Collection<IRoom> availableRooms = hotelResource.findARoom(checkIn,
-                    checkOut);
-
+            // Find available rooms
+            Collection<IRoom> availableRooms = findAvailableRooms(checkIn, checkOut);
             if (availableRooms.isEmpty()) {
-                consolePrinter.print("No rooms found for selected dates. Trying to find" +
-                        " a room in the next 7 days");
-
-                // Shift dates
-                checkIn = shiftDate(checkIn);
-                checkOut = shiftDate(checkOut);
-
-                // Find rooms available for shifted dates
-                availableRooms = hotelResource.findARoom(checkIn, checkOut);
-
-                if (availableRooms.isEmpty()) {
-                    consolePrinter.print("No free rooms in the next 7 days found. Try " +
-                            "different dates");
-                } else {
-                    // Print shifted dates and available rooms
-                    consolePrinter.print("You can book following rooms from " + checkIn +
-                            " till " + checkOut + ":");
-                    for (IRoom aRoom: availableRooms) {
-                        consolePrinter.print(aRoom);
-                    }
-                }
-
                 // Redirect back to main menu
                 keepFindingAndReservingARoom = false;
                 continue;
@@ -252,43 +227,16 @@ public class MainMenuService extends MenuService {
             }
 
             // Ask if customer wants to book a room
-            consolePrinter.print("Would you like to book one of the rooms above? " +
-                    "(y/n)");
-            boolean keepReadingAnswer = true;
-            while (keepReadingAnswer) {
-                String input = scanner.nextLine();
-                switch (input.toLowerCase()) {
-                    case "y" ->
-                        // Proceed with booking
-                            keepReadingAnswer = false;
-                    case "n" -> {
-                        // Go to main menu
-                        keepFindingAndReservingARoom = false;
-                        continue findAndReserveARoom;
-                    }
-                    default -> // Keep asking
-                            consolePrinter.print("Enter \"y\" for yes or \"n\" for no");
-                }
+            if (stopBooking()) {
+                // Go to main menu
+                keepFindingAndReservingARoom = false;
+                continue;
             }
 
             // Ask if customer has an account
-            consolePrinter.print("Do you have an account?");
-            keepReadingAnswer = true;
-            while (keepReadingAnswer) {
-                String input = scanner.nextLine();
-                switch (input.toLowerCase()) {
-                    case "y" ->
-                        // Proceed with booking
-                            keepReadingAnswer = false;
-                    case "n" -> {
-                        // Go to main menu
-                        keepFindingAndReservingARoom = false;
-                        consolePrinter.print("Please create an account in main menu");
-                        continue findAndReserveARoom;
-                    }
-                    default -> // Keep asking
-                            consolePrinter.print("Enter \"y\" for yes or \"n\" for no");
-                }
+            if (customerHasNoAccount()) {
+                keepFindingAndReservingARoom = false;
+                continue;
             }
 
             // Read customer's email
@@ -304,32 +252,7 @@ public class MainMenuService extends MenuService {
             }
 
             // Read which room to book
-            consolePrinter.print("Please enter which room to book");
-            String roomNumberToBook = "";
-            boolean keepReadingRoomNumber = true;
-            while (keepReadingRoomNumber) {
-                String input = scanner.nextLine();
-                if (isNumber(input)) {
-                    // Check that the room is available for booking
-                    boolean isAvailableRoom = false;
-                    for (IRoom aRoom: availableRooms) {
-                        if (aRoom.getRoomNumber().equals(input)) {
-                            isAvailableRoom = true;
-                            break;
-                        }
-                    }
-                    if (isAvailableRoom) {
-                        keepReadingRoomNumber = false;
-                        roomNumberToBook = input;
-                    } else {
-                        consolePrinter.print("The room you picked is actually not " +
-                                "available. Please enter a room number from the the " +
-                                "list above");
-                    }
-                } else {
-                    consolePrinter.print("Room number should be an integer number");
-                }
-            }
+            String roomNumberToBook = readRoomNumberToBook(availableRooms);
 
             // Book a room
             IRoom roomObjectToBook = hotelResource.getRoom(roomNumberToBook);
@@ -384,10 +307,112 @@ public class MainMenuService extends MenuService {
         return true;
     }
 
+    private Collection<IRoom> findAvailableRooms(Date checkIn, Date checkOut) {
+        Collection<IRoom> availableRooms = hotelResource.findARoom(checkIn,
+                checkOut);
+
+        if (availableRooms.isEmpty()) {
+            consolePrinter.print("No rooms found for selected dates. Trying to find" +
+                    " a room in the next 7 days");
+
+            // Shift dates
+            checkIn = shiftDate(checkIn);
+            checkOut = shiftDate(checkOut);
+
+            // Find rooms available for shifted dates
+            availableRooms = hotelResource.findARoom(checkIn, checkOut);
+
+            if (availableRooms.isEmpty()) {
+                consolePrinter.print("No free rooms in the next 7 days found. Try " +
+                        "different dates");
+            } else {
+                // Print shifted dates and available rooms
+                consolePrinter.print("You can book following rooms from " + checkIn +
+                        " till " + checkOut + ":");
+                for (IRoom aRoom: availableRooms) {
+                    consolePrinter.print(aRoom);
+                }
+            }
+        }
+        return availableRooms;
+    }
+
     private Date shiftDate(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, 7);
         return cal.getTime();
+    }
+
+    private boolean stopBooking() {
+        consolePrinter.print("Would you like to book one of the rooms above? " +
+                "(y/n)");
+        boolean stopBooking = false;
+        boolean keepReadingAnswer = true;
+        while (keepReadingAnswer) {
+            String input = scanner.nextLine();
+            switch (input.toLowerCase()) {
+                case "y" -> // Proceed with booking
+                    keepReadingAnswer = false;
+                case "n" -> {
+                    keepReadingAnswer = false;
+                    stopBooking = true;
+                }
+                default -> // Keep asking
+                        consolePrinter.print("Enter \"y\" for yes or \"n\" for no");
+            }
+        }
+        return stopBooking;
+    }
+
+    private boolean customerHasNoAccount() {
+        consolePrinter.print("Do you have an account?");
+        boolean customerHasNoAccount = false;
+        boolean keepReadingAnswer = true;
+        while (keepReadingAnswer) {
+            String input = scanner.nextLine();
+            switch (input.toLowerCase()) {
+                case "y" -> // Proceed with booking
+                        keepReadingAnswer = false;
+                case "n" -> {
+                    // Go to main menu
+                    consolePrinter.print("Please create an account in main menu");
+                    customerHasNoAccount = true;
+                    keepReadingAnswer = false;
+                }
+                default -> // Keep asking
+                        consolePrinter.print("Enter \"y\" for yes or \"n\" for no");
+            }
+        }
+        return customerHasNoAccount;
+    }
+
+    private String readRoomNumberToBook(Collection<IRoom> availableRooms) {
+        consolePrinter.print("Please enter which room to book");
+        String roomNumberToBook = "";
+        boolean keepReadingRoomNumber = true;
+        while (keepReadingRoomNumber) {
+            String input = scanner.nextLine();
+            if (isNumber(input)) {
+                // Check that the room is available for booking
+                boolean isAvailableRoom = false;
+                for (IRoom aRoom: availableRooms) {
+                    if (aRoom.getRoomNumber().equals(input)) {
+                        isAvailableRoom = true;
+                        break;
+                    }
+                }
+                if (isAvailableRoom) {
+                    keepReadingRoomNumber = false;
+                    roomNumberToBook = input;
+                } else {
+                    consolePrinter.print("The room you picked is actually not available. Please enter a room number " +
+                                    "from the the list above");
+                }
+            } else {
+                consolePrinter.print("Room number should be an integer number");
+            }
+        }
+        return roomNumberToBook;
     }
 }
