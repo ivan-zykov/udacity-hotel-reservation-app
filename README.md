@@ -43,8 +43,8 @@ java com.udacity.hotel.HotelApplication
 - [x] Add JavaDock for methods, especially public ones
 - [x] Add unit tests
 - [x] Clean FIXME and TODO tags
-- [ ] Fix IDEA’s standard linter errors
-- [ ] Add IDEA's plug-in to catch code style errors (Sonar) and fix errors
+- [x] Fix IDEA’s standard linter errors
+- [x] Add IDEA's plug-in to catch code style errors (Sonar) and fix errors
 
 ## TODO optional
 - [x] Catch exceptions later in UI?
