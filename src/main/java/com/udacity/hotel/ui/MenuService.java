@@ -25,11 +25,6 @@ abstract class MenuService {
      */
     public abstract void printMenu();
 
-    // TODO: move it to a dedicated ConsolePrinter class
-    <T> void print(T text) {
-        System.out.println(text);
-    }
-
     boolean isNumber(String strInt) {
         if (strInt == null) {
             return false;
