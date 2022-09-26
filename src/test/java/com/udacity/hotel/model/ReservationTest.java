@@ -4,14 +4,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReservationTest {
@@ -26,10 +24,7 @@ class ReservationTest {
     private static Date checkIn;
     private static Date checkOut;
     private ReservationFactory reservationFactory;
-
-    @Mock
     private static Customer customer;
-    @Mock
     private static IRoom room;
 
     @BeforeAll
@@ -44,23 +39,19 @@ class ReservationTest {
     @BeforeEach
     void init() {
         reservationFactory = new ReservationFactory();
+        customer = new Customer("I", "Z", "i@z.com");
+        room = new Room("1", 100.0D, RoomType.SINGLE);
         reservation = reservationFactory.create(customer, room, checkIn, checkOut);
     }
 
     @Test
     void toStringTest() {
-        // Stub customer
-        String expCustomer = "customer's toString";
-        when(customer.toString()).thenReturn(expCustomer);
-
-        // Stub room
-        String expRoom = "room's toString";
-        when(reservation.toString()).thenReturn(expRoom);
-
-        assertTrue(reservation.toString().contains("Reservation for"));
-        assertTrue(reservation.toString().contains(expCustomer));
-        assertTrue(reservation.toString().contains(expRoom));
-        assertTrue(reservation.toString().contains("Dates: " + checkIn + " - " + checkOut + "."));
+        assertAll(
+                () -> assertTrue(reservation.toString().contains(customer.toString())),
+                () -> assertTrue(reservation.toString().contains(room.toString())),
+                () -> assertTrue(reservation.toString().contains(checkIn.toString())),
+                () -> assertTrue(reservation.toString().contains(checkOut.toString()))
+        );
     }
 
     /**
@@ -74,7 +65,7 @@ class ReservationTest {
 
     @Test
     void equals_roomOther() {
-        var roomOther = new Room("1", 10.0D, RoomType.SINGLE);
+        var roomOther = new Room("2", 10.0D, RoomType.SINGLE);
         Reservation reservationOther = reservationFactory.create(customer, roomOther, checkIn, checkOut);
         assertNotEquals(reservation, reservationOther);
     }
