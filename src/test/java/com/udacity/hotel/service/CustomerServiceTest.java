@@ -43,11 +43,8 @@ class CustomerServiceTest {
      */
     @Test
     void addCustomer_getCustomer_OK() {
-        Customer customer = customerService.getCustomer(email);
-        if (customer != null) {
-            assertEquals(firstName, customer.getFirstName());
-            assertEquals(lastName, customer.getLastName());
-        }
+        Customer customer = new Customer(firstName, lastName, email);
+        assertEquals(customer, customerService.getCustomer(email));
     }
 
     @Test
@@ -68,11 +65,15 @@ class CustomerServiceTest {
     void getAllCustomers() {
         String emailJr = "j@r.com";
         customerService.addCustomer(emailJr, "J", "R");
+
         Collection<Customer> allCustomers = customerService.getAllCustomers();
-        assertEquals(2, allCustomers.size());
+
         Customer iZ = customerService.getCustomer(email);
-        assertTrue(allCustomers.contains(iZ));
         Customer jR = customerService.getCustomer(emailJr);
-        assertTrue(allCustomers.contains(jR));
+        assertAll(
+                () -> assertTrue(allCustomers.contains(iZ)),
+                () -> assertEquals(2, allCustomers.size()),
+                () -> assertTrue(allCustomers.contains(jR))
+        );
     }
 }
