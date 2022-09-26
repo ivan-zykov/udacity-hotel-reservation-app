@@ -3,7 +3,7 @@ package com.udacity.hotel.model;
 import java.util.Date;
 
 /**
- * An object of a reservation of a room for specific dates for a customer.
+ * A reservation of a room for specific dates for a customer.
  *
  * @author Ivan V. Zykov
  */
