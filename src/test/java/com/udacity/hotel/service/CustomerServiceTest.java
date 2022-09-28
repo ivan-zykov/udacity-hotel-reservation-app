@@ -5,7 +5,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,22 +15,25 @@ class CustomerServiceTest {
 
     private static CustomerService customerService;
 
-    private static String firstName;
-    private static String lastName;
-    private static String email;
-
+    private String firstName;
+    private String lastName;
+    private String email;
 
     @BeforeAll
     static void initAll() {
-        firstName = "I";
-        lastName = "Z";
-        email = "i@z.com";
         customerService = CustomerService.getInstance();
-        customerService.addCustomer(email, firstName, lastName);
     }
 
     @BeforeEach
-    void init() {
+    void init() throws NoSuchFieldException, IllegalAccessException {
+        firstName = "I";
+        lastName = "Z";
+        email = "i@z.com";
+
+        // Reset the SUT which is a singleton
+        Field customers = CustomerService.class.getDeclaredField("customers");
+        customers.setAccessible(true);
+        customers.set(customerService, new HashMap<>());
     }
 
     @Test
@@ -37,18 +42,18 @@ class CustomerServiceTest {
         assertSame(customerServiceOther, customerService);
     }
 
-    /**
-     * Customer is added in {@link CustomerServiceTest#initAll()} method.
-     * Also tests getting a customer.
-     */
     @Test
     void addCustomer_getCustomer_OK() {
+        customerService.addCustomer(email, firstName, lastName);
+
         Customer customer = new Customer(firstName, lastName, email);
         assertEquals(customer, customerService.getCustomer(email));
     }
 
     @Test
     void addCustomer_exists_exception() {
+        customerService.addCustomer(email, firstName, lastName);
+
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> customerService.addCustomer(email, firstName, lastName)
@@ -63,6 +68,7 @@ class CustomerServiceTest {
 
     @Test
     void getAllCustomers() {
+        customerService.addCustomer(email, firstName, lastName);
         String emailJr = "j@r.com";
         customerService.addCustomer(emailJr, "J", "R");
 
@@ -71,8 +77,8 @@ class CustomerServiceTest {
         Customer iZ = customerService.getCustomer(email);
         Customer jR = customerService.getCustomer(emailJr);
         assertAll(
-                () -> assertTrue(allCustomers.contains(iZ)),
                 () -> assertEquals(2, allCustomers.size()),
+                () -> assertTrue(allCustomers.contains(iZ)),
                 () -> assertTrue(allCustomers.contains(jR))
         );
     }
