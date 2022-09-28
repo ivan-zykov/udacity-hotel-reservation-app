@@ -1,23 +1,17 @@
 package com.udacity.hotel.api;
 
-import com.udacity.hotel.model.Customer;
-import com.udacity.hotel.model.IRoom;
-import com.udacity.hotel.model.Room;
-import com.udacity.hotel.model.RoomType;
+import com.udacity.hotel.model.*;
 import com.udacity.hotel.service.CustomerService;
 import com.udacity.hotel.service.ReservationService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class AdminResourceTest {
 
     private AdminResource adminResource;
@@ -25,14 +19,34 @@ class AdminResourceTest {
     private IRoom room1;
     private IRoom room2;
 
-    @Mock
-    private CustomerService customerService;
-    @Mock
-    private ReservationService reservationService;
+    private static CustomerService customerService;
+    private static ReservationService reservationService;
+
+    @BeforeAll
+    static void initAll() {
+        customerService = CustomerService.getInstance();
+        var reservationFactory = new ReservationFactory();
+        reservationService = ReservationService.getInstance(reservationFactory);
+    }
 
     @BeforeEach
-    void init() {
+    void reset() throws NoSuchFieldException, IllegalAccessException {
+        // Reset CustomerService singleton
+        Field customers = CustomerService.class.getDeclaredField("customers");
+        customers.setAccessible(true);
+        customers.set(customerService, new HashMap<>());
+
+        // Reset ReservationService singleton
+        Field reservations = ReservationService.class.getDeclaredField("reservations");
+        reservations.setAccessible(true);
+        reservations.set(reservationService, new HashSet<>());
+        Field rooms = ReservationService.class.getDeclaredField("rooms");
+        rooms.setAccessible(true);
+        rooms.set(reservationService, new HashMap<>());
+
+        // Instantiate SUT
         adminResource = new AdminResource(customerService, reservationService);
+
         room1 = new Room("1", 100.0D, RoomType.SINGLE);
         room2 = new Room("2", 200.0D, RoomType.DOUBLE);
     }
@@ -40,40 +54,67 @@ class AdminResourceTest {
     @Test
     void getCustomer() {
         String email = "i@z.com";
-        var customerIz = new Customer("I", "Z", email);
-        when(customerService.getCustomer(email)).thenReturn(customerIz);
+        String firstName = "I";
+        String lastName = "Z";
+        var customerIz = new Customer(firstName, lastName, email);
+        customerService.addCustomer(email, firstName, lastName);
+
         assertEquals(customerIz, adminResource.getCustomer(email));
     }
 
     @Test
     void addRoom() {
         adminResource.addRoom(List.of(room1, room2));
-        verify(reservationService, times(1)).addRoom(room1);
-        verify(reservationService, times(1)).addRoom(room2);
+
+        Map<String, IRoom> allRooms = reservationService.getRooms();
+        assertAll(
+                () -> assertEquals(2, allRooms.size()),
+                () -> assertTrue(allRooms.containsValue(room1)),
+                () -> assertTrue(allRooms.containsValue(room2))
+        );
     }
 
     @Test
     void getAllRooms() {
-        Map<String, IRoom> allRoomsMap = new HashMap<>();
-        allRoomsMap.put(room1.getRoomNumber(), room1);
-        allRoomsMap.put(room2.getRoomNumber(), room2);
-        when(reservationService.getRooms()).thenReturn(allRoomsMap);
-        Collection<IRoom> allRoomsList = adminResource.getAllRooms();
-        assertEquals(2, allRoomsList.size());
-        assertTrue(allRoomsList.contains(room1));
-        assertTrue(allRoomsList.contains(room2));
+        reservationService.addRoom(room1);
+        reservationService.addRoom(room2);
+
+        List<IRoom> expected = List.of(room1, room2);
+        assertEquals(expected, adminResource.getAllRooms());
     }
 
     @Test
     void getAllCustomers() {
-        Collection<Customer> allCustomers = new ArrayList<>();
-        when(customerService.getAllCustomers()).thenReturn(allCustomers);
-        assertEquals(allCustomers, adminResource.getAllCustomers());
+        String izFirst = "I";
+        String izLast = "Z";
+        String izEmail = "i@z.com";
+        customerService.addCustomer(izEmail, izFirst, izLast);
+        String jrFirst = "J";
+        String jrLast = "R";
+        String jrEmail = "j@r.com";
+        customerService.addCustomer(jrEmail, jrFirst, jrLast);
+
+        Collection<Customer> allCustomers = adminResource.getAllCustomers();
+        var iZ = new Customer(izFirst, izLast, izEmail);
+        var jR = new Customer(jrFirst, jrLast, jrEmail);
+        assertAll(
+                () -> assertTrue(allCustomers.contains(iZ)),
+                () -> assertTrue(allCustomers.contains(jR))
+        );
     }
 
     @Test
     void getAllReservations() {
-        adminResource.getAllReservations();
-        verify(reservationService, times(1)).getAllReservations();
+        var customer = new Customer("I", "Z", "i@z.com");
+        Calendar cal = Calendar.getInstance();
+        final int year = 2099;
+        final int month = Calendar.MAY;
+        cal.set(year, month, 20);
+        Date checkIn = cal.getTime();
+        cal.set(year, month, 27);
+        Date checkOut = cal.getTime();
+
+        Set<Reservation> expected = Set.of(reservationService.reserveARoom(customer, room1, checkIn, checkOut));
+        assertEquals(expected, adminResource.getAllReservations());
     }
 }
